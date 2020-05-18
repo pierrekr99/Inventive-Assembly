@@ -10,5 +10,14 @@ public Monteur(String name, String vorname, String mitarbeiternr, String passwor
 	this.anwesenheit = anwesenheit;
 }
 
+public String getAnwesenheit() {
+	return anwesenheit;
+}
+
+public void setAnwesenheit(String anwesenheit) {
+	this.anwesenheit = anwesenheit;
+}
+
+
 
 }
