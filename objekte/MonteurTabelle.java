@@ -12,12 +12,12 @@ public class MonteurTabelle extends AbstractTableModel implements Serializable {
 
 	
 //	Erstellung der Tabelle und des Konstruktors
-	private ArrayList<Monteur> Monteurliste;
+	private ArrayList<Monteur> monteurListe;
 	private String[] columns = {"Mitarbeiternr", "Nachname", "Vorname", "Anwesenheit"};
 
 	
-	public MonteurTabelle(ArrayList<Monteur> liste) {
-		this.Monteurliste = liste;
+	public MonteurTabelle(ArrayList<Monteur> monteurListe) {
+		this.monteurListe = monteurListe;
 	}
 
 	
@@ -30,7 +30,7 @@ public class MonteurTabelle extends AbstractTableModel implements Serializable {
 
 	@Override
 	public int getRowCount() {
-		return Monteurliste.size();
+		return monteurListe.size();
 	}
 
 	@Override
@@ -53,13 +53,13 @@ public class MonteurTabelle extends AbstractTableModel implements Serializable {
 
 		switch (columnIndex) {
 		case 0:
-			return Monteurliste.get(rowIndex).getMitarbeiternr();
+			return monteurListe.get(rowIndex).getMitarbeiternr();
 		case 1:
-			return Monteurliste.get(rowIndex).getName();
+			return monteurListe.get(rowIndex).getName();
 		case 2:
-			return Monteurliste.get(rowIndex).getVorname();
+			return monteurListe.get(rowIndex).getVorname();
 		case 3:
-			return Monteurliste.get(rowIndex).getAnwesenheit();
+			return monteurListe.get(rowIndex).getAnwesenheit();
 
 		default:
 			return null;

@@ -11,11 +11,11 @@ public class DetailsKomponentenTabelle extends AbstractTableModel implements Ser
 	private static final long serialVersionUID = -6330715590403021515L;
 
 	// Erstellung der Tabelle und des Konstruktors
-	private ArrayList<Komponente> KomponentenListe;
+	private ArrayList<Komponente> komponentenListe;
 	private String[] columns = { "Kategorie", "TeileNr", "Verfügbar", "Nicht verfügbar" };
 
-	public DetailsKomponentenTabelle(ArrayList<Komponente> KomponentenListe) {
-		this.KomponentenListe = KomponentenListe;
+	public DetailsKomponentenTabelle(ArrayList<Komponente> komponentenListe) {
+		this.komponentenListe = komponentenListe;
 	}
 
 //		Definieren der Tabelle
@@ -26,7 +26,7 @@ public class DetailsKomponentenTabelle extends AbstractTableModel implements Ser
 
 	@Override
 	public int getRowCount() {
-		return KomponentenListe.size();
+		return komponentenListe.size();
 	}
 
 	@Override
@@ -54,16 +54,16 @@ public class DetailsKomponentenTabelle extends AbstractTableModel implements Ser
 
 		switch (columnIndex) {
 		case 0:
-			return KomponentenListe.get(rowIndex).getKategorie();
+			return komponentenListe.get(rowIndex).getKategorie();
 		case 1:
-			return KomponentenListe.get(rowIndex).getKomponentennr();
+			return komponentenListe.get(rowIndex).getKomponentennr();
 		case 2:
-			if (KomponentenListe.get(rowIndex).isVerfuegbarkeit()) {
-				return KomponentenListe.get(rowIndex).getName();
+			if (komponentenListe.get(rowIndex).isVerfuegbarkeit()) {
+				return komponentenListe.get(rowIndex).getName();
 			} else return " ";
 		case 3:
-			if (KomponentenListe.get(rowIndex).isVerfuegbarkeit() == false) {
-				return KomponentenListe.get(rowIndex).getName();
+			if (komponentenListe.get(rowIndex).isVerfuegbarkeit() == false) {
+				return komponentenListe.get(rowIndex).getName();
 			} else return " ";
 
 		default:
