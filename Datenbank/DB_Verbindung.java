@@ -64,53 +64,31 @@ public class DB_Verbindung {
 	}
 
 	public void Auftrag_einlesen() { // alle Aufträge werden eingelesen
-		
+
 		try {
 			Statement stmt = Verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 
 			while (rs.next()) {
-				
+
 				ArrayList<Komponente> Komponentenlisteauftrag = new ArrayList<>();
-				
-				String []komponentennrarray =  rs.getString("Komponenten").split(","); //Der String in der Tabelle Spalte Komponenten, werden nach dem Komma in verschiedene Strings augeteilt und in den Array gespeichert
-				
-				
-				for(String ab:komponentennrarray) {										// Für jede Komponentennummer wird nun das richtige Exemplar von Komponente gesucht 
-					
-					for(int i = 0; i<Komponentenliste.size(); i++) {
-	
-						
-						if(ab.equals(Komponentenliste.get(i).getKomponentennr())) { 
-							Komponentenlisteauftrag.add(Komponentenliste.get(i));				// das Exmplar mit der passenden Kompinentennummer wird der Liste hinzugefügt
-						
+
+				String[] komponentennrarray = rs.getString("Komponenten").split(","); // Der String in der Tabelle Spalte Komponenten, werden nach dem Komma in
+																						// verschiedene Strings augeteilt und in den Array gespeichert
+				for (String ab : komponentennrarray) { // Für jede Komponentennummer wird nun das richtige Exemplar von Komponente
+														// gesucht
+					for (int i = 0; i < Komponentenliste.size(); i++) {
+						if (ab.equals(Komponentenliste.get(i).getKomponentennr())) {
+							Komponentenlisteauftrag.add(Komponentenliste.get(i)); // das Exmplar mit der passenden Kompinentennummer wird der Liste hinzugefügt
 						}
-		
-						
-						
 					}
-							
-				
-					
-					
-					
-					
+
 				}
-				
-		
-				
-				
-				objekte.Auftrag Auftrag = new Auftrag(
-						rs.getString("Auftragsnr"), 
-						rs.getString("Erstellungsdatum"),
-						rs.getString("Frist"), 
-						rs.getString("Status"), 
-						rs.getString("Zuständigkeit"),
-						rs.getString("Auftraggeber"), 
-						Komponentenlisteauftrag);	
-				
+
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("Auftragsnr"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), rs.getString("Zuständigkeit"), rs.getString("Auftraggeber"), Komponentenlisteauftrag);
+
 				Auftragsliste.add(Auftrag);
-				
+
 			}
 			System.out.println("Aufträge einlesen:" + Auftragsliste);
 
@@ -151,8 +129,7 @@ public class DB_Verbindung {
 			rs = stmt.executeQuery("SELECT * FROM `disponent`");
 
 			while (rs.next()) {
-				objekte.Disponent Disponent = new Disponent(rs.getString("Name"), rs.getString("Vorname"),
-						rs.getString("Mitarbeiternr"), rs.getString("Passwort"));
+				objekte.Disponent Disponent = new Disponent(rs.getString("Name"), rs.getString("Vorname"), rs.getString("Mitarbeiternr"), rs.getString("Passwort"));
 				Disponentliste.add(Disponent);
 			}
 			System.out.println("Disponenten einlesen:" + Disponentliste);
@@ -170,8 +147,7 @@ public class DB_Verbindung {
 			rs = stmt.executeQuery("SELECT * FROM `komponente`");
 
 			while (rs.next()) {
-				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("Komponentennr"),
-						rs.getBoolean("Verfügbarkeit"), rs.getString("Kategorie"));
+				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("Komponentennr"), rs.getBoolean("Verfügbarkeit"), rs.getString("Kategorie"));
 				Komponentenliste.add(Komponente);
 			}
 			System.out.println("Komponenten einlesen:" + Komponentenliste);
@@ -188,8 +164,7 @@ public class DB_Verbindung {
 			rs = stmt.executeQuery("SELECT * FROM `monteur`");
 
 			while (rs.next()) {
-				objekte.Monteur Monteur = new Monteur(rs.getString("Name"), rs.getString("Vorname"),
-						rs.getString("Mitarbeiternr"), rs.getString("Passwort"), rs.getString("Anwesenheit"));
+				objekte.Monteur Monteur = new Monteur(rs.getString("Name"), rs.getString("Vorname"), rs.getString("Mitarbeiternr"), rs.getString("Passwort"), rs.getString("Anwesenheit"));
 				Monteurliste.add(Monteur);
 			}
 			System.out.println("Monteur einlesen:" + Monteurliste);
