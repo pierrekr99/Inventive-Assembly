@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import objekte.Monteur;
 
-public class DetailTabelle extends AbstractTableModel implements Serializable {
+public class DetailsZuständigkeitTabelle extends AbstractTableModel implements Serializable {
 
 //		implementieren des Interfaces Serializable**/
 	private static final long serialVersionUID = 7711077838311496498L;
@@ -16,7 +16,7 @@ public class DetailTabelle extends AbstractTableModel implements Serializable {
 	private ArrayList<Monteur> detailListe;
 	private String[] columns = { "Name", "Mitarbeiternr" };
 
-	public DetailTabelle(ArrayList<Monteur> detailListe) {
+	public DetailsZuständigkeitTabelle(ArrayList<Monteur> detailListe) {
 			this.detailListe = detailListe;
 		}
 
