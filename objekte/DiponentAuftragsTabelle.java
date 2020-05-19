@@ -2,15 +2,15 @@ package objekte;
 
 import java.util.ArrayList;
 
-public class MonteurAuftragsTabelle extends AuftragsTabelle {
+public class DiponentAuftragsTabelle extends AuftragsTabelle {
+
 	
-	
-	private static final long serialVersionUID = 3857455058328741279L;
+	private static final long serialVersionUID = -9117957090034007029L;
 	
 	private ArrayList<Auftrag> auftragsListe;
-	private String[] kopfzeile = { "Auftragsnr", "Status", "Erstellungsdatum", "Frist", "Auftraggeber" };
-
-	public MonteurAuftragsTabelle(ArrayList<Auftrag> auftragsListe) {
+	private String[] kopfzeile = { "Auftragsnr","Status", "Erstellungsdatum", "Frist","Mitarbeitername", "MitarbeiterNR", "Auftraggeber" };
+	
+	public DiponentAuftragsTabelle(ArrayList<Auftrag> auftragsListe) {
 		super(auftragsListe);
 		this.auftragsListe = auftragsListe;
 	}
@@ -52,6 +52,10 @@ public class MonteurAuftragsTabelle extends AuftragsTabelle {
 		case 3:
 			return auftragsListe.get(rowIndex).getFrist();
 		case 4:
+			return auftragsListe.get(rowIndex).getZuständigkeitName();
+		case 5:
+			return auftragsListe.get(rowIndex).getZuständigkeitNr();
+		case 6:
 			return auftragsListe.get(rowIndex).getAuftraggeber();
 			
 		default:

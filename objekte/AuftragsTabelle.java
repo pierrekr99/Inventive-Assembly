@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
-public class AuftragsTabelle extends AbstractTableModel implements Serializable {
+public abstract class AuftragsTabelle extends AbstractTableModel implements Serializable {
 
 //	implementieren des Interfaces Serializable 
 	private static final long serialVersionUID = -3516729476934710024L;
 
 //	Erstellung der Tabelle und des Konstruktors
 	private ArrayList<Auftrag> auftragsListe;
-	private String[] columns = { "Auftragsnr",  "Status", "Erstellungsdatum", "Frist", "Zuständigkeit", "Auftraggeber"};
+	private String[] kopfzeile;
 
 	public AuftragsTabelle(ArrayList<Auftrag> auftragsListe) {
 			this.auftragsListe = auftragsListe;
@@ -21,50 +21,21 @@ public class AuftragsTabelle extends AbstractTableModel implements Serializable 
 	
 //	Definieren der Tabelle
 	@Override
-	public String getColumnName(int column) {
-		return columns[column];
-	}
+	public abstract String getColumnName(int column);
 
 	@Override
-	public int getRowCount() {
-		return auftragsListe.size();
-	}
+	public abstract int getRowCount();
 
 	@Override
-	public int getColumnCount() {
-
-		return columns.length;
-	}
+	public abstract int getColumnCount();
 
 	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
-	}
+	public abstract void setValueAt(Object aValue, int rowIndex, int columnIndex);
 
 	
 	
 //	Wertrückgabe der Tabelle
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-
-		switch (columnIndex) {
-		case 0:
-			return auftragsListe.get(rowIndex).getAuftragsnr();
-		case 1:
-			return auftragsListe.get(rowIndex).getStatus();
-		case 2:
-			return auftragsListe.get(rowIndex).getErstellungsdatum();
-		case 3:
-			return auftragsListe.get(rowIndex).getFrist();
-		case 4:
-			return auftragsListe.get(rowIndex).getZuständigkeit();
-		case 5:
-			return auftragsListe.get(rowIndex).getAuftraggeber();
-			
-		default:
-			return null;
-		}
-
-	}
+	public abstract Object getValueAt(int rowIndex, int columnIndex);
 
 }
