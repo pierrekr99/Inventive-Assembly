@@ -35,4 +35,13 @@ public class Mitarbeiter {
 		return passwort;
 	}
 
+	@Override
+	public String toString() {
+		return "Mitarbeiter [name=" + name + ", vorname=" + vorname + ", mitarbeiternr=" + mitarbeiternr + ", passwort="
+				+ passwort + "]";
+	}
+	
+	
+	
+
 }
