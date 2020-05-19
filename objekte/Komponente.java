@@ -37,8 +37,8 @@ public class Komponente  {
 
 	@Override
 	public String toString() {
-		return "Komponente [name=" + name + ", komponentennr=" + komponentennr + ", verfuegbarkeit=" + verfuegbarkeit
-				+ ", kategorie=" + kategorie + "]";
+		return "Komponentennr = " + komponentennr
+			;
 	}
 
 }

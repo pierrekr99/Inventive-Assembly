@@ -54,10 +54,11 @@ public class Auftrag {
 	public String getStatus() {
 		return status;
 	}
-
+	
 	public String getAuftraggeber() {
 		return auftraggeber;
 	}
+	
 
 	public ArrayList<Komponente> getKomponentennr() {
 		return komponentennr;

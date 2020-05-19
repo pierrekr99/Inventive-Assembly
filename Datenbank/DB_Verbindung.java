@@ -26,12 +26,11 @@ public class DB_Verbindung {
 
 		DB_Verbindung test = new DB_Verbindung();
 		test.verbinden();
-		// test.auftraggeber_einlesen();
-		// test.Auftrag_einlesen();
-		// test.disponent_einlesen();
-		//test.komponente_einlesen();
+		test.auftraggeber_einlesen();
+		test.disponent_einlesen();
+		test.komponente_einlesen();
 		test.monteur_einlesen();
-
+		test.Auftrag_einlesen();
 	}
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
@@ -65,17 +64,55 @@ public class DB_Verbindung {
 	}
 
 	public void Auftrag_einlesen() { // alle Aufträge werden eingelesen
+		
 		try {
 			Statement stmt = Verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 
 			while (rs.next()) {
-				objekte.Auftrag a = new Auftrag(rs.getString("Auftragsnummer"), rs.getString("Erstellungsdatum"),
-						rs.getString("Frist"), rs.getString("Status"), rs.getString("Zuständigkeit"),
-						rs.getString("Auftraggeber"), null);
-				Auftragsliste.add(a);
+				
+				ArrayList<Komponente> Komponentenlisteauftrag = new ArrayList<>();
+				
+				String []komponentennrarray =  rs.getString("Komponenten").split(","); //Der String in der Tabelle Spalte Komponenten, werden nach dem Komma in verschiedene Strings augeteilt und in den Array gespeichert
+				
+				
+				for(String ab:komponentennrarray) {										// Für jede Komponentennummer wird nun das richtige Exemplar von Komponente gesucht 
+					
+					for(int i = 0; i<Komponentenliste.size(); i++) {
+	
+						
+						if(ab.equals(Komponentenliste.get(i).getKomponentennr())) { 
+							Komponentenlisteauftrag.add(Komponentenliste.get(i));				// das Exmplar mit der passenden Kompinentennummer wird der Liste hinzugefügt
+						
+						}
+		
+						
+						
+					}
+							
+				
+					
+					
+					
+					
+				}
+				
+		
+				
+				
+				objekte.Auftrag Auftrag = new Auftrag(
+						rs.getString("Auftragsnr"), 
+						rs.getString("Erstellungsdatum"),
+						rs.getString("Frist"), 
+						rs.getString("Status"), 
+						rs.getString("Zuständigkeit"),
+						rs.getString("Auftraggeber"), 
+						Komponentenlisteauftrag);	
+				
+				Auftragsliste.add(Auftrag);
+				
 			}
-			System.out.println("Aufträge einlesen:");
+			System.out.println("Aufträge einlesen:" + Auftragsliste);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -145,23 +182,22 @@ public class DB_Verbindung {
 	}
 
 	public void monteur_einlesen() {
-		
-		try {
-		Statement stmt = Verbindung.createStatement();
-		rs = stmt.executeQuery("SELECT * FROM `monteur`");
-		
-		while (rs.next()) {
-			objekte.Monteur Monteur = new Monteur(rs.getString("Name"),rs.getString("Vorname"),rs.getString("Mitarbeiternr"), rs.getString("Passwort"), rs.getString("Anwesenheit"));																		
-			Monteurliste.add(Monteur);
-		}
-		System.out.println("Monteur einlesen:" + Monteurliste);
 
-	}catch(Exception e) {
-		e.printStackTrace();
-	}
-		
-		
+		try {
+			Statement stmt = Verbindung.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM `monteur`");
+
+			while (rs.next()) {
+				objekte.Monteur Monteur = new Monteur(rs.getString("Name"), rs.getString("Vorname"),
+						rs.getString("Mitarbeiternr"), rs.getString("Passwort"), rs.getString("Anwesenheit"));
+				Monteurliste.add(Monteur);
+			}
+			System.out.println("Monteur einlesen:" + Monteurliste);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
-
