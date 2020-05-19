@@ -1,9 +1,11 @@
-package objekte;
+package tabellen;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
+
+import objekte.Monteur;
 
 public class DetailTabelle extends AbstractTableModel implements Serializable {
 

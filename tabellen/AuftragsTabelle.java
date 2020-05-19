@@ -1,8 +1,11 @@
-package objekte;
+package tabellen;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import javax.swing.table.AbstractTableModel;
+
+import objekte.Auftrag;
 
 public class AuftragsTabelle extends AbstractTableModel implements Serializable {
 
