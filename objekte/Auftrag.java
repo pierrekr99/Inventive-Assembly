@@ -12,7 +12,8 @@ public class Auftrag {
 	private String erstellungsdatum;
 	private String frist;
 	private String status;
-	private String zuständigkeit; // angegeben durch Monteurexemplar.getMitarbeiternr();
+	private String zuständigkeitNr; // angegeben durch Monteurexemplar.getMitarbeiternr();
+	private String zuständigkeitName; // angegeben durch Monteurexemplar.getName();
 	private String auftraggeber; // angegeben durch Auftraggeberexemplar.getKundennr();
 	private ArrayList <Komponente> komponentennr;
 
@@ -24,9 +25,18 @@ public class Auftrag {
 		this.erstellungsdatum = erstellungsdatum;
 		this.frist = frist;
 		this.status = status;
-		this.zuständigkeit = zuständigkeit;
+		this.zuständigkeitNr = zuständigkeit;
+		this.zuständigkeitName = zuständigkeit;
 		this.auftraggeber = auftraggeber;
 		this.komponentennr = komponentennr;
+	}
+
+	public String getZuständigkeitNr() {
+		return zuständigkeitNr;
+	}
+
+	public String getZuständigkeitName() {
+		return zuständigkeitName;
 	}
 
 	public String getAuftragsnr() {
@@ -45,10 +55,6 @@ public class Auftrag {
 		return status;
 	}
 
-	public String getZuständigkeit() {
-		return zuständigkeit;
-	}
-
 	public String getAuftraggeber() {
 		return auftraggeber;
 	}
@@ -57,18 +63,16 @@ public class Auftrag {
 		return komponentennr;
 	}
 
-//	@Override
-//	public String toString() {
-//		return "Auftrag [auftragsnr=" + auftragsnr + ", erstellungsdatum=" + erstellungsdatum + ", frist=" + frist
-//				+ ", status=" + status + ", zuständigkeit=" + zuständigkeit + ", auftraggeber=" + auftraggeber
-//				+ ", komponentennr=" + komponentennr + "]";
-//	}
-	
+	@Override
 	public String toString() {
-		return auftragsnr;
+		return "Auftrag [auftragsnr=" + auftragsnr + ", erstellungsdatum=" + erstellungsdatum + ", frist=" + frist
+				+ ", status=" + status + ", zuständigkeitNr=" + zuständigkeitNr + ", zuständigkeitName="
+				+ zuständigkeitName + ", auftraggeber=" + auftraggeber + ", komponentennr=" + komponentennr + "]";
 	}
-	
-	
-	
+
+	public Object getZuständigkeit() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

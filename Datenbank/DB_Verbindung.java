@@ -67,7 +67,7 @@ public class DB_Verbindung {
 			objekte.Auftrag a = new Auftrag(rs.getString("Auftragsnummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), rs.getString("Zuständigkeit"), rs.getString("Auftraggeber"), null);																						
 			Auftragsliste.add(a);
 		}
-		System.out.println("Aufträge einelesen:" + Auftragsliste);
+		System.out.println("Aufträge einlesen:" + Auftragsliste);
 
 		
 		
