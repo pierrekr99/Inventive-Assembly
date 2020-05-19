@@ -10,26 +10,30 @@ import java.util.List;
 
 import objekte.Auftrag;
 import objekte.Komponente;
-
+import objekte.*;
 
 public class DB_Verbindung {
 
 	Connection Verbindung = null;
 	ResultSet rs;
 	List<Auftrag> Auftragsliste = new ArrayList<>();
+	List<Auftraggeber> Auftraggeberliste = new ArrayList<>();
+	List<Disponent> Disponentliste = new ArrayList<>();
 	
 	
 	public static void main (String[] args) { 
 		
 		DB_Verbindung test = new DB_Verbindung();
 		test.verbinden();
+		test.auftraggeber_einlesen();
+		//test.Auftrag_einlesen();
 		
 	}
 	
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
 	
-		String adresse = "jdbc:mysql://3.125.60.55";
+		String adresse = "jdbc:mysql://3.125.60.55/db2";
 		String treiber = "com.mysql.cj.jdbc.Driver";
 		String benutzername = "db2";
 		String passwort = "!db2.winf?";
@@ -37,7 +41,6 @@ public class DB_Verbindung {
 		try{
 			Class.forName(treiber);
 			Verbindung = DriverManager.getConnection(adresse, benutzername, passwort);
-			
 			System.out.println("Verbindung hergestellt");
 			
 		} catch (Exception e) {
@@ -61,29 +64,67 @@ public class DB_Verbindung {
 	public void Auftrag_einlesen() { 																 //alle Aufträge werden eingelesen
 		try {
 		Statement stmt = Verbindung.createStatement();
-		rs = stmt.executeQuery("SELECT * FROM `AuftragListe`");
+		rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 		
 		while (rs.next()) {
 			objekte.Auftrag a = new Auftrag(rs.getString("Auftragsnummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), rs.getString("Zuständigkeit"), rs.getString("Auftraggeber"), null);																						
 			Auftragsliste.add(a);
 		}
-		System.out.println("Aufträge einlesen:" + Auftragsliste);
-
-		
+		System.out.println("Aufträge einlesen:");
 		
 	}catch(Exception e) {
 		e.printStackTrace();
 	}
-		
-		
+			
 	}
 	
 	
-	public List<Auftrag> getList() { //Methoden Name English --> bekomme_Liste
-
-		return Auftragsliste; // Rückgabewert die Arraylist mit allen Aufträgen
-
+	public void auftraggeber_einlesen() {  //Methode vum alle Auftraggeber aus der Tabelle "auftraggeber" von der Datenbank einlesen
+		
+		try {
+			Statement stmt = Verbindung.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM `auftraggeber`");
+			
+			while (rs.next()) {
+				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"), rs.getString("Kundennr"));		//Ein Exemplar von Auftraggeber wird erstellt																
+				Auftraggeberliste.add(Auftraggeber);
+			}
+			System.out.println("Auftraggeber einlesen:" + Auftraggeberliste);
+	
+		}catch(Exception e) {
+			e.printStackTrace();
+		}	
+		
 	}
+//	public void disponent_einlesen() {
+//		
+//		try {
+//			Statement stmt = Verbindung.createStatement();
+//			rs = stmt.executeQuery("SELECT * FROM `disponent`");
+//			
+//			while (rs.next()) {
+//				objekte.Disponent Disponent = new Disponent(rs.getString(""));																		
+//				Disponentliste.add(Disponent);
+//			}
+//			System.out.println("Auftraggeber einlesen:" + Auftraggeberliste);
+//	
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		
+//		
+//	}
+	public void komponente_einlesen() {
+		
+		
+		
+		
+		
+	}
+	public void monteur_einlesen() {}
+	
+
 	
 }
 

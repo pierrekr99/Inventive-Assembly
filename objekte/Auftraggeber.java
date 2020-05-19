@@ -9,9 +9,10 @@ public class Auftraggeber {
 	private String kundennr;
 
 	public Auftraggeber(String name, String kundennr) {
-		super();
-		name = name;
-		kundennr = kundennr;
+	super();
+	this.name = name;
+	this.kundennr = kundennr;
+	
 
 	}
 
@@ -25,7 +26,7 @@ public class Auftraggeber {
 
 	@Override
 	public String toString() {
-		return "Auftraggeber [Name=" + name + ", Kundennr=" + kundennr + "]";
+		return " [Name = " + name + ", Kundennr = " + kundennr + "]";
 	}
 
 }
