@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Auftrag {
 	
-	// kommentar von jani
 
 //	Attribute
 	private String auftragsnr;
