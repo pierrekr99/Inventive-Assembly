@@ -7,12 +7,13 @@ public class Auftrag {
 
 
 //	Attribute
-	private String auftragsnummer;
+	private String auftragsNummer;
 	private String erstellungsdatum;
 	private String frist;
 	private String status;
 	private Monteur zustaendig; // in Tabelle angegeben durch Monteurexemplar.getName(); + angegeben durch Monteurexemplar.getMitarbeiternummer();
-	private Auftraggeber auftraggeber; //in Tabelle angegeben durch Auftraggeberexemplar.getKundennummer();
+	private Auftraggeber auftraggeber;
+	//in Tabelle angegeben durch Auftraggeberexemplar.getKundennummer();
 	private ArrayList <Komponente> komponenten; //in Tabelle angegeben in ArrayList mit komponentenexemplar.getKomponentennummer()
 
 	
@@ -21,7 +22,7 @@ public class Auftrag {
 	public Auftrag(String auftragsnummer, String erstellungsdatum, String frist, String status, Monteur zustaendig,
 			Auftraggeber auftraggeber, ArrayList<Komponente> komponenten) {
 		super();
-		this.auftragsnummer = auftragsnummer;
+		this.auftragsNummer = auftragsnummer;
 		this.erstellungsdatum = erstellungsdatum;
 		this.frist = frist;
 		this.status = status;
@@ -31,13 +32,13 @@ public class Auftrag {
 	}
 
 
-	public String getAuftragsnummer() {
-		return auftragsnummer;
+	public String getAuftragsNummer() {
+		return auftragsNummer;
 	}
 
 
-	public void setAuftragsnummer(String auftragsnummer) {
-		this.auftragsnummer = auftragsnummer;
+	public void setAuftragsNummer(String auftragsnummer) {
+		this.auftragsNummer = auftragsnummer;
 	}
 
 
@@ -103,7 +104,7 @@ public class Auftrag {
 
 	@Override
 	public String toString() {
-		return "Auftrag [auftragsnummer=" + auftragsnummer + ", erstellungsdatum=" + erstellungsdatum + ", frist="
+		return "Auftrag [auftragsnummer=" + auftragsNummer + ", erstellungsdatum=" + erstellungsdatum + ", frist="
 				+ frist + ", status=" + status + ", zustaendig=" + zustaendig + ", auftraggeber=" + auftraggeber
 				+ ", komponenten=" + komponenten + "]";
 	}

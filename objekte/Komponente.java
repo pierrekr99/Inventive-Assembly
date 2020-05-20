@@ -6,15 +6,15 @@ public class Komponente  {
 	
 //	Attribute
 	private String name;
-	private String komponentennr;
+	private String komponentenNummer;
 	private boolean verfuegbarkeit;
 	private String kategorie;
 
 	
-	public Komponente(String name, String komponentennr, boolean verfuegbarkeit, String kategorie) {
+	public Komponente(String name, String komponentenNummer, boolean verfuegbarkeit, String kategorie) {
 		super();
 		this.name = name;
-		this.komponentennr = komponentennr;
+		this.komponentenNummer = komponentenNummer;
 		this.verfuegbarkeit = verfuegbarkeit;
 		this.kategorie = kategorie;
 	}
@@ -23,8 +23,8 @@ public class Komponente  {
 		return name;
 	}
 
-	public String getKomponentennr() {
-		return komponentennr;
+	public String getKomponentenNummer() {
+		return komponentenNummer;
 	}
 
 	public boolean isVerfuegbarkeit() {
@@ -37,7 +37,7 @@ public class Komponente  {
 
 	@Override
 	public String toString() {
-		return "Komponentennr = " + komponentennr
+		return "KomponentenNummer = " + komponentenNummer
 			;
 	}
 

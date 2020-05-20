@@ -10,7 +10,7 @@ public class MonteurAuftragsTabelle extends AuftragsTabelle {
 	private static final long serialVersionUID = 3857455058328741279L;
 	
 	private ArrayList<Auftrag> auftragsListe;
-	private String[] kopfzeile = { "Auftragsnr", "Status", "Erstellungsdatum", "Frist", "Auftraggeber" };
+	private String[] kopfzeile = { "Auftragsnummer", "Status", "Erstellungsdatum", "Frist", "Auftraggeber" };
 
 	public MonteurAuftragsTabelle(ArrayList<Auftrag> auftragsListe) {
 		super(auftragsListe);
@@ -46,7 +46,7 @@ public class MonteurAuftragsTabelle extends AuftragsTabelle {
 
 		switch (columnIndex) {
 		case 0:
-			return auftragsListe.get(rowIndex).getAuftragsnr();
+			return auftragsListe.get(rowIndex).getAuftragsNummer();
 		case 1:
 			return auftragsListe.get(rowIndex).getStatus();
 		case 2:

@@ -10,7 +10,7 @@ public class DiponentAuftragsTabelle extends AuftragsTabelle {
 	private static final long serialVersionUID = -9117957090034007029L;
 	
 	private ArrayList<Auftrag> auftragsListe;
-	private String[] kopfzeile = { "Auftragsnr","Status", "Erstellungsdatum", "Frist","Mitarbeitername", "MitarbeiterNR", "Auftraggeber" };
+	private String[] kopfzeile = { "Auftragsnummer","Status", "Erstellungsdatum", "Frist","Mitarbeitername", "Mitarbeiternummer", "Auftraggeber" };
 	
 	public DiponentAuftragsTabelle(ArrayList<Auftrag> auftragsListe) {
 		super(auftragsListe);
@@ -46,7 +46,7 @@ public class DiponentAuftragsTabelle extends AuftragsTabelle {
 
 		switch (columnIndex) {
 		case 0:
-			return auftragsListe.get(rowIndex).getAuftragsnr();
+			return auftragsListe.get(rowIndex).getAuftragsNummer();
 		case 1:
 			return auftragsListe.get(rowIndex).getStatus();
 		case 2:
@@ -54,9 +54,9 @@ public class DiponentAuftragsTabelle extends AuftragsTabelle {
 		case 3:
 			return auftragsListe.get(rowIndex).getFrist();
 		case 4:
-			return auftragsListe.get(rowIndex).getZuständigkeitName();
+			return auftragsListe.get(rowIndex).getZustaendig().getName();  // Name des zuständigen Monteurs über Monteurexemplar.getName():
 		case 5:
-			return auftragsListe.get(rowIndex).getZuständigkeitNr();
+			return auftragsListe.get(rowIndex).getZustaendig().getMitarbeiterNummer();  // Mitarbeiternummer des zuständigen Monteurs über Monteurexemplar.getMitarbeiternummer();
 		case 6:
 			return auftragsListe.get(rowIndex).getAuftraggeber();
 			
