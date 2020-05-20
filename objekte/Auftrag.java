@@ -18,15 +18,15 @@ public class Auftrag {
 	private ArrayList <Komponente> komponentennr;
 
 	
-	public Auftrag(String auftragsnr, String erstellungsdatum, String frist, String status, String zuständigkeit,
+	public Auftrag(String auftragsnr, String erstellungsdatum, String frist, String status, String zuständigkeitName, String zuständigkeitNr,
 			String auftraggeber, ArrayList<Komponente> komponentennr) {
 		super();
 		this.auftragsnr = auftragsnr;
 		this.erstellungsdatum = erstellungsdatum;
 		this.frist = frist;
 		this.status = status;
-		this.zuständigkeitNr = zuständigkeit;
-		this.zuständigkeitName = zuständigkeit;
+		this.zuständigkeitName = zuständigkeitName;
+		this.zuständigkeitNr = zuständigkeitNr;
 		this.auftraggeber = auftraggeber;
 		this.komponentennr = komponentennr;
 	}
@@ -71,9 +71,5 @@ public class Auftrag {
 				+ zuständigkeitName + ", auftraggeber=" + auftraggeber + ", komponentennr=" + komponentennr + "]";
 	}
 
-	public Object getZuständigkeit() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

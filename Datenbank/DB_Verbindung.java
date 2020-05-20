@@ -30,7 +30,7 @@ public class DB_Verbindung {
 		test.disponent_einlesen();
 		test.komponente_einlesen();
 		test.monteur_einlesen();
-		test.Auftrag_einlesen();
+		test.auftrag_einlesen();
 	}
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
@@ -63,7 +63,7 @@ public class DB_Verbindung {
 
 	}
 
-	public void Auftrag_einlesen() { // alle Aufträge werden eingelesen
+	public void auftrag_einlesen() { // alle Aufträge werden eingelesen
 
 		try {
 			Statement stmt = Verbindung.createStatement();
@@ -85,7 +85,7 @@ public class DB_Verbindung {
 
 				}
 
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("Auftragsnr"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), rs.getString("Zuständigkeit"), rs.getString("Auftraggeber"), Komponentenlisteauftrag);
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("Auftragsnr"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), rs.getString("ZuständigkeitName"),  rs.getString("ZuständigkeitNr"), rs.getString("Auftraggeber"), Komponentenlisteauftrag);
 
 				Auftragsliste.add(Auftrag);
 
