@@ -5,71 +5,110 @@ import java.util.ArrayList;
 
 public class Auftrag {
 	
-	// kommentar von jani
+
 
 //	Attribute
-	private String auftragsnr;
+	private String auftragsnummer;
 	private String erstellungsdatum;
 	private String frist;
 	private String status;
-	private String zuständigkeitNr; // angegeben durch Monteurexemplar.getMitarbeiternr();
-	private String zuständigkeitName; // angegeben durch Monteurexemplar.getName();
-	private String auftraggeber; // angegeben durch Auftraggeberexemplar.getKundennr();
-	private ArrayList <Komponente> komponentennr;
+	private Monteur zustaendig; // in Tabelle angegeben durch Monteurexemplar.getName(); + angegeben durch Monteurexemplar.getMitarbeiternummer();
+	private Auftraggeber auftraggeber; //in Tabelle angegeben durch Auftraggeberexemplar.getKundennummer();
+	private ArrayList <Komponente> komponenten; //in Tabelle angegeben in ArrayList mit komponentenexemplar.getKomponentennummer()
 
 	
-	public Auftrag(String auftragsnr, String erstellungsdatum, String frist, String status, String zuständigkeitName, String zuständigkeitNr,
-			String auftraggeber, ArrayList<Komponente> komponentennr) {
+// Konstruktor
+
+	public Auftrag(String auftragsnummer, String erstellungsdatum, String frist, String status, Monteur zustaendig,
+			Auftraggeber auftraggeber, ArrayList<Komponente> komponenten) {
 		super();
-		this.auftragsnr = auftragsnr;
+		this.auftragsnummer = auftragsnummer;
 		this.erstellungsdatum = erstellungsdatum;
 		this.frist = frist;
 		this.status = status;
-		this.zuständigkeitName = zuständigkeitName;
-		this.zuständigkeitNr = zuständigkeitNr;
+		this.zustaendig = zustaendig;
 		this.auftraggeber = auftraggeber;
-		this.komponentennr = komponentennr;
+		this.komponenten = komponenten;
 	}
 
-	public String getZuständigkeitNr() {
-		return zuständigkeitNr;
+
+	public String getAuftragsnummer() {
+		return auftragsnummer;
 	}
 
-	public String getZuständigkeitName() {
-		return zuständigkeitName;
+
+	public void setAuftragsnummer(String auftragsnummer) {
+		this.auftragsnummer = auftragsnummer;
 	}
 
-	public String getAuftragsnr() {
-		return auftragsnr;
-	}
 
 	public String getErstellungsdatum() {
 		return erstellungsdatum;
 	}
 
+
+	public void setErstellungsdatum(String erstellungsdatum) {
+		this.erstellungsdatum = erstellungsdatum;
+	}
+
+
 	public String getFrist() {
 		return frist;
 	}
 
+
+	public void setFrist(String frist) {
+		this.frist = frist;
+	}
+
+
 	public String getStatus() {
 		return status;
 	}
-	
-	public String getAuftraggeber() {
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public Monteur getZustaendig() {
+		return zustaendig;
+	}
+
+
+	public void setZustaendig(Monteur zustaendig) {
+		this.zustaendig = zustaendig;
+	}
+
+
+	public Auftraggeber getAuftraggeber() {
 		return auftraggeber;
 	}
-	
 
-	public ArrayList<Komponente> getKomponentennr() {
-		return komponentennr;
+
+	public void setAuftraggeber(Auftraggeber auftraggeber) {
+		this.auftraggeber = auftraggeber;
 	}
+
+
+	public ArrayList<Komponente> getKomponenten() {
+		return komponenten;
+	}
+
+
+	public void setKomponenten(ArrayList<Komponente> komponenten) {
+		this.komponenten = komponenten;
+	}
+
 
 	@Override
 	public String toString() {
-		return "Auftrag [auftragsnr=" + auftragsnr + ", erstellungsdatum=" + erstellungsdatum + ", frist=" + frist
-				+ ", status=" + status + ", zuständigkeitNr=" + zuständigkeitNr + ", zuständigkeitName="
-				+ zuständigkeitName + ", auftraggeber=" + auftraggeber + ", komponentennr=" + komponentennr + "]";
+		return "Auftrag [auftragsnummer=" + auftragsnummer + ", erstellungsdatum=" + erstellungsdatum + ", frist="
+				+ frist + ", status=" + status + ", zustaendig=" + zustaendig + ", auftraggeber=" + auftraggeber
+				+ ", komponenten=" + komponenten + "]";
 	}
 
+	
 
 }
