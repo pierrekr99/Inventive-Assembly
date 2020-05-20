@@ -174,5 +174,20 @@ public class DB_Verbindung {
 		}
 
 	}
+	
+	public String getPassword(String id) {
+		String passwort = "";
+		try {
+			Statement stmt = Verbindung.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM `Login` WHERE `MitarbeiterNr` = " + id);
+			while(rs.next()) {
+				passwort = rs.getString("Passwort");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return passwort;
+	}
 
 }
