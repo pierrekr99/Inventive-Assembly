@@ -14,7 +14,7 @@ public class DetailsZuständigkeitTabelle extends AbstractTableModel implements S
 	
 	//		Erstellung der Tabelle und des Konstruktors
 	private ArrayList<Monteur> detailListe;
-	private String[] columns = { "Name", "Mitarbeiternr" };
+	private String[] columns = { "Name", "Mitarbeiternummer" };
 
 	public DetailsZuständigkeitTabelle(ArrayList<Monteur> detailListe) {
 			this.detailListe = detailListe;
@@ -51,7 +51,7 @@ public class DetailsZuständigkeitTabelle extends AbstractTableModel implements S
 		case 0:
 			return detailListe.get(rowIndex).getName();
 		case 1:
-			return detailListe.get(rowIndex).getMitarbeiternr();
+			return detailListe.get(rowIndex).getMitarbeiterNummer();
 		default:
 			return null;
 		}

@@ -14,7 +14,7 @@ public class DetailsKomponentenTabelle extends AbstractTableModel implements Ser
 
 	// Erstellung der Tabelle und des Konstruktors
 	private ArrayList<Komponente> komponentenListe;
-	private String[] columns = { "Kategorie", "TeileNr", "Verfügbar", "Nicht verfügbar" };
+	private String[] columns = { "Kategorie", "Komponentennummer", "verfügbar", "Nicht verfügbar" };
 
 	public DetailsKomponentenTabelle(ArrayList<Komponente> komponentenListe) {
 		this.komponentenListe = komponentenListe;
@@ -58,7 +58,7 @@ public class DetailsKomponentenTabelle extends AbstractTableModel implements Ser
 		case 0:
 			return komponentenListe.get(rowIndex).getKategorie();
 		case 1:
-			return komponentenListe.get(rowIndex).getKomponentennr();
+			return komponentenListe.get(rowIndex).getKomponentenNummer();
 		case 2:
 			if (komponentenListe.get(rowIndex).isVerfuegbarkeit()) {
 				return komponentenListe.get(rowIndex).getName();

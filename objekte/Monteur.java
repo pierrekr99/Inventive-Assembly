@@ -5,7 +5,7 @@ public class Monteur extends Mitarbeiter {
 	// Attribute
 	private String anwesenheit;
 
-	public Monteur(String name, String vorname, String mitarbeiterNummer, String passwort) {
+	public Monteur(String name, String vorname, String mitarbeiterNummer, String passwort, String anwesenheit) {
 		super(name, vorname, mitarbeiterNummer, passwort);
 		this.anwesenheit = anwesenheit;
 	}

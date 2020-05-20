@@ -14,23 +14,23 @@ import objekte.*;
 
 public class DB_Verbindung {
 
-	Connection Verbindung = null;
+	Connection verbindung = null;
 	ResultSet rs;
-	List<Auftrag> Auftragsliste = new ArrayList<>();
-	List<Auftraggeber> Auftraggeberliste = new ArrayList<>();
-	List<Disponent> Disponentliste = new ArrayList<>();
-	List<Komponente> Komponentenliste = new ArrayList<>();
-	List<Monteur> Monteurliste = new ArrayList<>();
+	List<Auftrag> auftragsliste = new ArrayList<>();
+	List<Auftraggeber> auftraggeberliste = new ArrayList<>();
+	List<Disponent> disponentliste = new ArrayList<>();
+	List<Komponente> komponentenliste = new ArrayList<>();
+	List<Monteur> monteurliste = new ArrayList<>();
 
 	public static void main(String[] args) {
 
 		DB_Verbindung test = new DB_Verbindung();
 		test.verbinden();
-		test.auftraggeber_einlesen();
-		test.disponent_einlesen();
-		test.komponente_einlesen();
-		test.monteur_einlesen();
-		test.auftrag_einlesen();
+		test.auftraggeberEinlesen();
+		test.disponentEinlesen();
+		test.komponenteEinlesen();
+		test.monteurEinlesen();
+		test.auftragEinlesen();
 	}
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
@@ -42,7 +42,7 @@ public class DB_Verbindung {
 
 		try {
 			Class.forName(treiber);
-			Verbindung = DriverManager.getConnection(adresse, benutzername, passwort);
+			verbindung = DriverManager.getConnection(adresse, benutzername, passwort);
 			System.out.println("Verbindung hergestellt");
 
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class DB_Verbindung {
 	public void trennen() { // trennt die Verbindung mit der Datenbank
 
 		try {
-			Verbindung.close();
+			verbindung.close();
 			System.out.println("Verbindung getrennt");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -63,10 +63,10 @@ public class DB_Verbindung {
 
 	}
 
-	public void auftrag_einlesen() { // alle Aufträge werden eingelesen
+	public void auftragEinlesen() { // alle Aufträge werden eingelesen
 
 		try {
-			Statement stmt = Verbindung.createStatement();
+			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 
 			while (rs.next()) {
@@ -77,20 +77,20 @@ public class DB_Verbindung {
 																						// verschiedene Strings augeteilt und in den Array gespeichert
 				for (String ab : komponentennrarray) { // Für jede Komponentennummer wird nun das richtige Exemplar von Komponente
 														// gesucht
-					for (int i = 0; i < Komponentenliste.size(); i++) {
-						if (ab.equals(Komponentenliste.get(i).getKomponentennr())) {
-							Komponentenlisteauftrag.add(Komponentenliste.get(i)); // das Exmplar mit der passenden Kompinentennummer wird der Liste hinzugefügt
+					for (int i = 0; i < komponentenliste.size(); i++) {
+						if (ab.equals(komponentenliste.get(i).getKomponentenNummer())) {
+							Komponentenlisteauftrag.add(komponentenliste.get(i)); // das Exmplar mit der passenden Kompinentennummer wird der Liste hinzugefügt
 						}
 					}
 
 				}
 
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("Auftragsnr"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), rs.getString("ZuständigkeitName"),  rs.getString("ZuständigkeitNr"), rs.getString("Auftraggeber"), Komponentenlisteauftrag);
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), rs.getString("ZuständigkeitName"),  rs.getString("ZuständigkeitNr"), rs.getString("Auftraggeber"), Komponentenlisteauftrag);
 
-				Auftragsliste.add(Auftrag);
+				auftragsliste.add(Auftrag);
 
 			}
-			System.out.println("Aufträge einlesen:" + Auftragsliste);
+			System.out.println("Aufträge einlesen:" + auftragsliste);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,23 +98,23 @@ public class DB_Verbindung {
 
 	}
 
-	public void auftraggeber_einlesen() { // Methode vum alle Auftraggeber aus der Tabelle "auftraggeber" von der
+	public void auftraggeberEinlesen() { // Methode vum alle Auftraggeber aus der Tabelle "auftraggeber" von der
 											// Datenbank einlesen
 
 		try {
-			Statement stmt = Verbindung.createStatement();
+			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftraggeber`");
 
 			while (rs.next()) {
-				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"), rs.getString("Kundennr")); // Ein
+				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"), rs.getString("KundenNummer")); // Ein
 																														// Exemplar
 																														// von
 																														// Auftraggeber
 																														// wird
 																														// erstellt
-				Auftraggeberliste.add(Auftraggeber);
+				auftraggeberliste.add(Auftraggeber);
 			}
-			System.out.println("Auftraggeber einlesen:" + Auftraggeberliste);
+			System.out.println("Auftraggeber einlesen:" + auftraggeberliste);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,17 +122,17 @@ public class DB_Verbindung {
 
 	}
 
-	public void disponent_einlesen() {
+	public void disponentEinlesen() {
 
 		try {
-			Statement stmt = Verbindung.createStatement();
+			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `disponent`");
 
 			while (rs.next()) {
-				objekte.Disponent Disponent = new Disponent(rs.getString("Name"), rs.getString("Vorname"), rs.getString("Mitarbeiternr"), rs.getString("Passwort"));
-				Disponentliste.add(Disponent);
+				objekte.Disponent Disponent = new Disponent(rs.getString("Name"), rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"));
+				disponentliste.add(Disponent);
 			}
-			System.out.println("Disponenten einlesen:" + Disponentliste);
+			System.out.println("Disponenten einlesen:" + disponentliste);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -140,34 +140,34 @@ public class DB_Verbindung {
 
 	}
 
-	public void komponente_einlesen() {
+	public void komponenteEinlesen() {
 
 		try {
-			Statement stmt = Verbindung.createStatement();
+			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `komponente`");
 
 			while (rs.next()) {
-				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("Komponentennr"), rs.getBoolean("Verfügbarkeit"), rs.getString("Kategorie"));
-				Komponentenliste.add(Komponente);
+				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("KomponentenNummer"), rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"));
+				komponentenliste.add(Komponente);
 			}
-			System.out.println("Komponenten einlesen:" + Komponentenliste);
+			System.out.println("Komponenten einlesen:" + komponentenliste);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void monteur_einlesen() {
+	public void monteurEinlesen() {
 
 		try {
-			Statement stmt = Verbindung.createStatement();
+			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `monteur`");
 
 			while (rs.next()) {
-				objekte.Monteur Monteur = new Monteur(rs.getString("Name"), rs.getString("Vorname"), rs.getString("Mitarbeiternr"), rs.getString("Passwort"), rs.getString("Anwesenheit"));
-				Monteurliste.add(Monteur);
+				objekte.Monteur Monteur = new Monteur(rs.getString("Name"), rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), rs.getString("Anwesenheit"));
+				monteurliste.add(Monteur);
 			}
-			System.out.println("Monteur einlesen:" + Monteurliste);
+			System.out.println("Monteur einlesen:" + monteurliste);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -178,7 +178,7 @@ public class DB_Verbindung {
 	public String getPassword(String id) {
 		String passwort = "";
 		try {
-			Statement stmt = Verbindung.createStatement();
+			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `Login` WHERE `MitarbeiterNr` = " + id);
 			while(rs.next()) {
 				passwort = rs.getString("Passwort");
