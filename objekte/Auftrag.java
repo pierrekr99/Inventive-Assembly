@@ -1,6 +1,5 @@
 package objekte;
 
-import java.util.Comparator;
 import java.util.ArrayList;
 
 public class Auftrag {
