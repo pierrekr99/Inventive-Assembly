@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 public class Auftrag {
 	
-
+//<<<<<<< HEAD
+//
+//=======
+//>>>>>>> branch 'master' of https://github.com/pierrekr99/Inventive-Assembly1
 
 //	Attribute
 	private String auftragsNummer;
