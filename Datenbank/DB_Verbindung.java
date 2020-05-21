@@ -132,7 +132,7 @@ public class DB_Verbindung {
 					System.out.println("Keinen passenden Auftraggeber gefunden. Möchten Sie einen neuen Auftraggeber anlegen?");
 				}
 
-				if (zustaendig != null && auftraggeber != null) {
+				if (zustaendig.getMitarbeiterNummer() != null && auftraggeber.getKundenNummer() != null) {
 					objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"),
 							rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), zustaendig,
 							auftraggeber, Komponentenlisteauftrag);
@@ -143,7 +143,10 @@ public class DB_Verbindung {
 					
 				}
 			}
-			System.out.println("Aufträge einlesen:" + auftragsListe);
+			System.out.println("Aufträge einlesen:");
+			for (Auftrag auftrag : auftragsListe) {
+				System.out.println(auftrag);
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
