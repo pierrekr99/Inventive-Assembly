@@ -103,10 +103,10 @@ public class DB_Verbindung {
 				 * Gleiches Vorgehen beim Auftraggeber ...
 				 */
 
-				Monteur zustaendig = null;
+				Monteur zustaendig = new Monteur(null, null, null, null, null);
 
 				for (Monteur monteur : monteurListe) {
-					if (monteur.getMitarbeiterNummer().equals(rs.getString("ZuständigkeitNummer"))) {
+					if (monteur.getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
 						zustaendig.setName(monteur.getName());
 						zustaendig.setVorname(monteur.getVorname());
 						zustaendig.setMitarbeiterNummer(monteur.getMitarbeiterNummer());
@@ -115,7 +115,7 @@ public class DB_Verbindung {
 					}
 				}
 
-				Auftraggeber auftraggeber = null;
+				Auftraggeber auftraggeber = new Auftraggeber(null, null);
 
 				for (Auftraggeber kunde : auftraggeberListe) {
 					if (kunde.getKundenNummer().equals(rs.getString("Auftraggeber"))) {
