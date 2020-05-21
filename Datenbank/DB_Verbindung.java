@@ -92,12 +92,16 @@ public class DB_Verbindung {
 
 				}
 
-				/* Der zuständige Monteur und der Auftraggeber sind im Auftrag als Objekte gespeichert, allerdings ist eine Objektspeicherung in der Datenbank nicht möglich.
-				 * Somit vergleicht man hier beim Monteur die Mitarbeiternummer aus der DB mit allen Mitarbeiternummern aus der Monteurliste.
-				 * Bei Übereinstimmung wird dann der Monteur, dem die Mitarbeiternummer zugeordnet werden konnte, 
-				 * mit seinen Attributen (die bereits in der Monteurliste gespeichert sind) in dem Monteurexemplar zustaendig abgespeichert und somit im Auftrag vermerkt.
+				/*
+				 * Der zuständige Monteur und der Auftraggeber sind im Auftrag als Objekte
+				 * gespeichert, allerdings ist eine Objektspeicherung in der Datenbank nicht
+				 * möglich. Somit vergleicht man hier beim Monteur die Mitarbeiternummer aus der
+				 * DB mit allen Mitarbeiternummern aus der Monteurliste. Bei Übereinstimmung
+				 * wird dann der Monteur, dem die Mitarbeiternummer zugeordnet werden konnte,
+				 * mit seinen Attributen (die bereits in der Monteurliste gespeichert sind) in
+				 * dem Monteurexemplar zustaendig abgespeichert und somit im Auftrag vermerkt.
 				 * Gleiches Vorgehen beim Auftraggeber ...
-				*/
+				 */
 
 				Monteur zustaendig = null;
 
@@ -120,12 +124,16 @@ public class DB_Verbindung {
 					}
 				}
 
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
-						rs.getString("Frist"), rs.getString("Status"), zustaendig, auftraggeber,
-						Komponentenlisteauftrag);
+				if (zustaendig != null && auftraggeber != null) {
+					objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"),
+							rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), zustaendig,
+							auftraggeber, Komponentenlisteauftrag);
 
-				auftragsliste.add(Auftrag);
-
+					auftragsliste.add(Auftrag);
+				}else {
+					System.out.println("Fehler! Der Auftrag konnte leider nicht angelegt werden. Bitte überprüfen Sie ihre Eingaben!");
+					
+				}
 			}
 			System.out.println("Aufträge einlesen:" + auftragsliste);
 
