@@ -24,6 +24,14 @@ public class Auftraggeber {
 		return kundenNummer;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setKundenNummer(String kundenNummer) {
+		this.kundenNummer = kundenNummer;
+	}
+
 	@Override
 	public String toString() {
 		return " [Name = " + name + ", Kundennr = " + kundenNummer + "]";
