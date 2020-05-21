@@ -16,11 +16,11 @@ public class DB_Verbindung {
 
 	Connection verbindung = null;
 	ResultSet rs;
-	List<Auftrag> auftragsliste = new ArrayList<>();
-	List<Auftraggeber> auftraggeberliste = new ArrayList<>();
-	List<Disponent> disponentliste = new ArrayList<>();
-	List<Komponente> komponentenliste = new ArrayList<>();
-	List<Monteur> monteurliste = new ArrayList<>();
+	List<Auftrag> auftragsListe = new ArrayList<>();
+	List<Auftraggeber> auftraggeberListe = new ArrayList<>();
+	List<Disponent> disponentListe = new ArrayList<>();
+	List<Komponente> komponentenListe = new ArrayList<>();
+	List<Monteur> monteurListe = new ArrayList<>();
 
 	public static void main(String[] args) {
 
@@ -82,9 +82,9 @@ public class DB_Verbindung {
 				for (String ab : komponentennrarray) { // Für jede Komponentennummer wird nun das richtige Exemplar von
 														// Komponente
 														// gesucht
-					for (int i = 0; i < komponentenliste.size(); i++) {
-						if (ab.equals(komponentenliste.get(i).getKomponentenNummer())) {
-							Komponentenlisteauftrag.add(komponentenliste.get(i)); // das Exmplar mit der passenden
+					for (int i = 0; i < komponentenListe.size(); i++) {
+						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {
+							Komponentenlisteauftrag.add(komponentenListe.get(i)); // das Exmplar mit der passenden
 																					// Kompinentennummer wird der Liste
 																					// hinzugefügt
 						}
@@ -105,7 +105,7 @@ public class DB_Verbindung {
 
 				Monteur zustaendig = null;
 
-				for (Monteur monteur : monteurliste) {
+				for (Monteur monteur : monteurListe) {
 					if (monteur.getMitarbeiterNummer().equals(rs.getString("ZuständigkeitNummer"))) {
 						zustaendig.setName(monteur.getName());
 						zustaendig.setVorname(monteur.getVorname());
@@ -117,11 +117,19 @@ public class DB_Verbindung {
 
 				Auftraggeber auftraggeber = null;
 
-				for (Auftraggeber kunde : auftraggeberliste) {
+				for (Auftraggeber kunde : auftraggeberListe) {
 					if (kunde.getKundenNummer().equals(rs.getString("Auftraggeber"))) {
 						auftraggeber.setKundenNummer(kunde.getKundenNummer());
 						auftraggeber.setName(kunde.getName());
 					}
+				}
+				
+				if (auftraggeber == null) {
+					/*
+					 Falls kein Auftraggeber mit dieser Nummer gefunden wird, kann ggf. neuer Auftraggeber angelegt werden? -> oder nur nice-to-have ??
+					 Falls ja, müsste es hier einen Verweis auf ein extra GUI Fenster geben.
+					 */
+					System.out.println("Keinen passenden Auftraggeber gefunden. Möchten Sie einen neuen Auftraggeber anlegen?");
 				}
 
 				if (zustaendig != null && auftraggeber != null) {
@@ -129,13 +137,13 @@ public class DB_Verbindung {
 							rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), zustaendig,
 							auftraggeber, Komponentenlisteauftrag);
 
-					auftragsliste.add(Auftrag);
+					auftragsListe.add(Auftrag);
 				}else {
 					System.out.println("Fehler! Der Auftrag konnte leider nicht angelegt werden. Bitte überprüfen Sie ihre Eingaben!");
 					
 				}
 			}
-			System.out.println("Aufträge einlesen:" + auftragsliste);
+			System.out.println("Aufträge einlesen:" + auftragsListe);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -158,9 +166,9 @@ public class DB_Verbindung {
 														// Auftraggeber
 														// wird
 														// erstellt
-				auftraggeberliste.add(Auftraggeber);
+				auftraggeberListe.add(Auftraggeber);
 			}
-			System.out.println("Auftraggeber einlesen:" + auftraggeberliste);
+			System.out.println("Auftraggeber einlesen:" + auftraggeberListe);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -177,9 +185,9 @@ public class DB_Verbindung {
 			while (rs.next()) {
 				objekte.Disponent Disponent = new Disponent(rs.getString("Name"), rs.getString("Vorname"),
 						rs.getString("MitarbeiterNummer"), rs.getString("Passwort"));
-				disponentliste.add(Disponent);
+				disponentListe.add(Disponent);
 			}
-			System.out.println("Disponenten einlesen:" + disponentliste);
+			System.out.println("Disponenten einlesen:" + disponentListe);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,9 +204,9 @@ public class DB_Verbindung {
 			while (rs.next()) {
 				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("KomponentenNummer"),
 						rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"));
-				komponentenliste.add(Komponente);
+				komponentenListe.add(Komponente);
 			}
-			System.out.println("Komponenten einlesen:" + komponentenliste);
+			System.out.println("Komponenten einlesen:" + komponentenListe);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -214,9 +222,9 @@ public class DB_Verbindung {
 			while (rs.next()) {
 				objekte.Monteur Monteur = new Monteur(rs.getString("Name"), rs.getString("Vorname"),
 						rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), rs.getString("Anwesenheit"));
-				monteurliste.add(Monteur);
+				monteurListe.add(Monteur);
 			}
-			System.out.println("Monteur einlesen:" + monteurliste);
+			System.out.println("Monteur einlesen:" + monteurListe);
 
 		} catch (Exception e) {
 			e.printStackTrace();
