@@ -114,7 +114,7 @@ public class LoginFenster extends JFrame {
 		JButton bt_Login = new JButton("Login");
 		bt_Login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String id = tf_MitarbeiterID.getText();
+				String id = tf_MitarbeiterID.getText();//Hier die inderscheidung zwischen Disponent und Monteur durch vergleich der Nummer mit Bereich für jew Rolle
 				if (tf_password.getText().equals(verbindung.getPassword(id))) {
 					System.out.println("Erfolg!");
 				} else {
