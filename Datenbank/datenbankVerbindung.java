@@ -21,7 +21,6 @@ public class datenbankVerbindung {
 	ArrayList<Disponent> disponentListe = new ArrayList<>();
 	ArrayList<Komponente> komponentenListe = new ArrayList<>();
 	ArrayList<Monteur> monteurListe = new ArrayList<>();
-	
 
 	public Connection getVerbindung() {
 		return verbindung;
