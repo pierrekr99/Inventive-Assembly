@@ -12,7 +12,7 @@ import objekte.Auftrag;
 import objekte.Komponente;
 import objekte.*;
 
-public class DB_Verbindung {
+public class datenbankVerbindung {
 
 	Connection verbindung = null;
 	ResultSet rs;
@@ -24,7 +24,7 @@ public class DB_Verbindung {
 
 	public static void main(String[] args) {
 
-		DB_Verbindung test = new DB_Verbindung();
+		datenbankVerbindung test = new datenbankVerbindung();
 		test.verbinden();
 		test.auftraggeberEinlesen();
 		test.disponentEinlesen();
