@@ -36,7 +36,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
-public class MontuerAufträge extends JFrame {
+public class MonteurAuftraege extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tAuftraege;
@@ -63,7 +63,7 @@ public class MontuerAufträge extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MontuerAufträge frame = new MontuerAufträge();
+					MonteurAuftraege frame = new MonteurAuftraege();
 					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);// Fenster Groß
 					// frame.setUndecorated(true);//Vollbild
 					frame.setVisible(true);// Fenster erscheint
@@ -77,7 +77,7 @@ public class MontuerAufträge extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MontuerAufträge() {
+	public MonteurAuftraege() {
 		setTitle("Invenive Assembly");// Name des Fensters
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Was passiert beim schließen des Fensters
 		setBounds(100, 100, 1010, 450);// (MinBreite, MinHöhe, StandardBreite, StandardHöhe)
