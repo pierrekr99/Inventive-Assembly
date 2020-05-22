@@ -29,6 +29,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import Datenbank.datenbankVerbindung;
+
 import java.awt.Font;
 import javax.swing.UIManager;
 import java.awt.event.MouseAdapter;
@@ -43,7 +46,7 @@ public class MonteurAuftraege extends JFrame {
 	private JTextField txtSuche;
 
 	// dieser teil wird später ausgelagert
-	int zeilen = 500;// Aufragliste.size; Die Anzahl der Zeilen, die die Tabelle hat
+	int zeilen = 5;// Aufragliste.size; Die Anzahl der Zeilen, die die Tabelle hat
 	int zeile = 0;// Zeile in der der Neue Auftrag eingefügt wird
 	String auftragsNr = "1234567";// diese infos werden später aus der Datenbank ausgelesen
 	String status = "Offen";
@@ -51,14 +54,16 @@ public class MonteurAuftraege extends JFrame {
 	String datum = "16.05.20";
 	String auftraggeber = "Highspeed GmbH";
 
-	Object[][] auftraege = new Object[zeilen][];// Nur das wird später eingelesen
-	String[] auftrag = new String[6];// Ein AUftrag wird als Zeile erstellt (Zeile mit 6 Spalten
+	Object[][] auftraege = new Object[zeilen][6];// Nur das wird später eingelesen
+	String[] auftrag = new String[6];// Ein Auftrag wird als Zeile erstellt (Zeile mit 6 Spalten
 	String details = "Details";// Hier könnte man den Detailsbutton Rendern
 
+	datenbankVerbindung db = new datenbankVerbindung();
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -73,7 +78,7 @@ public class MonteurAuftraege extends JFrame {
 			}
 		});
 	}
-
+*/
 	/**
 	 * Create the frame.
 	 */
@@ -151,26 +156,29 @@ public class MonteurAuftraege extends JFrame {
 		sPAuftraege.setColumnHeaderView(panel);
 		contentPane.setLayout(gl_contentPane);
 	}
-
+	/**
+	 * Die methode zum Füllen der Tabelle*************************************************************************
+	 * ************************************************************************************************
+	 */
 	private void auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
-		neueZeile();
-
+		db.verbinden();
+		db.auftraggeberEinlesen();
+		db.disponentEinlesen();
+		db.komponenteEinlesen();
+		db.monteurEinlesen();
+		db.auftragEinlesen();
+		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
+			auftraege[i][0] = details;
+			auftraege[i][1] = db.getAuftragsListe().get(i).getAuftragsNummer();// Auftragsliste.get(zeile).getAuftragsnr()
+			auftraege[i][2] = db.getAuftragsListe().get(i).getStatus();
+			auftraege[i][3] = db.getAuftragsListe().get(i).getFrist();
+			auftraege[i][4] = db.getAuftragsListe().get(i).getErstellungsdatum();
+			auftraege[i][5] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
+		}
 	}
-
-	private String[] neuerAuftrag() { // Füllt den Auftrag mit den Parametern
-		auftrag[0] = details;
-		auftrag[1] = auftragsNr;// Auftragsliste.get(zeile).getAuftragsnr()
-		auftrag[2] = status;
-		auftrag[3] = frist;
-		auftrag[4] = datum;
-		auftrag[5] = auftraggeber;
-		return auftrag;
-	}
-
-	private void neueZeile() {
-		auftraege[zeile] = neuerAuftrag();//Fügt neuen Auftrag in aufträge ein
-		zeile++;
-	}
+	/**
+	 * *************************************************************************************************
+	 */
 
 	public void deteilsFenster() {//Öffnet Detailsfenster
 		try {
