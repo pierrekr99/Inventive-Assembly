@@ -16,11 +16,40 @@ public class datenbankVerbindung {
 
 	Connection verbindung = null;
 	ResultSet rs;
-	List<Auftrag> auftragsListe = new ArrayList<>();
-	List<Auftraggeber> auftraggeberListe = new ArrayList<>();
-	List<Disponent> disponentListe = new ArrayList<>();
-	List<Komponente> komponentenListe = new ArrayList<>();
-	List<Monteur> monteurListe = new ArrayList<>();
+	ArrayList<Auftrag> auftragsListe = new ArrayList<>();
+	ArrayList<Auftraggeber> auftraggeberListe = new ArrayList<>();
+	ArrayList<Disponent> disponentListe = new ArrayList<>();
+	ArrayList<Komponente> komponentenListe = new ArrayList<>();
+	ArrayList<Monteur> monteurListe = new ArrayList<>();
+	
+
+	public Connection getVerbindung() {
+		return verbindung;
+	}
+
+	public ResultSet getRs() {
+		return rs;
+	}
+
+	public ArrayList<Auftrag> getAuftragsListe() {
+		return auftragsListe;
+	}
+
+	public ArrayList<Auftraggeber> getAuftraggeberListe() {
+		return auftraggeberListe;
+	}
+
+	public ArrayList<Disponent> getDisponentListe() {
+		return disponentListe;
+	}
+
+	public ArrayList<Komponente> getKomponentenListe() {
+		return komponentenListe;
+	}
+
+	public ArrayList<Monteur> getMonteurListe() {
+		return monteurListe;
+	}
 
 	public static void main(String[] args) {
 
