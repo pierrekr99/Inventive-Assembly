@@ -18,4 +18,13 @@ public class Monteur extends Mitarbeiter {
 		this.anwesenheit = anwesenheit;
 	}
 
+	@Override
+	public String toString() {
+		return "Monteur [anwesenheit=" + anwesenheit + ", getName()=" + getName() + ", getVorname()=" + getVorname()
+				+ ", getMitarbeiterNummer()=" + getMitarbeiterNummer() + ", getPasswort()=" + getPasswort() + "]";
+	}
+
+	
+	
+
 }

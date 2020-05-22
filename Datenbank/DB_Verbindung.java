@@ -103,10 +103,10 @@ public class DB_Verbindung {
 				 * Gleiches Vorgehen beim Auftraggeber ...
 				 */
 
-				Monteur zustaendig = null;
+				Monteur zustaendig = new Monteur(null, null, null, null, null);
 
 				for (Monteur monteur : monteurListe) {
-					if (monteur.getMitarbeiterNummer().equals(rs.getString("ZuständigkeitNummer"))) {
+					if (monteur.getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
 						zustaendig.setName(monteur.getName());
 						zustaendig.setVorname(monteur.getVorname());
 						zustaendig.setMitarbeiterNummer(monteur.getMitarbeiterNummer());
@@ -115,7 +115,7 @@ public class DB_Verbindung {
 					}
 				}
 
-				Auftraggeber auftraggeber = null;
+				Auftraggeber auftraggeber = new Auftraggeber(null, null);
 
 				for (Auftraggeber kunde : auftraggeberListe) {
 					if (kunde.getKundenNummer().equals(rs.getString("Auftraggeber"))) {
@@ -132,7 +132,7 @@ public class DB_Verbindung {
 					System.out.println("Keinen passenden Auftraggeber gefunden. Möchten Sie einen neuen Auftraggeber anlegen?");
 				}
 
-				if (zustaendig != null && auftraggeber != null) {
+				if (zustaendig.getMitarbeiterNummer() != null && auftraggeber.getKundenNummer() != null) {
 					objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"),
 							rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), zustaendig,
 							auftraggeber, Komponentenlisteauftrag);
@@ -143,7 +143,10 @@ public class DB_Verbindung {
 					
 				}
 			}
-			System.out.println("Aufträge einlesen:" + auftragsListe);
+			System.out.println("Aufträge einlesen:");
+			for (Auftrag auftrag : auftragsListe) {
+				System.out.println(auftrag);
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
