@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Datenbank.DB_Verbindung;
+import Datenbank.datenbankVerbindung;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -44,7 +44,7 @@ public class LoginFenster extends JFrame {
 	private JTextField tf_MitarbeiterID;
 	private JPasswordField tf_password;
 	private Icon icon;
-	private DB_Verbindung verbindung = new DB_Verbindung();
+	private datenbankVerbindung verbindung = new datenbankVerbindung();
 
 	/**
 	 * Launch the application.
