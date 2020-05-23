@@ -301,7 +301,7 @@ public class datenbankVerbindung {
 		String passwort = "";
 		try {
 			Statement stmt = verbindung.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM `Login` WHERE `MitarbeiterNr` = " + id);
+			rs = stmt.executeQuery("SELECT * FROM `Mitarbeiter` WHERE `MitarbeiterNummer` = " + id);
 			while (rs.next()) {
 				passwort = rs.getString("Passwort");
 			}
