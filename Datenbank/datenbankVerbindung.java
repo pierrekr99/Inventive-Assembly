@@ -241,6 +241,8 @@ public class datenbankVerbindung {
 			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter`");
 
 			while (rs.next()) {
+				
+				// monteure werden durch if-Bedingung herausgefiltert, dann erfolgt einlesen der Disponenten
 				if (rs.getString("Rolle").equals("Disponent")) {
 					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
 							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"),
@@ -282,6 +284,8 @@ public class datenbankVerbindung {
 			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter`");
 
 			while (rs.next()) {
+				
+				// Disponenten werden durch if-Bedingung herausgefiltert, dann erfolgt einlesen der Monteure
 				if (rs.getString("Rolle").equals("Monteur")) {
 					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
 							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"),
