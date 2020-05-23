@@ -3,22 +3,23 @@ package objekte;
 public class Mitarbeiter {
 
 //	Attribute
+	private String rolle;
 	private String name;
 	private String vorname;
 	private String mitarbeiterNummer;
 	private String passwort;
 	private String anwesenheit;
-	private String rolle;
+	
 
-	public Mitarbeiter(String name, String vorname, String mitarbeiterNummer, String passwort, String anwesenheit,
-			String rolle) {
+	public Mitarbeiter(String rolle, String name, String vorname, String mitarbeiterNummer, String passwort, String anwesenheit) {
 		super();
+		this.rolle = rolle;
 		this.name = name;
 		this.vorname = vorname;
 		this.mitarbeiterNummer = mitarbeiterNummer;
 		this.passwort = passwort;
 		this.anwesenheit = anwesenheit;
-		this.rolle = rolle;
+		
 	}
 
 	public String getName() {
@@ -71,9 +72,11 @@ public class Mitarbeiter {
 
 	@Override
 	public String toString() {
-		return "Mitarbeiter [name=" + name + ", vorname=" + vorname + ", mitarbeiterNummer=" + mitarbeiterNummer
-				+ ", passwort=" + passwort + ", anwesenheit=" + anwesenheit + ", rolle=" + rolle + "]";
+		return "Mitarbeiter [rolle=" + rolle + ", name=" + name + ", vorname=" + vorname + ", mitarbeiterNummer="
+				+ mitarbeiterNummer + ", passwort=" + passwort + ", anwesenheit=" + anwesenheit + "]";
 	}
+
+	
 	
 	
 

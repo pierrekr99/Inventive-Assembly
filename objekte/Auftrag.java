@@ -14,7 +14,7 @@ public class Auftrag {
 	private String erstellungsdatum;
 	private String frist;
 	private String status;
-	private Monteur zustaendig; // in Tabelle angegeben durch Monteurexemplar.getName(); + angegeben durch Monteurexemplar.getMitarbeiternummer();
+	private Mitarbeiter zustaendig; // in Tabelle angegeben durch Monteurexemplar.getName(); + angegeben durch Monteurexemplar.getMitarbeiternummer();
 	private Auftraggeber auftraggeber;
 	//in Tabelle angegeben durch Auftraggeberexemplar.getKundennummer();
 	private ArrayList <Komponente> komponenten; //in Tabelle angegeben in ArrayList mit komponentenexemplar.getKomponentennummer()
@@ -22,7 +22,7 @@ public class Auftrag {
 	
 // Konstruktor
 
-	public Auftrag(String auftragsnummer, String erstellungsdatum, String frist, String status, Monteur zustaendig,
+	public Auftrag(String auftragsnummer, String erstellungsdatum, String frist, String status, Mitarbeiter zustaendig,
 			Auftraggeber auftraggeber, ArrayList<Komponente> komponenten) {
 		super();
 		this.auftragsNummer = auftragsnummer;
@@ -75,12 +75,12 @@ public class Auftrag {
 	}
 
 
-	public Monteur getZustaendig() {
+	public Mitarbeiter getZustaendig() {
 		return zustaendig;
 	}
 
 
-	public void setZustaendig(Monteur zustaendig) {
+	public void setZustaendig(Mitarbeiter zustaendig) {
 		this.zustaendig = zustaendig;
 	}
 

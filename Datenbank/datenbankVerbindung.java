@@ -16,15 +16,15 @@ public class datenbankVerbindung {
 
 	Connection verbindung = null;
 	ResultSet rs;
-	
+
 	int indexmitarbeiter;
 	int indexAuftraggeber;
-	
+
 	ArrayList<Auftrag> auftragsListe = new ArrayList<>();
 	ArrayList<Auftraggeber> auftraggeberListe = new ArrayList<>();
-	ArrayList<Disponent> disponentListe = new ArrayList<>();
+	ArrayList<Mitarbeiter> disponentListe = new ArrayList<>();
 	ArrayList<Komponente> komponentenListe = new ArrayList<>();
-	ArrayList<Monteur> monteurListe = new ArrayList<>();
+	ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
 
 	public Connection getVerbindung() {
 		return verbindung;
@@ -42,7 +42,7 @@ public class datenbankVerbindung {
 		return auftraggeberListe;
 	}
 
-	public ArrayList<Disponent> getDisponentListe() {
+	public ArrayList<Mitarbeiter> getDisponentListe() {
 		return disponentListe;
 	}
 
@@ -50,7 +50,7 @@ public class datenbankVerbindung {
 		return komponentenListe;
 	}
 
-	public ArrayList<Monteur> getMonteurListe() {
+	public ArrayList<Mitarbeiter> getMonteurListe() {
 		return monteurListe;
 	}
 
@@ -100,9 +100,9 @@ public class datenbankVerbindung {
 		try {
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
-			
+
 			while (rs.next()) {
-			
+
 				ArrayList<Komponente> Komponentenlisteauftrag = new ArrayList<>();
 				String[] komponentennrarray = rs.getString("Komponenten").split(","); // Der String in der Tabelle
 																						// Spalte Komponenten, werden
@@ -134,74 +134,70 @@ public class datenbankVerbindung {
 				 * Gleiches Vorgehen beim Auftraggeber ...
 				 */
 
-				
-				
-			/*	
-				Monteur zustaendig = new Monteur(null, null, null, null, null);
+				/*
+				 * Monteur zustaendig = new Monteur(null, null, null, null, null);
+				 * 
+				 * for (Monteur monteur : monteurListe) { if
+				 * (monteur.getMitarbeiterNummer().equals(rs.getString(
+				 * "ZustaendigMitarbeiterNummer"))) { zustaendig.setName(monteur.getName());
+				 * zustaendig.setVorname(monteur.getVorname());
+				 * zustaendig.setMitarbeiterNummer(monteur.getMitarbeiterNummer());
+				 * zustaendig.setPasswort(monteur.getPasswort());
+				 * zustaendig.setAnwesenheit(monteur.getAnwesenheit()); } }
+				 * 
+				 * Auftraggeber auftraggeber = new Auftraggeber(null, null);
+				 * 
+				 * for (Auftraggeber kunde : auftraggeberListe) { if
+				 * (kunde.getKundenNummer().equals(rs.getString("Auftraggeber"))) {
+				 * auftraggeber.setKundenNummer(kunde.getKundenNummer());
+				 * auftraggeber.setName(kunde.getName()); } }
+				 * 
+				 * if (auftraggeber == null) { /* Falls kein Auftraggeber mit dieser Nummer
+				 * gefunden wird, kann ggf. neuer Auftraggeber angelegt werden? -> oder nur
+				 * nice-to-have ?? Falls ja, müsste es hier einen Verweis auf ein extra GUI
+				 * Fenster geben.
+				 * 
+				 * System.out.
+				 * println("Keinen passenden Auftraggeber gefunden. Möchten Sie einen neuen Auftraggeber anlegen?"
+				 * ); }
+				 * 
+				 * if (zustaendig.getMitarbeiterNummer() != null &&
+				 * auftraggeber.getKundenNummer() != null) { objekte.Auftrag Auftrag = new
+				 * Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
+				 * rs.getString("Frist"), rs.getString("Status"), zustaendig, auftraggeber,
+				 * Komponentenlisteauftrag);
+				 * 
+				 * auftragsListe.add(Auftrag); }else { System.out.
+				 * println("Fehler! Der Auftrag konnte leider nicht angelegt werden. Bitte überprüfen Sie ihre Eingaben!"
+				 * );
+				 * 
+				 * }
+				 * 
+				 */
 
-				for (Monteur monteur : monteurListe) {
-					if (monteur.getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
-						zustaendig.setName(monteur.getName());
-						zustaendig.setVorname(monteur.getVorname());
-						zustaendig.setMitarbeiterNummer(monteur.getMitarbeiterNummer());
-						zustaendig.setPasswort(monteur.getPasswort());
-						zustaendig.setAnwesenheit(monteur.getAnwesenheit());
-					}
-				}
+				for (int i = 0; i < monteurListe.size(); i++) {
 
-				Auftraggeber auftraggeber = new Auftraggeber(null, null);
-
-				for (Auftraggeber kunde : auftraggeberListe) {
-					if (kunde.getKundenNummer().equals(rs.getString("Auftraggeber"))) {
-						auftraggeber.setKundenNummer(kunde.getKundenNummer());
-						auftraggeber.setName(kunde.getName());
-					}
-				}
-				
-				if (auftraggeber == null) {
-					/*
-					 Falls kein Auftraggeber mit dieser Nummer gefunden wird, kann ggf. neuer Auftraggeber angelegt werden? -> oder nur nice-to-have ??
-					 Falls ja, müsste es hier einen Verweis auf ein extra GUI Fenster geben.
-					 
-					System.out.println("Keinen passenden Auftraggeber gefunden. Möchten Sie einen neuen Auftraggeber anlegen?");
-				}
-
-				if (zustaendig.getMitarbeiterNummer() != null && auftraggeber.getKundenNummer() != null) {
-					objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"),
-							rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), zustaendig,
-							auftraggeber, Komponentenlisteauftrag);
-
-					auftragsListe.add(Auftrag);
-				}else {
-					System.out.println("Fehler! Der Auftrag konnte leider nicht angelegt werden. Bitte überprüfen Sie ihre Eingaben!");
-					
-				}
-			
-		*/					
-
-				for(int i = 0; i< monteurListe.size(); i++) {
-					
-					if(monteurListe.get(i).getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {		
+					if (monteurListe.get(i).getMitarbeiterNummer()
+							.equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
 						indexmitarbeiter = i;
 					}
 				}
-				
-				for(int i = 0; i< auftraggeberListe.size(); i++) {
-					
-					if(auftraggeberListe.get(i).getKundenNummer().equals(rs.getString("Auftraggeber"))) {		
+
+				for (int i = 0; i < auftraggeberListe.size(); i++) {
+
+					if (auftraggeberListe.get(i).getKundenNummer().equals(rs.getString("Auftraggeber"))) {
 						indexAuftraggeber = i;
 					}
-				}			
-				
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"),
-						rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter), auftraggeberListe.get(indexAuftraggeber), Komponentenlisteauftrag);
-						
+				}
+
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
+						rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter),
+						auftraggeberListe.get(indexAuftraggeber), Komponentenlisteauftrag);
+
 				auftragsListe.add(Auftrag);
-	
+
 			}
-			
-			
-			
+
 			System.out.println("Aufträge einlesen:");
 			for (Auftrag auftrag : auftragsListe) {
 				System.out.println(auftrag);
@@ -242,12 +238,16 @@ public class datenbankVerbindung {
 
 		try {
 			Statement stmt = verbindung.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM `disponent`");
+			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter`");
 
 			while (rs.next()) {
-				objekte.Disponent Disponent = new Disponent(rs.getString("Name"), rs.getString("Vorname"),
-						rs.getString("MitarbeiterNummer"), rs.getString("Passwort"));
-				disponentListe.add(Disponent);
+				if (rs.getString("Rolle").equals("Disponent")) {
+					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
+							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"),
+							rs.getString("Anwesenheit"));
+					disponentListe.add(Disponent);
+
+				}
 			}
 			System.out.println("Disponenten einlesen:" + disponentListe);
 
@@ -279,12 +279,15 @@ public class datenbankVerbindung {
 
 		try {
 			Statement stmt = verbindung.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM `monteur`");
+			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter`");
 
 			while (rs.next()) {
-				objekte.Monteur Monteur = new Monteur(rs.getString("Name"), rs.getString("Vorname"),
-						rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), rs.getString("Anwesenheit"));
-				monteurListe.add(Monteur);
+				if (rs.getString("Rolle").equals("Monteur")) {
+					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
+							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"),
+							rs.getString("Anwesenheit"));
+					monteurListe.add(Monteur);
+				}
 			}
 			System.out.println("Monteur einlesen:" + monteurListe);
 
