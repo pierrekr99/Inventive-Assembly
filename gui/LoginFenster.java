@@ -136,9 +136,9 @@ public class LoginFenster extends JFrame {
 		JLabel logoLabel = new JLabel("");
 		logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		logoLabel.setForeground(Color.WHITE);
-		logoLabel.setBounds(594, 0, 180, 100);
+		logoLabel.setBounds(594, 0, 180, 102);
 		panel.add(logoLabel);
-		icon = new ImageIcon("C:\\Users\\bisch\\eclipse-workspace\\Wi-Projekt\\src\\Images\\Logo_final180x100.png");
+		icon = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_final180x100.png");
 		logoLabel.setIcon(icon);
 
 	}
