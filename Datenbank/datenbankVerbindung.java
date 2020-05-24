@@ -315,5 +315,21 @@ public class datenbankVerbindung {
 
 		return passwort;
 	}
+	
+	public String getRolle(String id) {
+		String rolle="";
+		try {
+			Statement stmt = verbindung.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter` WHERE `MitarbeiterNummer` = " + id);
+			while(rs.next()) {
+				rolle = rs.getString("Rolle");
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return rolle;
+	}
 
 }

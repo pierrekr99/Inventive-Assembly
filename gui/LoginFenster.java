@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Datenbank.datenbankVerbindung;
+import test.MonteurAuftraege;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -46,27 +47,6 @@ public class LoginFenster extends JFrame {
 	private Icon icon;
 	private datenbankVerbindung verbindung = new datenbankVerbindung();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginFenster frame = new LoginFenster();
-					frame.setVisible(true);
-					frame.setTitle("Inventive Assembly");
-					frame.setResizable(false);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public LoginFenster() {
 
 		verbindung.verbinden();
@@ -115,10 +95,19 @@ public class LoginFenster extends JFrame {
 		bt_Login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String id = tf_MitarbeiterID.getText();//Hier die inderscheidung zwischen Disponent und Monteur durch vergleich der Nummer mit Bereich für jew Rolle
-				if (tf_password.getText().equals(verbindung.getPassword(id))) {
-					System.out.println("Erfolg!");
+				
+				if(tf_password.getText().equals(verbindung.getPassword(id))) {
+					if(verbindung.getRolle(id).equals("Monteur")) {
+						MonteurFenster monteur = new MonteurFenster();
+						monteur.setVisible(true);
+						setVisible(false);
+					}else {
+						DisponentFenster disponent = new DisponentFenster();
+						disponent.setVisible(true);
+						setVisible(false);
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Passwort erneut eingeben");
+					JOptionPane.showMessageDialog( null,"Passwort erneut eingeben","Anmeldedatenfehler", JOptionPane.PLAIN_MESSAGE);
 				}
 
 			}
