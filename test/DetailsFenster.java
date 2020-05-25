@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import Datenbank.datenbankVerbindung;
@@ -12,24 +14,26 @@ import objekte.Komponente;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.JTextField;
 
 public class DetailsFenster extends JFrame implements TableCellRenderer {
 
 	private JPanel contentPane;
 	private JTable tKomponenten;
+	private JScrollPane sPKomponenten;
 	private datenbankVerbindung verbindung = new datenbankVerbindung();
 
 	int zeilen = 10;// Aufragliste.size; Die Anzahl der Zeilen, die die Tabelle hat
 	int zeile = 0;// Zeile in der der Neue Auftrag eingefügt wird
 
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
-	String[] komponente = new String[4];// Ein Auftrag wird als Zeile erstellt (Zeile mit 4 Spalten)
 
 	/**
 	 * Launch the application.
@@ -59,14 +63,16 @@ public class DetailsFenster extends JFrame implements TableCellRenderer {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
-		JScrollPane sPAuftraege = new JScrollPane();
+		sPKomponenten = new JScrollPane();
+
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addComponent(sPAuftraege, GroupLayout.DEFAULT_SIZE, 1574, Short.MAX_VALUE));
-		gl_contentPane.setVerticalGroup(
-				gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane.createSequentialGroup()
-						.addGap(31).addComponent(sPAuftraege, GroupLayout.DEFAULT_SIZE, 819, Short.MAX_VALUE)));
+				.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 774, Short.MAX_VALUE));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+						// Sonst wird hier ein eigenes Modell Eingefügt
+						.addGap(31).addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)));
 
 		komponenten();
 		tKomponenten = new JTable();// Neue Tabelle
@@ -74,15 +80,33 @@ public class DetailsFenster extends JFrame implements TableCellRenderer {
 		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 16));// Schriftart und -größe in der Tabelle
 		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 20));// Schriftart und -größe in der
 																					// Kopfzeile der Tabelle
-		tKomponenten.setModel(new DefaultTableModel(komponenten, // Benötigter Inhalt: (String[][],String[])
-				// Sonst wird hier ein eigenes Modell Eingefügt
-				new String[] { "TeileNr.", "Name", "Kategorie", "Verfügbarkeit", }));// Generierung der
-																						// Tabelle
-		sPAuftraege.setViewportView(tKomponenten);
+		tKomponenten.setModel(
+				new DefaultTableModel(komponenten, new String[] { "TeileNr.", "Name", "Kategorie", "Verfügbarkeit", }));// Generierung
+																														// der
+																														// Tabelle
+																														// Benötigter
+																														// Inhalt:
+																														// (String[][],String[])
+
+		sPKomponenten.setViewportView(tKomponenten);
 
 		JPanel panel = new JPanel();
-		sPAuftraege.setColumnHeaderView(panel);
+		sPKomponenten.setColumnHeaderView(panel);
 		contentPane.setLayout(gl_contentPane);
+		
+		tKomponenten.addMouseListener(new MouseAdapter() {//MouseListener für das Fenster
+			public void mouseClicked(MouseEvent e) {
+				if (e.MOUSE_PRESSED == 501) {//Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht dazu)
+					JTable target = (JTable) e.getSource();
+					int row = target.getSelectedRow();//wo wurde geklickt
+					int column = target.getSelectedColumn();
+					// do some action if appropriate column
+					if (column == 3 && verbindung.getKomponentenlisteauftrag().get(row).isVerfuegbarkeit() == false) {// wenn man in Verfügbarkeitsspalte klickt und die verfügbarkeit false ist 
+						JOptionPane.showMessageDialog(null, "Eilbestellung wurde ausgeführt");
+					}
+				}
+			}
+		});
 
 	}
 
