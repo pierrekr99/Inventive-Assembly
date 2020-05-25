@@ -25,7 +25,7 @@ public class datenbankVerbindung {
 	ArrayList<Mitarbeiter> disponentListe = new ArrayList<>();
 	ArrayList<Komponente> komponentenListe = new ArrayList<>();
 	ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
-	ArrayList<Komponente> Komponentenlisteauftrag = new ArrayList<>();
+	ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
 
 	public Connection getVerbindung() {
 		return verbindung;
@@ -52,7 +52,7 @@ public class datenbankVerbindung {
 	}
 	
 	public ArrayList<Komponente> getKomponentenlisteauftrag() {
-		return Komponentenlisteauftrag;
+		return komponentenlisteauftrag;
 	}
 
 	public ArrayList<Mitarbeiter> getMonteurListe() {
@@ -120,7 +120,7 @@ public class datenbankVerbindung {
 														// gesucht
 					for (int i = 0; i < komponentenListe.size(); i++) {
 						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {
-							Komponentenlisteauftrag.add(komponentenListe.get(i)); // das Exmplar mit der passenden
+							komponentenlisteauftrag.add(komponentenListe.get(i)); // das Exmplar mit der passenden
 																					// Kompinentennummer wird der Liste
 																					// hinzugefügt
 						}
@@ -197,7 +197,7 @@ public class datenbankVerbindung {
 
 				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
 						rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter),
-						auftraggeberListe.get(indexAuftraggeber), Komponentenlisteauftrag);
+						auftraggeberListe.get(indexAuftraggeber), komponentenlisteauftrag);
 
 				auftragsListe.add(Auftrag);
 

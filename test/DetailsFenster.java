@@ -25,7 +25,7 @@ public class DetailsFenster extends JFrame implements TableCellRenderer {
 	private JTable tKomponenten;
 	private datenbankVerbindung verbindung = new datenbankVerbindung();
 
-	int zeilen = 5;// Aufragliste.size; Die Anzahl der Zeilen, die die Tabelle hat
+	int zeilen = 10;// Aufragliste.size; Die Anzahl der Zeilen, die die Tabelle hat
 	int zeile = 0;// Zeile in der der Neue Auftrag eingefügt wird
 
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
@@ -90,20 +90,21 @@ public class DetailsFenster extends JFrame implements TableCellRenderer {
 								// komponenten[][]eingebaut
 
 		verbindung.verbinden();
+		verbindung.auftraggeberEinlesen();
+		verbindung.disponentEinlesen();
+		verbindung.komponenteEinlesen();
+		verbindung.monteurEinlesen();
+		verbindung.auftragEinlesen();
 
-//		verbindung.komponenteEinlesen();
-//		verbindung.auftragEinlesen();
-		
+		for (int i = 0; i < verbindung.getKomponentenlisteauftrag().size(); i++) { // fügt Komponenten eines Auftrags in
+																					// die Tabelle ein
+			komponenten[i][0] = verbindung.getKomponentenlisteauftrag().get(i).getKomponentenNummer();
+			komponenten[i][1] = verbindung.getKomponentenlisteauftrag().get(i).getName();
+			komponenten[i][2] = verbindung.getKomponentenlisteauftrag().get(i).getKategorie();
+			komponenten[i][3] = verbindung.getKomponentenlisteauftrag().get(i).isVerfuegbarkeit();
+		}
 
 	}
-
-//for (int i = 0; i < db.getKomponentenListe().size(); i++) {
-//	auftraege[i][0] = db.getKomponentenListe().get(i).getKomponentenNummer();
-//	auftraege[i][1] = db.getAuftragsListe().get(i).getAuftragsNummer();
-//	auftraege[i][2] = db.getAuftragsListe().get(i).getStatus();
-//	auftraege[i][3] = db.getAuftragsListe().get(i).getFrist();
-
-//}
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
