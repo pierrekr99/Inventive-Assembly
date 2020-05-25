@@ -25,6 +25,7 @@ public class datenbankVerbindung {
 	ArrayList<Mitarbeiter> disponentListe = new ArrayList<>();
 	ArrayList<Komponente> komponentenListe = new ArrayList<>();
 	ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
+	ArrayList<Komponente> Komponentenlisteauftrag = new ArrayList<>();
 
 	public Connection getVerbindung() {
 		return verbindung;
@@ -48,6 +49,10 @@ public class datenbankVerbindung {
 
 	public ArrayList<Komponente> getKomponentenListe() {
 		return komponentenListe;
+	}
+	
+	public ArrayList<Komponente> getKomponentenlisteauftrag() {
+		return Komponentenlisteauftrag;
 	}
 
 	public ArrayList<Mitarbeiter> getMonteurListe() {
@@ -103,7 +108,7 @@ public class datenbankVerbindung {
 
 			while (rs.next()) {
 
-				ArrayList<Komponente> Komponentenlisteauftrag = new ArrayList<>();
+//				ArrayList<Komponente> Komponentenlisteauftrag = new ArrayList<>();   //wir oben schon deklariert
 				String[] komponentennrarray = rs.getString("Komponenten").split(","); // Der String in der Tabelle
 																						// Spalte Komponenten, werden
 																						// nach dem Komma in
