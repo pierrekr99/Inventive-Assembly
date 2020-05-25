@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.util.ArrayList;
 
 import Datenbank.datenbankVerbindung;
 import objekte.Komponente;
@@ -92,6 +93,7 @@ public class DetailsFenster extends JFrame implements TableCellRenderer {
 
 //		verbindung.komponenteEinlesen();
 //		verbindung.auftragEinlesen();
+		
 
 	}
 
