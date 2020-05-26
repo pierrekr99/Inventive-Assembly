@@ -182,7 +182,7 @@ public class MonteurAuftraege extends JFrame {
 
 	public void deteilsFenster() {//Öffnet Detailsfenster
 		try {
-			DetailsFenster detailsFenster = new DetailsFenster();//Fenster wird erstellt
+			DetailsFenster detailsFenster = new test.DetailsFenster();//Fenster wird erstellt
 			detailsFenster.setVisible(true);//Fenster wird sichtbar
 		} catch (Exception e) {
 			e.printStackTrace();

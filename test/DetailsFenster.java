@@ -22,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 public class DetailsFenster extends JFrame implements TableCellRenderer {
 
@@ -34,6 +35,7 @@ public class DetailsFenster extends JFrame implements TableCellRenderer {
 	int zeile = 0;// Zeile in der der Neue Auftrag eingefügt wird
 
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
+	private JPanel panel_1;
 
 	/**
 	 * Launch the application.
@@ -64,15 +66,19 @@ public class DetailsFenster extends JFrame implements TableCellRenderer {
 		setContentPane(contentPane);
 
 		sPKomponenten = new JScrollPane();
-
+		
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 774, Short.MAX_VALUE));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 774, Short.MAX_VALUE)
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						// Sonst wird hier ein eigenes Modell Eingefügt
-						.addGap(31).addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)));
+					.addGap(31)
+					.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE))
+		);
 
 		komponenten();
 		tKomponenten = new JTable();// Neue Tabelle
@@ -93,16 +99,29 @@ public class DetailsFenster extends JFrame implements TableCellRenderer {
 		JPanel panel = new JPanel();
 		sPKomponenten.setColumnHeaderView(panel);
 		contentPane.setLayout(gl_contentPane);
-		
-		tKomponenten.addMouseListener(new MouseAdapter() {//MouseListener für das Fenster
+
+		tKomponenten.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 			public void mouseClicked(MouseEvent e) {
-				if (e.MOUSE_PRESSED == 501) {//Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht dazu)
+				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
+												// dazu)
 					JTable target = (JTable) e.getSource();
-					int row = target.getSelectedRow();//wo wurde geklickt
+					int row = target.getSelectedRow();// wo wurde geklickt
 					int column = target.getSelectedColumn();
 					// do some action if appropriate column
-					if (column == 3 && verbindung.getKomponentenlisteauftrag().get(row).isVerfuegbarkeit() == false) {// wenn man in Verfügbarkeitsspalte klickt und die verfügbarkeit false ist 
-						JOptionPane.showMessageDialog(null, "Eilbestellung wurde ausgeführt");
+					if (column == 3 && verbindung.getKomponentenlisteauftrag().get(row).isVerfuegbarkeit() == false) {// wenn
+																														// man
+																														// in
+																														// Verfügbarkeitsspalte
+																														// klickt
+																														// und
+																														// die
+																														// verfügbarkeit
+																														// false
+																														// ist
+
+						JOptionPane.showMessageDialog(null,
+								("Eilbestellung für [" + verbindung.getKomponentenlisteauftrag().get(row).getName())
+										+ "] wurde ausgeführt");
 					}
 				}
 			}
