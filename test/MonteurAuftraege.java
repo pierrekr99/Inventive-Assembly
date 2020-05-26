@@ -108,7 +108,6 @@ public class MonteurAuftraege extends JFrame {
 					.addComponent(sPAuftraege, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE))
 		);
 
-		auftraege();
 		tAuftraege = new JTable();// Neue Tabelle
 		tAuftraege.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
 		tAuftraege.setFont(new Font("Tahoma", Font.PLAIN, 16));// Schriftart und -größe in der Tabelle
