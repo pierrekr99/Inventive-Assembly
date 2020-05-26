@@ -91,43 +91,42 @@ public class LoginFenster extends JFrame {
 		tf_password.setColumns(10);
 		tf_password.setBounds(330, 192, 144, 25);
 		panel.add(tf_password);
-
+		
+		MonteurAuftraege monteur = new MonteurAuftraege();
+		monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		monteur.setVisible(false);
+		
+		
+		DisponentFenster disponent = new DisponentFenster();
+		disponent.setVisible(false);
+		disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		
 		JButton bt_Login = new JButton("Login");
 		bt_Login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				boolean funktion = false;
 				String id = tf_MitarbeiterID.getText();//Hier die inderscheidung zwischen Disponent und Monteur durch vergleich der Nummer mit Bereich für jew Rolle
 				verbindung.monteurEinlesen();
 				verbindung.disponentEinlesen();
 				for (Mitarbeiter mitarbeiter : verbindung.getDisponentListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-						DisponentFenster disponent = new DisponentFenster();
 						disponent.setVisible(true);
 						setVisible(false);
+						funktion = true;
 					}
 				}
 				
 				for(Mitarbeiter mitarbeiter : verbindung.getMonteurListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-						MonteurFenster monteur = new MonteurFenster();
 						monteur.setVisible(true);
 						setVisible(false);
+						funktion = true;
 					}
 				}
-				/*
-				if(tf_password.getText().equals(verbindung.getPassword(id))) {
-					if(verbindung.getRolle(id).equals("Monteur")) {
-						MonteurFenster monteur = new MonteurFenster();
-						monteur.setVisible(true);
-						setVisible(false);
-					}else {
-						DisponentFenster disponent = new DisponentFenster();
-						disponent.setVisible(true);
-						setVisible(false);
-					}
-				} else {
-					JOptionPane.showMessageDialog( null,"Passwort erneut eingeben","Anmeldedatenfehler", JOptionPane.PLAIN_MESSAGE);
+				if(!funktion) {
+					JOptionPane.showMessageDialog(null, "Anmeldedaten überprüfen!");
 				}
-			*/
+				
 			}
 		});
 		bt_Login.setFont(new Font("Verdana", Font.ITALIC, 11));

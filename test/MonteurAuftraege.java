@@ -83,7 +83,7 @@ public class MonteurAuftraege extends JFrame {
 	 * Create the frame.
 	 */
 	public MonteurAuftraege() {
-		setTitle("Invenive Assembly");// Name des Fensters
+		setTitle("Inventive Assembly");// Name des Fensters
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Was passiert beim schließen des Fensters
 		setBounds(100, 100, 1010, 450);// (MinBreite, MinHöhe, StandardBreite, StandardHöhe)
 		contentPane = new JPanel();

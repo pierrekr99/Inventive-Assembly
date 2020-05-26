@@ -28,11 +28,11 @@ public class Main {
 					login.setLocationRelativeTo(null);
 					
 					// MonteurAuftr‰ge
-					MonteurAuftraege frame = new MonteurAuftraege();
+				/*	MonteurAuftraege frame = new MonteurAuftraege();
 					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);// Fenster Groﬂ
 					// frame.setUndecorated(true);//Vollbild
 					frame.setVisible(false);// Fenster erscheint
-					
+					*/
 					// DisponentAuftr‰ge
 					
 					// DetailsFenster
