@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Datenbank.datenbankVerbindung;
+import objekte.Mitarbeiter;
 import test.MonteurAuftraege;
 
 import java.awt.GridBagLayout;
@@ -95,7 +96,24 @@ public class LoginFenster extends JFrame {
 		bt_Login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String id = tf_MitarbeiterID.getText();//Hier die inderscheidung zwischen Disponent und Monteur durch vergleich der Nummer mit Bereich für jew Rolle
+				verbindung.monteurEinlesen();
+				verbindung.disponentEinlesen();
+				for (Mitarbeiter mitarbeiter : verbindung.getDisponentListe()) {
+					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
+						DisponentFenster disponent = new DisponentFenster();
+						disponent.setVisible(true);
+						setVisible(false);
+					}
+				}
 				
+				for(Mitarbeiter mitarbeiter : verbindung.getMonteurListe()) {
+					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
+						MonteurFenster monteur = new MonteurFenster();
+						monteur.setVisible(true);
+						setVisible(false);
+					}
+				}
+				/*
 				if(tf_password.getText().equals(verbindung.getPassword(id))) {
 					if(verbindung.getRolle(id).equals("Monteur")) {
 						MonteurFenster monteur = new MonteurFenster();
@@ -109,7 +127,7 @@ public class LoginFenster extends JFrame {
 				} else {
 					JOptionPane.showMessageDialog( null,"Passwort erneut eingeben","Anmeldedatenfehler", JOptionPane.PLAIN_MESSAGE);
 				}
-
+			*/
 			}
 		});
 		bt_Login.setFont(new Font("Verdana", Font.ITALIC, 11));
