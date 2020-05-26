@@ -172,7 +172,7 @@ public class DisponentFenster extends JFrame {
 			monteure[i][0] = db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName();
 			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();// Auftragsliste.get(zeile).getAuftragsnr()
 			monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
-			monteure[i][3] = "Summe: " + summeAuftraege(i) + "         Details";
+			monteure[i][3] = "Summe: " + summeAuftraege(i) + "         Details";//Dropdown fehlt noch
 		}
 		return monteure;
 	}
