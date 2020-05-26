@@ -1,4 +1,4 @@
-package test;
+package test; //kommentar test
 
 import java.awt.Color;
 import java.awt.Component;
