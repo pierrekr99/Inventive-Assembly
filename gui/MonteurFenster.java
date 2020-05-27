@@ -154,13 +154,13 @@ public class MonteurFenster extends JFrame{
 		 */
 
 		auftraegeMonteurTBL = new JTable();//tabelle erstellen
-		auftraegeMonteurTBL.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 20));//formatierung schrift
+		auftraegeMonteurTBL.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));//formatierung schrift kopf
 		auftraegeMonteurTBL.setModel(new DefaultTableModel(//befüllung
 			auftraege(),
 				
 //				,
 			new String[] {
-				"Auftragsnummer", "Details", "Status", "Datum", "Frist", "Auftraggeber"//welche spaltennamen
+				"", "Auftragsnummer", "Status", "Datum", "Frist", "Auftraggeber"//welche spaltennamen
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {//welche spalten lassen sich ändern
@@ -170,8 +170,10 @@ public class MonteurFenster extends JFrame{
 				return columnEditables[column];
 			}
 		});
-
-		JComboBox auswahlBoxStatus = new JComboBox();//combo box für status
+		
+		auftraegeMonteurTBL.setRowHeight(50); //Zeilen höhe
+		
+		JComboBox auswahlBoxStatus = new JComboBox();//combo box für den status
 		auswahlBoxStatus.addItem("Im Lager");//auswahlmöglichkeiten
 		auswahlBoxStatus.addItem("Teile fehlen");
 		auswahlBoxStatus.addItem("disponiert");
@@ -186,12 +188,13 @@ public class MonteurFenster extends JFrame{
 					int column = target.getSelectedColumn();
 					// do some action if appropriate column
 					if (column == 0) {//wenn in DetailsSpalte
-						detailsFenster();//Detailsfenster wird geöffnet
+						detailsFenster(row);//Detailsfenster wird geöffnet und reihe des auftrags wird übergeben um details aufrufen zu können
+						
 					}
 				}
 			}
 		});
-		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 16));//formatierung schrift
+		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));//formatierung schrift in tabelle
 		scrollPane.setViewportView(auftraegeMonteurTBL);
 		auftraegeTab.setLayout(gl_auftraegeTab);
 
@@ -225,9 +228,9 @@ public class MonteurFenster extends JFrame{
 	 * *************************************************************************************************
 	 */
 
-	public void detailsFenster() {//Öffnet Detailsfenster
+	public void detailsFenster(int row) {//Öffnet Detailsfenster
 		try {
-			DetailsFenster detailsFenster = new DetailsFenster();//Fenster wird erstellt
+			DetailsFenster detailsFenster = new DetailsFenster(row);//Fenster wird erstellt
 			detailsFenster.setVisible(true);//Fenster wird sichtbar
 		} catch (Exception e) {
 			e.printStackTrace();
