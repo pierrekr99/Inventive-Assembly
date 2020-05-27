@@ -94,6 +94,7 @@ public class LoginFenster extends JFrame {
 				for(Mitarbeiter mitarbeiter : verbindung.getMonteurListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
 						MonteurFenster monteur = new MonteurFenster();
+						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						monteur.setVisible(true);
 						dispose();
 						funktion = true;
