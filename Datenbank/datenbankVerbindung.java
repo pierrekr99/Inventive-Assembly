@@ -123,7 +123,7 @@ public class datenbankVerbindung {
 					for (int i = 0; i < komponentenListe.size(); i++) {
 						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {
 							komponentenlisteauftrag.add(komponentenListe.get(i)); // das Exmplar mit der passenden
-																					// Kompinentennummer wird der Liste
+																				// Kompinentennummer wird der Liste
 																					// hinzugefügt
 						}
 					}
@@ -201,6 +201,8 @@ public class datenbankVerbindung {
 				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
 						rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter),
 						auftraggeberListe.get(indexAuftraggeber), komponentenlisteauftrag);
+				
+				
 
 				auftragsListe.add(Auftrag);
 
