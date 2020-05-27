@@ -154,13 +154,13 @@ public class MonteurFenster extends JFrame{
 		 */
 
 		auftraegeMonteurTBL = new JTable();//tabelle erstellen
-		auftraegeMonteurTBL.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 20));//formatierung schrift
+		auftraegeMonteurTBL.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));//formatierung schrift kopf
 		auftraegeMonteurTBL.setModel(new DefaultTableModel(//befüllung
 			auftraege(),
 				
 //				,
 			new String[] {
-				"Auftragsnummer", "Details", "Status", "Datum", "Frist", "Auftraggeber"//welche spaltennamen
+				"", "Auftragsnummer", "Status", "Datum", "Frist", "Auftraggeber"//welche spaltennamen
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {//welche spalten lassen sich ändern
@@ -170,7 +170,9 @@ public class MonteurFenster extends JFrame{
 				return columnEditables[column];
 			}
 		});
-
+		
+		auftraegeMonteurTBL.setRowHeight(50); //Zeilen höhe
+		
 		JComboBox auswahlBoxStatus = new JComboBox();//combo box für status
 		auswahlBoxStatus.addItem("Im Lager");//auswahlmöglichkeiten
 		auswahlBoxStatus.addItem("Teile fehlen");
@@ -191,7 +193,7 @@ public class MonteurFenster extends JFrame{
 				}
 			}
 		});
-		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 16));//formatierung schrift
+		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));//formatierung schrift in tabelle
 		scrollPane.setViewportView(auftraegeMonteurTBL);
 		auftraegeTab.setLayout(gl_auftraegeTab);
 
