@@ -188,7 +188,8 @@ public class MonteurFenster extends JFrame{
 					int column = target.getSelectedColumn();
 					// do some action if appropriate column
 					if (column == 0) {//wenn in DetailsSpalte
-						detailsFenster();//Detailsfenster wird geöffnet
+						detailsFenster(row);//Detailsfenster wird geöffnet und reihe des auftrags wird übergeben um details aufrufen zu können
+						
 					}
 				}
 			}
@@ -227,9 +228,9 @@ public class MonteurFenster extends JFrame{
 	 * *************************************************************************************************
 	 */
 
-	public void detailsFenster() {//Öffnet Detailsfenster
+	public void detailsFenster(int row) {//Öffnet Detailsfenster
 		try {
-			DetailsFenster detailsFenster = new DetailsFenster();//Fenster wird erstellt
+			DetailsFenster detailsFenster = new DetailsFenster(row);//Fenster wird erstellt
 			detailsFenster.setVisible(true);//Fenster wird sichtbar
 		} catch (Exception e) {
 			e.printStackTrace();
