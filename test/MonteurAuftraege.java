@@ -134,7 +134,7 @@ public class MonteurAuftraege extends JFrame {
 					int column = target.getSelectedColumn();
 					// do some action if appropriate column
 					if (column == 0) {//wenn in DetailsSpalte
-						deteilsFenster();//Detailsfenster wird geöffnet
+//						deteilsFenster();//Detailsfenster wird geöffnet
 					}
 				}
 			}
@@ -172,12 +172,12 @@ public class MonteurAuftraege extends JFrame {
 	 * *************************************************************************************************
 	 */
 
-	public void deteilsFenster() {//Öffnet Detailsfenster
-		try {
-			DetailsFenster detailsFenster = new test.DetailsFenster();//Fenster wird erstellt
-			detailsFenster.setVisible(true);//Fenster wird sichtbar
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public void deteilsFenster() {//Öffnet Detailsfenster
+//		try {
+//			DetailsFenster detailsFenster = new test.DetailsFenster();//Fenster wird erstellt
+//			detailsFenster.setVisible(true);//Fenster wird sichtbar
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 }

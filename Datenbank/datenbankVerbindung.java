@@ -68,6 +68,7 @@ public class datenbankVerbindung {
 		test.komponenteEinlesen();
 		test.monteurEinlesen();
 		test.auftragEinlesen();
+		
 	}
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
@@ -118,6 +119,7 @@ public class datenbankVerbindung {
 				for (String ab : komponentennrarray) { // Für jede Komponentennummer wird nun das richtige Exemplar von
 														// Komponente
 														// gesucht
+					
 					for (int i = 0; i < komponentenListe.size(); i++) {
 						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {
 							komponentenlisteauftrag.add(komponentenListe.get(i)); // das Exmplar mit der passenden
@@ -125,6 +127,7 @@ public class datenbankVerbindung {
 																					// hinzugefügt
 						}
 					}
+					
 
 				}
 
@@ -207,6 +210,11 @@ public class datenbankVerbindung {
 			for (Auftrag auftrag : auftragsListe) {
 				System.out.println(auftrag);
 			}
+			
+			
+			
+			
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

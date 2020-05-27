@@ -3,6 +3,8 @@ package gui;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.GroupLayout;
@@ -40,8 +42,8 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	/*
-	public static void main(String[] args) {
+	
+/*	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -54,7 +56,7 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 	}
-	*/
+*/	
 
 	/**
 	 * Create the frame.
@@ -145,6 +147,22 @@ public class DisponentFenster extends JFrame {
 		
 
 		contentPane.setLayout(gl_contentPane);
+		
+		auftraegeTbl.addMouseListener(new MouseAdapter() {//MouseListener für das Fenster
+			public void mouseClicked(MouseEvent e) {
+				if (e.MOUSE_PRESSED == 501) {//Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht dazu)
+					JTable target = (JTable) e.getSource();
+					int row = target.getSelectedRow();//wo wurde geklickt
+					int column = target.getSelectedColumn();
+					// do some action if appropriate column
+					if (column == 0) {//wenn in DetailsSpalte
+//						detailsFenster();//Detailsfenster wird geöffnet
+						DetailsFenster frame = new DetailsFenster();
+						frame.setVisible(true);
+					}
+				}
+			}
+		});
 	}
 /**
  * Hilfsmethoden

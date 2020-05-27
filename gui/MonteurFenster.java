@@ -186,7 +186,7 @@ public class MonteurFenster {
 					int column = target.getSelectedColumn();
 					// do some action if appropriate column
 					if (column == 0) {//wenn in DetailsSpalte
-						deteilsFenster();//Detailsfenster wird geöffnet
+						detailsFenster();//Detailsfenster wird geöffnet
 					}
 				}
 			}
@@ -225,7 +225,7 @@ public class MonteurFenster {
 	 * *************************************************************************************************
 	 */
 
-	public void deteilsFenster() {//Öffnet Detailsfenster
+	public void detailsFenster() {//Öffnet Detailsfenster
 		try {
 			DetailsFenster detailsFenster = new DetailsFenster();//Fenster wird erstellt
 			detailsFenster.setVisible(true);//Fenster wird sichtbar
