@@ -22,6 +22,7 @@ import Datenbank.datenbankVerbindung;
 import objekte.Komponente;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.AncestorEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class DetailsFenster extends JFrame {
 
@@ -32,9 +33,11 @@ public class DetailsFenster extends JFrame {
 
 	int zeilen = 3;
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
+	Object[][] monteur = new Object[2][3];
+	private JTable tMonteur;
+	private JScrollPane scrollPane;
+	private JTable tableMonteur;
 
-	
-	
 	/**
 	 * Launch the application.
 	 */
@@ -50,29 +53,51 @@ public class DetailsFenster extends JFrame {
 			}
 		});
 	}
-	
 */
-
 	/**
 	 * Create the frame.
 	 */
 	public DetailsFenster(int row) { // reihe des auftrags als parameter
 		setTitle("Auftragsdetails");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);// Nur dieses Fenster wird Geschlossen
-		setBounds(100, 100, 948, 529);
+		setBounds(100, 100, 1007, 465);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
 		sPKomponenten = new JScrollPane();
+		sPKomponenten.setBounds(5, 36, 922, 449);
+		contentPane.setLayout(null);
+
+		JScrollPane sPMonteur = new JScrollPane();
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 774, Short.MAX_VALUE));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(258)
+							.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 463, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
 		gl_contentPane.setVerticalGroup(
-				gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane.createSequentialGroup()
-						.addGap(31).addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)));
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(32)
+					.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+					.addGap(62)
+					.addComponent(sPKomponenten, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(100, Short.MAX_VALUE))
+		);
+
+		tableMonteur = new JTable();
+		tableMonteur.setModel(
+				new DefaultTableModel(new Object [][] {{null,null}}, new String[] { "MitarbeiterID", "Monteur" }));
+		sPMonteur.setViewportView(tableMonteur);
 
 		komponenten(row);
 		tKomponenten = new JTable();// Neue Tabelle
@@ -103,6 +128,10 @@ public class DetailsFenster extends JFrame {
 		JPanel panel = new JPanel();
 		sPKomponenten.setColumnHeaderView(panel);
 		contentPane.setLayout(gl_contentPane);
+
+		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
+		tKomponenten.setRowHeight(50); // Zeilen höhe
+		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
 
 //		tKomponenten.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 //			public void mouseClicked(MouseEvent e) {
