@@ -157,7 +157,7 @@ public class DisponentFenster extends JFrame {
 					// do some action if appropriate column
 					if (column == 0) {//wenn in DetailsSpalte
 //						detailsFenster();//Detailsfenster wird geöffnet
-						DetailsFenster frame = new DetailsFenster();
+						DetailsFenster frame = new DetailsFenster(row); // reihe des Auftrags wird übergeben um details aufrufen zu können
 						frame.setVisible(true);
 					}
 				}
