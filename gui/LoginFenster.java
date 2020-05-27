@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import Datenbank.datenbankVerbindung;
 import objekte.Mitarbeiter;
-import test.MonteurAuftraege;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -72,16 +72,7 @@ public class LoginFenster extends JFrame {
 		tf_password.setToolTipText("Hier Passwort eingeben...");
 		tf_password.setColumns(10);
 		tf_password.setBounds(330, 192, 144, 25);
-		panel.add(tf_password);
-		
-		MonteurAuftraege monteur = new MonteurAuftraege();
-		monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		monteur.setVisible(false);
-		
-		
-		DisponentFenster disponent = new DisponentFenster();
-		disponent.setVisible(false);
-		disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		panel.add(tf_password);		
 		
 		JButton bt_Login = new JButton("Login");
 		bt_Login.addActionListener(new ActionListener() {
@@ -95,17 +86,16 @@ public class LoginFenster extends JFrame {
 						DisponentFenster disponent = new DisponentFenster();
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						disponent.setVisible(true);
-						setVisible(false);
+						dispose();
 						funktion = true;
 					}
 				}
 				
 				for(Mitarbeiter mitarbeiter : verbindung.getMonteurListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-						monteur.setVisible(true);
 						MonteurFenster monteur = new MonteurFenster();
 						monteur.setVisible(true);
-						setVisible(false);
+						dispose();
 						funktion = true;
 					}
 				}
