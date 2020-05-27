@@ -120,7 +120,7 @@ public class DetailsFenster extends JFrame {
 		verbindung.monteurEinlesen();
 		verbindung.auftragEinlesen();
 		
-				//verbindung.getAuftragsListe().get(i).getKomponenten().size()
+				//verbindung.getAuftragsListe().get(i).getKomponenten().size() ??
 		
 		for (int i = 0; i < 3; i++) { // fügt Komponenten eines Auftrags in
 			// die Tabelle ein
