@@ -1,4 +1,4 @@
-package test;
+package test; //kommentar test
 
 import java.awt.Color;
 import java.awt.Component;
@@ -45,19 +45,9 @@ public class MonteurAuftraege extends JFrame {
 	private JTable tAuftraege;
 	private JTextField txtSuche;
 
-	// dieser teil wird später ausgelagert
-	int zeilen = 5;// Aufragliste.size; Die Anzahl der Zeilen, die die Tabelle hat
-	int zeile = 0;// Zeile in der der Neue Auftrag eingefügt wird
-	String auftragsNr = "1234567";// diese infos werden später aus der Datenbank ausgelesen
-	String status = "Offen";
-	String frist = "28.05.20";
-	String datum = "16.05.20";
-	String auftraggeber = "Highspeed GmbH";
-
-	Object[][] auftraege = new Object[zeilen][6];// Nur das wird später eingelesen
-	String[] auftrag = new String[6];// Ein Auftrag wird als Zeile erstellt (Zeile mit 6 Spalten
+	int zeilen;
 	String details = "Details";// Hier könnte man den Detailsbutton Rendern
-
+	
 	datenbankVerbindung db = new datenbankVerbindung();
 	
 	/**
@@ -118,13 +108,12 @@ public class MonteurAuftraege extends JFrame {
 					.addComponent(sPAuftraege, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE))
 		);
 
-		auftraege();
 		tAuftraege = new JTable();// Neue Tabelle
 		tAuftraege.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
 		tAuftraege.setFont(new Font("Tahoma", Font.PLAIN, 16));// Schriftart und -größe in der Tabelle
 		tAuftraege.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 20));// Schriftart und -größe in der
 																				// Kopfzeile der Tabelle
-		tAuftraege.setModel(new DefaultTableModel(auftraege, // Benötigter Inhalt: (String[][],String[])
+		tAuftraege.setModel(new DefaultTableModel(auftraege(), // Benötigter Inhalt: (String[][],String[])
 				// Sonst wird hier ein eigenes Modell Eingefügt
 				new String[] { "", "AuftragsNr.", "Status", "Frist", "Datum", "Auftraggeber" }));// Generierung der
 																									// Tabelle
@@ -160,13 +149,15 @@ public class MonteurAuftraege extends JFrame {
 	 * Die methode zum Füllen der Tabelle*************************************************************************
 	 * ************************************************************************************************
 	 */
-	private void auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
+	private Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
 		db.verbinden();
 		db.auftraggeberEinlesen();
 		db.disponentEinlesen();
 		db.komponenteEinlesen();
 		db.monteurEinlesen();
 		db.auftragEinlesen();
+		zeilen = db.getAuftragsListe().size();
+		Object[][] auftraege = new Object[zeilen][6];// Nur das wird später eingelesen
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
 			auftraege[i][0] = details;
 			auftraege[i][1] = db.getAuftragsListe().get(i).getAuftragsNummer();// Auftragsliste.get(zeile).getAuftragsnr()
@@ -175,6 +166,7 @@ public class MonteurAuftraege extends JFrame {
 			auftraege[i][4] = db.getAuftragsListe().get(i).getErstellungsdatum();
 			auftraege[i][5] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
 		}
+		return auftraege;
 	}
 	/**
 	 * *************************************************************************************************
