@@ -37,7 +37,7 @@ import Datenbank.datenbankVerbindung;
 
 public class MonteurFenster {
 
-	private JFrame fenster;
+	JFrame fenster;
 	private JTextField suchFeld;
 	private JTable auftraegeMonteurTBL;
 	
@@ -233,4 +233,6 @@ public class MonteurFenster {
 			e.printStackTrace();
 		}
 	}
+
+
 }

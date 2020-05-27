@@ -40,6 +40,7 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -53,6 +54,7 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 	}
+	*/
 
 	/**
 	 * Create the frame.
@@ -67,6 +69,7 @@ public class DisponentFenster extends JFrame {
 		txtSuche = new JTextField();
 		txtSuche.setText("Suche");
 		txtSuche.setColumns(10);
+		dbEinlesen();//die Datenbank wird eingelesen
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -98,7 +101,7 @@ public class DisponentFenster extends JFrame {
 																					// Kopfzeile der Tabelle
 		auftraegeTbl.setModel(new DefaultTableModel(auftraege(), // Benötigter Inhalt: (String[][],String[])
 				// Sonst wird hier ein eigenes Modell Eingefügt
-				new String[] { "", "Auftragsnr", "Status", "Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer",
+				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer",
 						"Auftragsgeber" }) {
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
 					false, false, false, false, false, true, false, false };
@@ -135,12 +138,26 @@ public class DisponentFenster extends JFrame {
 				return columnEditables[column];
 			}
 		});
+		auftraegeCombobox();
+		TableColumn auftraegeColumn = monteureTbl.getColumnModel().getColumn(3);// eine bestimmte Spalte für Combobox
+																				// auswählen
+		auftraegeColumn.setCellEditor(new DefaultCellEditor(auftraegeCombobox));// in die Spalte die Combobox einbinden
 		
 
 		contentPane.setLayout(gl_contentPane);
 	}
+/**
+ * Hilfsmethoden
+ */
+	
+	private void auftraegeCombobox() {//Aufträge dropdown
+		auftraegeCombobox.removeAllItems();
+		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
+			auftraegeCombobox.addItem(db.getAuftragsListe().get(i));
+		}
+	}
 
-	private String summeAuftraege(int i) {
+	private String summeAuftraege(int i) {//zählt die zugehörigen Aufträge des Monteurs
 		String summe;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
 			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
@@ -159,13 +176,7 @@ public class DisponentFenster extends JFrame {
 	}
 
 
-	private Object[][] monteure() {
-		db.verbinden();
-		db.auftraggeberEinlesen();
-		db.disponentEinlesen();
-		db.komponenteEinlesen();
-		db.monteurEinlesen();
-		db.auftragEinlesen();
+	private Object[][] monteure() {//Erstellt Tabelle mit Monteuren
 		zeilenMonteure = db.getMonteurListe().size();
 		Object[][] monteure = new Object[zeilenMonteure][4];// Nur das wird später eingelesen
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
@@ -177,19 +188,13 @@ public class DisponentFenster extends JFrame {
 		return monteure;
 	}
 
-	private void monteureCombobox() {
+	private void monteureCombobox() {//Fügt Optionen zur Statusveränderung hinzu
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
 			monteureCombobox.addItem(db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName());
 		}
 	}
 
 	private Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
-		db.verbinden();
-		db.auftraggeberEinlesen();
-		db.disponentEinlesen();
-		db.komponenteEinlesen();
-		db.monteurEinlesen();
-		db.auftragEinlesen();
 		zeilen = db.getAuftragsListe().size();
 		Object[][] auftraege = new Object[zeilen][8];// Nur das wird später eingelesen
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
@@ -205,5 +210,14 @@ public class DisponentFenster extends JFrame {
 		}
 		return auftraege;
 	}
-
+	
+	private void dbEinlesen() {//db Wier Eingelesen
+		db.verbinden();
+		db.auftraggeberEinlesen();
+		db.disponentEinlesen();
+		db.komponenteEinlesen();
+		db.monteurEinlesen();
+		db.auftragEinlesen();
+		
+	}
 }
