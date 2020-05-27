@@ -173,7 +173,7 @@ public class MonteurFenster extends JFrame{
 		
 		auftraegeMonteurTBL.setRowHeight(50); //Zeilen höhe
 		
-		JComboBox auswahlBoxStatus = new JComboBox();//combo box für status
+		JComboBox auswahlBoxStatus = new JComboBox();//combo box für den status
 		auswahlBoxStatus.addItem("Im Lager");//auswahlmöglichkeiten
 		auswahlBoxStatus.addItem("Teile fehlen");
 		auswahlBoxStatus.addItem("disponiert");
