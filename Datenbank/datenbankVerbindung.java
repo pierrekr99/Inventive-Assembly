@@ -110,7 +110,7 @@ public class datenbankVerbindung {
 				String[] komponentennrarray = rs.getString("Komponenten").split(","); 
 																				
 				for (String ab : komponentennrarray) { 
-														
+								
 					
 					for (int i = 0; i < komponentenListe.size(); i++) {
 						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {

@@ -32,7 +32,7 @@ public class DetailsFenster extends JFrame {
 	int zeile = 0;// Zeile in der der Neue Auftrag eingefügt wird
 
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
-	private JPanel panel_1;
+
 
 	/**
 	 * Launch the application.
@@ -49,7 +49,6 @@ public class DetailsFenster extends JFrame {
 			}
 		});
 	}
-
 
 	/**
 	 * Create the frame.
@@ -100,9 +99,9 @@ public class DetailsFenster extends JFrame {
 					int row = target.getSelectedRow();// wo wurde geklickt
 					int column = target.getSelectedColumn();
 					// do some action if appropriate column
-					if (column == 3 && verbindung.getKomponentenlisteauftrag().get(row).isVerfuegbarkeit() == false) {// wenn man in der Verfügbarkeitsspalte klickt und die verfügbarkeit false ist
+					if (column == 3 && verbindung.getAuftragsListe().get(row).getKomponenten().get(row).isVerfuegbarkeit() == false) {// wenn man in der Verfügbarkeitsspalte klickt und die verfügbarkeit false ist
 						JOptionPane.showMessageDialog(null,
-								("Eilbestellung für [" + verbindung.getKomponentenlisteauftrag().get(row).getName())
+								("Eilbestellung für [" + verbindung.getAuftragsListe().get(row).getKomponenten().get(row).getName())
 										+ "] wurde ausgeführt");
 					}
 				}
@@ -113,36 +112,25 @@ public class DetailsFenster extends JFrame {
 
 	private void komponenten() {// Komponenten werden aus Komponentensliste ausgelesen und in
 		// komponenten[][]eingebaut
-		
+
 		verbindung.verbinden();
 		verbindung.auftraggeberEinlesen();
 		verbindung.disponentEinlesen();
 		verbindung.komponenteEinlesen();
 		verbindung.monteurEinlesen();
 		verbindung.auftragEinlesen();
-
-		for (int i = 0; i < verbindung.getKomponentenlisteauftrag().size(); i++) { // fügt Komponenten eines Auftrags in
+		
+				//verbindung.getAuftragsListe().get(i).getKomponenten().size()
+		
+		for (int i = 0; i < 3; i++) { // fügt Komponenten eines Auftrags in
 			// die Tabelle ein
-			
-			
-			komponenten[i][0] = verbindung.getKomponentenlisteauftrag().get(i).getKomponentenNummer();
-			komponenten[i][1] = verbindung.getKomponentenlisteauftrag().get(i).getName();
-			komponenten[i][2] = verbindung.getKomponentenlisteauftrag().get(i).getKategorie();
-			komponenten[i][3] = verbindung.getKomponentenlisteauftrag().get(i).isVerfuegbarkeit();
-			
-//			komponenten[i][0] = verbindung.getAuftragsListe().get(0).getKomponenten().get(i).getKomponentenNummer();
-//			komponenten[i][1] = verbindung.getAuftragsListe().get(i).getKomponenten().get(i).getName();
-//			komponenten[i][2] = verbindung.getAuftragsListe().get(i).getKomponenten().get(i).getKategorie();
-//			komponenten[i][3] = verbindung.getAuftragsListe().get(i).getKomponenten().get(i).isVerfuegbarkeit();
-				
-			}
-//			ArrayList<String> komplist = new ArrayList<>();
-//			
-//			komplist.add(verbindung.getAuftragsListe().get(0).getKomponenten().get(0).getKomponentenNummer());
-//			
-//			for (String k : komplist) {
-//				System.out.println(k);
-//		}
+
+			komponenten[i][0] = verbindung.getAuftragsListe().get(i).getKomponenten().get(i).getKomponentenNummer();
+			komponenten[i][1] = verbindung.getAuftragsListe().get(i).getKomponenten().get(i).getName();
+			komponenten[i][2] = verbindung.getAuftragsListe().get(i).getKomponenten().get(i).getKategorie();
+			komponenten[i][3] = verbindung.getAuftragsListe().get(i).getKomponenten().get(i).isVerfuegbarkeit();
+
+		}
 
 	}
 
