@@ -35,11 +35,14 @@ import javax.swing.table.TableColumn;
 
 import Datenbank.datenbankVerbindung;
 
-public class MonteurFenster {
 
-	JFrame fenster;
+public class MonteurFenster extends JFrame{
+
 	private JTextField suchFeld;
 	private JTable auftraegeMonteurTBL;
+	private JPanel contentPane;
+	
+	
 	
 	
 	
@@ -48,7 +51,8 @@ public class MonteurFenster {
 	
 
 	datenbankVerbindung db = new datenbankVerbindung(); //verbindung Datenbank
-
+	JComboBox auswahlBoxStatus = new JComboBox();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -71,24 +75,17 @@ public class MonteurFenster {
 	 */
 	public MonteurFenster() {
 
-		einleiten();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void einleiten() {
-		fenster = new JFrame(); //neues fenster
-		fenster.setTitle("Inventive Assembly Monteur Auftragsansicht");//Namen setzen
-		fenster.setExtendedState(JFrame.MAXIMIZED_BOTH);//Großansicht
-		fenster.setBounds(0, 0, 700, 600);
-		fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//fenster schließen bei x
+		
+		setTitle("Inventive Assembly Monteur Auftragsansicht");//Namen setzen
+		setExtendedState(JFrame.MAXIMIZED_BOTH);//Großansicht
+		setBounds(0, 0, 700, 600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//fenster schließen bei x
 		GridBagLayout gridBagLayout = new GridBagLayout();//layout von hier
 		gridBagLayout.columnWidths = new int[] { 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 362, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
-		fenster.getContentPane().setLayout(gridBagLayout);//bis hier
+		getContentPane().setLayout(gridBagLayout);//bis hier
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);//layout für tabbed pane von hier
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16)); //schriftgröße
@@ -97,7 +94,7 @@ public class MonteurFenster {
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
 		gbc_tabbedPane.gridx = 0;
 		gbc_tabbedPane.gridy = 0;
-		fenster.getContentPane().add(tabbedPane, gbc_tabbedPane);//bis hier
+		getContentPane().add(tabbedPane, gbc_tabbedPane);//bis hier
 
 		JPanel auftraegeTab = new JPanel();
 		tabbedPane.addTab("Aufträge", null, auftraegeTab, null);// tab sichtbar
@@ -112,8 +109,11 @@ public class MonteurFenster {
 		logoutKnopf.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {//logout befehl...
-				System.out.println("moin");
+			public void actionPerformed(ActionEvent e) {//logout befehl...zurück zum login
+				
+				LoginFenster login = new LoginFenster();//loginfenster erstellen
+				login.setVisible(true);
+				dispose();//aktuelles Fenster schließen
 				
 			}
 		});
@@ -199,7 +199,7 @@ public class MonteurFenster {
 		
 		
 	}
-	/**
+	/** hilfsmethoden
 	 * Die methode zum Füllen der Tabelle*************************************************************************
 	 * ************************************************************************************************
 	 */
