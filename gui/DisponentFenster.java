@@ -169,6 +169,7 @@ public class DisponentFenster extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 
 		auftraegeCombobox.addActionListener(null
+				//Soll die Veränderung der Zelle verhindern, damit nur die Auftragsnummern im Dropdown angezeigt werden
 				//Hier Den inhalt der Zelle wieder auf ""Summe: " + summeAuftraege(i) + "         Details"" setzen
 				);
 		
