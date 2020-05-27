@@ -25,7 +25,7 @@ public class datenbankVerbindung {
 	ArrayList<Mitarbeiter> disponentListe = new ArrayList<>();
 	ArrayList<Komponente> komponentenListe = new ArrayList<>();
 	ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
-	ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
+
 
 	public Connection getVerbindung() {
 		return verbindung;
@@ -51,9 +51,6 @@ public class datenbankVerbindung {
 		return komponentenListe;
 	}
 	
-	public ArrayList<Komponente> getKomponentenlisteauftrag() {
-		return komponentenlisteauftrag;
-	}
 
 	public ArrayList<Mitarbeiter> getMonteurListe() {
 		return monteurListe;
@@ -68,6 +65,7 @@ public class datenbankVerbindung {
 		test.komponenteEinlesen();
 		test.monteurEinlesen();
 		test.auftragEinlesen();
+		
 	}
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
@@ -100,7 +98,7 @@ public class datenbankVerbindung {
 
 	}
 
-	public void auftragEinlesen() { // alle Aufträge werden eingelesen
+	public void auftragEinlesen() { 
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -108,77 +106,23 @@ public class datenbankVerbindung {
 
 			while (rs.next()) {
 
-//				ArrayList<Komponente> Komponentenlisteauftrag = new ArrayList<>();   //wir oben schon deklariert
-				String[] komponentennrarray = rs.getString("Komponenten").split(","); // Der String in der Tabelle
-																						// Spalte Komponenten, werden
-																						// nach dem Komma in
-																						// verschiedene Strings
-																						// augeteilt und in den Array
-																						// gespeichert
-				for (String ab : komponentennrarray) { // Für jede Komponentennummer wird nun das richtige Exemplar von
-														// Komponente
-														// gesucht
+				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();  
+				String[] komponentennrarray = rs.getString("Komponenten").split(","); 
+																				
+				for (String ab : komponentennrarray) { 
+								
+					
 					for (int i = 0; i < komponentenListe.size(); i++) {
 						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {
-							komponentenlisteauftrag.add(komponentenListe.get(i)); // das Exmplar mit der passenden
-																					// Kompinentennummer wird der Liste
-																					// hinzugefügt
+							komponentenlisteauftrag.add(komponentenListe.get(i)); 
+																				
 						}
 					}
+					
 
 				}
 
-				/*
-				 * Der zuständige Monteur und der Auftraggeber sind im Auftrag als Objekte
-				 * gespeichert, allerdings ist eine Objektspeicherung in der Datenbank nicht
-				 * möglich. Somit vergleicht man hier beim Monteur die Mitarbeiternummer aus der
-				 * DB mit allen Mitarbeiternummern aus der Monteurliste. Bei Übereinstimmung
-				 * wird dann der Monteur, dem die Mitarbeiternummer zugeordnet werden konnte,
-				 * mit seinen Attributen (die bereits in der Monteurliste gespeichert sind) in
-				 * dem Monteurexemplar zustaendig abgespeichert und somit im Auftrag vermerkt.
-				 * Gleiches Vorgehen beim Auftraggeber ...
-				 */
-
-				/*
-				 * Monteur zustaendig = new Monteur(null, null, null, null, null);
-				 * 
-				 * for (Monteur monteur : monteurListe) { if
-				 * (monteur.getMitarbeiterNummer().equals(rs.getString(
-				 * "ZustaendigMitarbeiterNummer"))) { zustaendig.setName(monteur.getName());
-				 * zustaendig.setVorname(monteur.getVorname());
-				 * zustaendig.setMitarbeiterNummer(monteur.getMitarbeiterNummer());
-				 * zustaendig.setPasswort(monteur.getPasswort());
-				 * zustaendig.setAnwesenheit(monteur.getAnwesenheit()); } }
-				 * 
-				 * Auftraggeber auftraggeber = new Auftraggeber(null, null);
-				 * 
-				 * for (Auftraggeber kunde : auftraggeberListe) { if
-				 * (kunde.getKundenNummer().equals(rs.getString("Auftraggeber"))) {
-				 * auftraggeber.setKundenNummer(kunde.getKundenNummer());
-				 * auftraggeber.setName(kunde.getName()); } }
-				 * 
-				 * if (auftraggeber == null) { /* Falls kein Auftraggeber mit dieser Nummer
-				 * gefunden wird, kann ggf. neuer Auftraggeber angelegt werden? -> oder nur
-				 * nice-to-have ?? Falls ja, müsste es hier einen Verweis auf ein extra GUI
-				 * Fenster geben.
-				 * 
-				 * System.out.
-				 * println("Keinen passenden Auftraggeber gefunden. Möchten Sie einen neuen Auftraggeber anlegen?"
-				 * ); }
-				 * 
-				 * if (zustaendig.getMitarbeiterNummer() != null &&
-				 * auftraggeber.getKundenNummer() != null) { objekte.Auftrag Auftrag = new
-				 * Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
-				 * rs.getString("Frist"), rs.getString("Status"), zustaendig, auftraggeber,
-				 * Komponentenlisteauftrag);
-				 * 
-				 * auftragsListe.add(Auftrag); }else { System.out.
-				 * println("Fehler! Der Auftrag konnte leider nicht angelegt werden. Bitte überprüfen Sie ihre Eingaben!"
-				 * );
-				 * 
-				 * }
-				 * 
-				 */
+	
 
 				for (int i = 0; i < monteurListe.size(); i++) {
 
@@ -198,6 +142,8 @@ public class datenbankVerbindung {
 				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
 						rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter),
 						auftraggeberListe.get(indexAuftraggeber), komponentenlisteauftrag);
+				
+				
 
 				auftragsListe.add(Auftrag);
 
@@ -207,6 +153,7 @@ public class datenbankVerbindung {
 			for (Auftrag auftrag : auftragsListe) {
 				System.out.println(auftrag);
 			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -214,8 +161,7 @@ public class datenbankVerbindung {
 
 	}
 
-	public void auftraggeberEinlesen() { // Methode vum alle Auftraggeber aus der Tabelle "auftraggeber" von der
-											// Datenbank einlesen
+	public void auftraggeberEinlesen() { 
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -223,12 +169,7 @@ public class datenbankVerbindung {
 
 			while (rs.next()) {
 				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"),
-						rs.getString("KundenNummer")); // Ein
-														// Exemplar
-														// von
-														// Auftraggeber
-														// wird
-														// erstellt
+						rs.getString("KundenNummer")); 
 				auftraggeberListe.add(Auftraggeber);
 			}
 			System.out.println("Auftraggeber einlesen:" + auftraggeberListe);
@@ -247,7 +188,7 @@ public class datenbankVerbindung {
 
 			while (rs.next()) {
 				
-				// monteure werden durch if-Bedingung herausgefiltert, dann erfolgt einlesen der Disponenten
+				
 				if (rs.getString("Rolle").equals("Disponent")) {
 					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
 							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"),
@@ -290,7 +231,6 @@ public class datenbankVerbindung {
 
 			while (rs.next()) {
 				
-				// Disponenten werden durch if-Bedingung herausgefiltert, dann erfolgt einlesen der Monteure
 				if (rs.getString("Rolle").equals("Monteur")) {
 					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
 							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"),
@@ -306,35 +246,6 @@ public class datenbankVerbindung {
 
 	}
 
-	public String getPassword(String id) {
-		String passwort = "";
-		try {
-			Statement stmt = verbindung.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter` WHERE `MitarbeiterNummer` = " + id);
-			while (rs.next()) {
-				passwort = rs.getString("Passwort");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return passwort;
-	}
 	
-	public String getRolle(String id) {
-		String rolle="";
-		try {
-			Statement stmt = verbindung.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter` WHERE `MitarbeiterNummer` = " + id);
-			while(rs.next()) {
-				rolle = rs.getString("Rolle");
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		return rolle;
-	}
 
 }

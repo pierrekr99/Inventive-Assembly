@@ -6,39 +6,21 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import Datenbank.datenbankVerbindung;
 import objekte.Mitarbeiter;
 import test.MonteurAuftraege;
-
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import java.awt.Font;
-import java.awt.FlowLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.print.attribute.standard.JobMessageFromOperator;
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
-import java.awt.Component;
 import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.awt.event.ActionEvent;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class LoginFenster extends JFrame {
 
@@ -110,6 +92,8 @@ public class LoginFenster extends JFrame {
 				verbindung.disponentEinlesen();
 				for (Mitarbeiter mitarbeiter : verbindung.getDisponentListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
+						DisponentFenster disponent = new DisponentFenster();
+						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						disponent.setVisible(true);
 						setVisible(false);
 						funktion = true;
@@ -119,6 +103,8 @@ public class LoginFenster extends JFrame {
 				for(Mitarbeiter mitarbeiter : verbindung.getMonteurListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
 						monteur.setVisible(true);
+						MonteurFenster monteur = new MonteurFenster();
+						monteur.fenster.setVisible(true);
 						setVisible(false);
 						funktion = true;
 					}
