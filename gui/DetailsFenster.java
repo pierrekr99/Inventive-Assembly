@@ -31,14 +31,14 @@ public class DetailsFenster extends JFrame {
 	private datenbankVerbindung verbindung = new datenbankVerbindung();
 
 	int zeilen = 3;
-//	int zeile = 0;// Zeile in der der Neue Auftrag eingefügt wird
-
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
 
+	
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -50,6 +50,8 @@ public class DetailsFenster extends JFrame {
 			}
 		});
 	}
+	
+*/
 
 	/**
 	 * Create the frame.
