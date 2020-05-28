@@ -87,7 +87,7 @@ public class DetailsFenster extends JFrame {
 						.addContainerGap(100, Short.MAX_VALUE)));
 
 		tableMonteur = new JTable();
-		tableMonteur.setModel(new DefaultTableModel(
+		tableMonteur.setModel(new DefaultTableModel( // Monteur Tabelle ohne inhalt
 			new Object[][] {
 				{null, null, null},
 				{null, null, null},
