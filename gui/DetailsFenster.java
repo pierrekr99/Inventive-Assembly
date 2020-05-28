@@ -33,7 +33,7 @@ public class DetailsFenster extends JFrame {
 
 	int zeilen = 3;
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
-	Object[][] monteur = new Object[2][3];
+	Object[][] monteur = new Object[zeilen][6];
 	private JTable tMonteur;
 	private JScrollPane scrollPane;
 	private JTable tableMonteur;
@@ -41,7 +41,7 @@ public class DetailsFenster extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-/*	public static void main(String[] args) {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -53,7 +53,7 @@ public class DetailsFenster extends JFrame {
 			}
 		});
 	}
-*/
+
 	/**
 	 * Create the frame.
 	 */
@@ -72,31 +72,32 @@ public class DetailsFenster extends JFrame {
 		JScrollPane sPMonteur = new JScrollPane();
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(258)
-							.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 463, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addGap(32)
-					.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-					.addGap(62)
-					.addComponent(sPKomponenten, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(100, Short.MAX_VALUE))
-		);
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+										.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE))
+								.addGroup(gl_contentPane.createSequentialGroup().addGap(258).addComponent(sPMonteur,
+										GroupLayout.PREFERRED_SIZE, 463, GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup().addGap(32)
+						.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE).addGap(62)
+						.addComponent(sPKomponenten, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(100, Short.MAX_VALUE)));
 
 		tableMonteur = new JTable();
-		tableMonteur.setModel(
-				new DefaultTableModel(new Object [][] {{null,null}}, new String[] { "MitarbeiterID", "Monteur" }));
+		tableMonteur.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+				{null, null, null},
+			},
+			new String[] {
+				"AuftragsNummer", "MonteurNummer", "MonteurName"
+			}
+		));
 		sPMonteur.setViewportView(tableMonteur);
 
 		komponenten(row);
@@ -106,7 +107,7 @@ public class DetailsFenster extends JFrame {
 		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 20));// Schriftart und -größe in der
 																					// Kopfzeile der Tabelle
 		tKomponenten.setModel(
-				new DefaultTableModel(komponenten, new String[] { "TeileNr.", "Name", "Kategorie", "Verfügbarkeit", })
+				new DefaultTableModel(komponenten, new String[] { "TeileNummer", "Name", "Kategorie", "Verfügbarkeit", })
 
 				{
 					boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
@@ -133,23 +134,30 @@ public class DetailsFenster extends JFrame {
 		tKomponenten.setRowHeight(50); // Zeilen höhe
 		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
 
-//		tKomponenten.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
-//			public void mouseClicked(MouseEvent e) {
-//				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
-//												// dazu)
-//					JTable target = (JTable) e.getSource();
-//					int row1 = target.getSelectedRow();// wo wurde geklickt
-//					int column = target.getSelectedColumn();
-//					// do some action if appropriate column
-//					if (column == 3 && ) {// wenn man in der Verfügbarkeitsspalte klickt und die verfügbarkeit false ist
-//						JOptionPane.showMessageDialog(null,
-//								("Eilbestellung für [" + "Teil"
-//										+ "] wurde ausgeführt"));
-//					}
-////					verbindung.getAuftragsListe().get(row1).getKomponenten().get(row1).getName())
-//				}
-//			}
-//		});
+		tKomponenten.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
+			public void mouseClicked(MouseEvent e) {
+				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
+												// dazu)
+					JTable target = (JTable) e.getSource();
+					int row1 = target.getSelectedRow();// wo wurde geklickt
+					int column = target.getSelectedColumn();
+					// do some action if appropriate column
+					if (column == 3 && komponenten[row1][column].equals(false)) {// wenn man in der Verfügbarkeitsspalte
+																					// klickt und die verfügbarkeit
+																					// false ist
+						JOptionPane.showMessageDialog(null,
+								("Eilbestellung für [" + komponenten[row1][1] + "] wurde ausgeführt")); // name der
+																										// komponenten
+																										// wird
+																										// ausgegeben
+																										// (komponenten
+																										// spalte 1)
+					}
+
+				}
+
+			}
+		});
 
 	}
 
