@@ -82,8 +82,8 @@ public class LoginFenster extends JFrame {
 		bt_Login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean funktion = false;
-				String id = tf_MitarbeiterID.getText();//Hier die inderscheidung zwischen Disponent und Monteur durch vergleich der Nummer mit Bereich für jew Rolle
-
+				String id = tf_MitarbeiterID.getText();
+				
 				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
 						DisponentFenster disponent = new DisponentFenster();
