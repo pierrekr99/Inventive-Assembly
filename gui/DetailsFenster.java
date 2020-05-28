@@ -1,12 +1,9 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
@@ -19,30 +16,26 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import Datenbank.datenbankVerbindung;
-import objekte.Komponente;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.AncestorEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class DetailsFenster extends JFrame {
-	
+
 	static datenbankVerbindung db = main.Main.getdb();
-	
+
 	private JPanel contentPane;
 	private JTable tKomponenten;
 	private JScrollPane sPKomponenten;
-	
+	private JScrollPane sPMonteur;
+	private JTable tMonteur;
+
 	int zeilen = 3;
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
-	Object[][] monteur = new Object[zeilen][6];
-	private JTable tMonteur;
-	private JScrollPane scrollPane;
-	private JTable tableMonteur;
+	Object[][] monteur = new Object[1][3];
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -52,88 +45,84 @@ public class DetailsFenster extends JFrame {
 					e.printStackTrace();
 				}
 			}
-		});
+	});
 	}
-
+*/
 	/**
 	 * Create the frame.
 	 */
 	public DetailsFenster(int row) { // reihe des auftrags als parameter
+
+//      -------  Fenster  -----------------------------------------------
+
 		setTitle("Auftragsdetails");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);// Nur dieses Fenster wird Geschlossen
-		setBounds(100, 100, 1007, 465);
+		setBounds(100, 100, 1060, 466);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		JPanel panel = new JPanel();
 
-		sPKomponenten = new JScrollPane();
-		sPKomponenten.setBounds(5, 36, 922, 449);
-		contentPane.setLayout(null);
-
-		JScrollPane sPMonteur = new JScrollPane();
-
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-										.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE))
-								.addGroup(gl_contentPane.createSequentialGroup().addGap(258).addComponent(sPMonteur,
-										GroupLayout.PREFERRED_SIZE, 463, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup().addGap(32)
-						.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE).addGap(62)
-						.addComponent(sPKomponenten, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(100, Short.MAX_VALUE)));
-
-		tableMonteur = new JTable();
-		tableMonteur.setModel(new DefaultTableModel( // Monteur Tabelle ohne inhalt
-			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-			},
-			new String[] {
-				"AuftragsNummer", "MonteurNummer", "MonteurName"
-			}
-		));
-		sPMonteur.setViewportView(tableMonteur);
+//		-------  Komponenten Tabelle  ----------------------------------------
 
 		komponenten(row);
+		sPKomponenten = new JScrollPane();
+		sPKomponenten.setBounds(5, 36, 922, 449);
 		tKomponenten = new JTable();// Neue Tabelle
 		tKomponenten.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
-		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 16));// Schriftart und -größe in der Tabelle
-		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 20));// Schriftart und -größe in der
-																					// Kopfzeile der Tabelle
-		tKomponenten.setModel(
-				new DefaultTableModel(komponenten, new String[] { "TeileNummer", "Name", "Kategorie", "Verfügbarkeit", })
+		tKomponenten.setModel(new DefaultTableModel(komponenten,
+				new String[] { "TeileNummer", "Name", "Kategorie", "Verfügbarkeit", })
 
-				{
-					boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-							false, false, false, false };
+		{
+			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
+					false, false, false, false };
 
-					public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
-						return columnEditables[column];
-					}
-
-				});// Generierung
-					// der
-					// Tabelle
-					// Benötigter
-					// Inhalt:
-					// (String[][],String[])
-
+			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+				return columnEditables[column];
+			}
+		});// Generierung der Tabelle Benötigter Inhalt: (String[][],String[])
 		sPKomponenten.setViewportView(tKomponenten);
-
-		JPanel panel = new JPanel();
 		sPKomponenten.setColumnHeaderView(panel);
-		contentPane.setLayout(gl_contentPane);
+
+		eilbestellen();
+
+//      -------  Monteur Tabelle  ----------------------------------------
+
+		autragMonteur(row);
+		sPMonteur = new JScrollPane();
+		tMonteur = new JTable();
+		tMonteur.setModel(
+				new DefaultTableModel(monteur, new String[] { "AuftragsNummer", "MonteurNummer", "MonteurName" }));
+
+		sPMonteur.setViewportView(tMonteur);
+
+//		-------  Formatierung  -------------------------------------------------
+
+		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
+		tMonteur.setRowHeight(50); // Zeilen höhe
+		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
 
 		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
 		tKomponenten.setRowHeight(50); // Zeilen höhe
 		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
+
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
+								.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 723, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE).addGap(47)
+						.addComponent(sPKomponenten, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(100, Short.MAX_VALUE)));
+		contentPane.setLayout(gl_contentPane);
+
+	}
+
+	private void eilbestellen() {
 
 		tKomponenten.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 			public void mouseClicked(MouseEvent e) {
@@ -147,16 +136,10 @@ public class DetailsFenster extends JFrame {
 																					// klickt und die verfügbarkeit
 																					// false ist
 						JOptionPane.showMessageDialog(null,
-								("Eilbestellung für [" + komponenten[row1][1] + "] wurde ausgeführt")); // name der
-																										// komponenten
-																										// wird
-																										// ausgegeben
-																										// (komponenten
-																										// spalte 1)
+								("Eilbestellung für [" + komponenten[row1][1] + "] wurde ausgeführt"));
+						// name der komponenten wird ausgegeben (komponenten spalte 1)
 					}
-
 				}
-
 			}
 		});
 
@@ -168,11 +151,9 @@ public class DetailsFenster extends JFrame {
 		// int row ist die reihe des auftrags um details des jeweiligen auftrags
 		// ausgeben zu können
 
-
-
 		for (int i = 0; i < db.getAuftragsListe().get(row).getKomponenten().size(); i++) { // fügt Komponenten
-																									// eines Auftrags in
-			// die Tabelle ein
+																							// eines Auftrags in
+																							// die Tabelle ein
 
 			komponenten[i][0] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKomponentenNummer();
 			komponenten[i][1] = db.getAuftragsListe().get(row).getKomponenten().get(i).getName();
@@ -180,6 +161,15 @@ public class DetailsFenster extends JFrame {
 			komponenten[i][3] = db.getAuftragsListe().get(row).getKomponenten().get(i).isVerfuegbarkeit();
 
 		}
+
+	}
+
+	private void autragMonteur(int row) { // fügt auftragsnummer monteurname und nummer in tabelle ein
+
+		monteur[0][0] = db.getAuftragsListe().get(row).getAuftragsNummer();
+		monteur[0][1] = db.getAuftragsListe().get(row).getZustaendig().getMitarbeiterNummer();
+		monteur[0][2] = db.getAuftragsListe().get(row).getZustaendig().getVorname() + " "
+				+ db.getAuftragsListe().get(row).getZustaendig().getName();
 
 	}
 
