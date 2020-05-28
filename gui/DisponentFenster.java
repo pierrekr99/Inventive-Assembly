@@ -151,7 +151,7 @@ public class DisponentFenster extends JFrame {
 
 		monteureTbl.setModel(new DefaultTableModel(monteure(), // Benötigter Inhalt: (String[][],String[])
 				// Sonst wird hier ein eigenes Modell Eingefügt
-				new String[] { "Name", "MittarbeiterNummer", "Verfügbarkeit", "Auftraege"// welche spaltennamen
+				new String[] { "Name", "MitarbeiterNummer", "Verfügbarkeit", "Auftraege"// welche spaltennamen
 				}) {
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
 					false, false, false, true };
