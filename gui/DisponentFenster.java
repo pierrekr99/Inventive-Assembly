@@ -68,7 +68,6 @@ public class DisponentFenster extends JFrame {
 		txtSuche.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtSuche.setText("Suche");
 		txtSuche.setColumns(10);
-		dbEinlesen();// die Datenbank wird eingelesen
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -321,13 +320,5 @@ public class DisponentFenster extends JFrame {
 		return auftraege;
 	}
 
-	private void dbEinlesen() {// db Wier Eingelesen
-		db.verbinden();
-		db.auftraggeberEinlesen();
-		db.disponentEinlesen();
-		db.komponenteEinlesen();
-		db.monteurEinlesen();
-		db.auftragEinlesen();
 
-	}
 }

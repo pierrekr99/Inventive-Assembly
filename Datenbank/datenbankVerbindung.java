@@ -56,16 +56,17 @@ public class datenbankVerbindung {
 		return monteurListe;
 	}
 
-	public static void main(String[] args) {
+	
 
-		datenbankVerbindung test = new datenbankVerbindung();
-		test.verbinden();
-		test.auftraggeberEinlesen();
-		test.disponentEinlesen();
-		test.komponenteEinlesen();
-		test.monteurEinlesen();
-		test.auftragEinlesen();
+	public datenbankVerbindung() {
 		
+		verbinden();
+		auftraggeberEinlesen();
+		disponentEinlesen();
+		komponenteEinlesen();
+		monteurEinlesen();
+		auftragEinlesen();
+	
 	}
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
