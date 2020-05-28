@@ -56,10 +56,7 @@ public class datenbankVerbindung {
 		return monteurListe;
 	}
 
-	
-
 	public datenbankVerbindung() {
-		
 		verbinden();
 		auftraggeberEinlesen();
 		disponentEinlesen();

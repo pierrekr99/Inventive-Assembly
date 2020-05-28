@@ -27,6 +27,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class DisponentFenster extends JFrame {
+	
+	static datenbankVerbindung db = main.Main.getdb();
 
 	private JPanel contentPane;
 	private JTextField txtSuche;
@@ -38,7 +40,6 @@ public class DisponentFenster extends JFrame {
 	int summeAuftraege = 0;
 	String details = "Details";// Hier könnte man den Detailsbutton Rendern
 
-	datenbankVerbindung db = new datenbankVerbindung();
 	JComboBox monteureCombobox = new JComboBox(); // erstellung einer Combobox
 	JComboBox auftraegeCombobox = new JComboBox();
 

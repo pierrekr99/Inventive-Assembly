@@ -25,12 +25,13 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class DetailsFenster extends JFrame {
-
+	
+	static datenbankVerbindung db = main.Main.getdb();
+	
 	private JPanel contentPane;
 	private JTable tKomponenten;
 	private JScrollPane sPKomponenten;
-	private datenbankVerbindung verbindung = new datenbankVerbindung();
-
+	
 	int zeilen = 3;
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
 	Object[][] monteur = new Object[zeilen][6];
@@ -167,21 +168,16 @@ public class DetailsFenster extends JFrame {
 		// int row ist die reihe des auftrags um details des jeweiligen auftrags
 		// ausgeben zu können
 
-		verbindung.verbinden();
-		verbindung.auftraggeberEinlesen();
-		verbindung.disponentEinlesen();
-		verbindung.komponenteEinlesen();
-		verbindung.monteurEinlesen();
-		verbindung.auftragEinlesen();
 
-		for (int i = 0; i < verbindung.getAuftragsListe().get(row).getKomponenten().size(); i++) { // fügt Komponenten
+
+		for (int i = 0; i < db.getAuftragsListe().get(row).getKomponenten().size(); i++) { // fügt Komponenten
 																									// eines Auftrags in
 			// die Tabelle ein
 
-			komponenten[i][0] = verbindung.getAuftragsListe().get(row).getKomponenten().get(i).getKomponentenNummer();
-			komponenten[i][1] = verbindung.getAuftragsListe().get(row).getKomponenten().get(i).getName();
-			komponenten[i][2] = verbindung.getAuftragsListe().get(row).getKomponenten().get(i).getKategorie();
-			komponenten[i][3] = verbindung.getAuftragsListe().get(row).getKomponenten().get(i).isVerfuegbarkeit();
+			komponenten[i][0] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKomponentenNummer();
+			komponenten[i][1] = db.getAuftragsListe().get(row).getKomponenten().get(i).getName();
+			komponenten[i][2] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKategorie();
+			komponenten[i][3] = db.getAuftragsListe().get(row).getKomponenten().get(i).isVerfuegbarkeit();
 
 		}
 

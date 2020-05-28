@@ -9,12 +9,14 @@ import gui.LoginFenster;
 import test.MonteurAuftraege;
 
 public class Main {
-
+	
+	
+	static datenbankVerbindung db = new datenbankVerbindung();
+	
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		
-		
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -31,5 +33,10 @@ public class Main {
 			}
 		});
 	}
-
+	
+	public static datenbankVerbindung getdb() {
+		return db;
+	}
+	
+	
 }

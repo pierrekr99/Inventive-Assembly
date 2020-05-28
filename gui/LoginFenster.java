@@ -24,15 +24,19 @@ import java.awt.event.ActionEvent;
 
 public class LoginFenster extends JFrame {
 
+	
+	static datenbankVerbindung db = main.Main.getdb();
+	
+	
+	
 	private JPanel contentPane;
 	private JTextField tf_MitarbeiterID;
 	private JPasswordField tf_password;
 	private Icon icon;
-	private datenbankVerbindung verbindung = new datenbankVerbindung();
 
 	public LoginFenster() {
-
-		verbindung.verbinden();
+		
+		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 500);
@@ -79,9 +83,9 @@ public class LoginFenster extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean funktion = false;
 				String id = tf_MitarbeiterID.getText();//Hier die inderscheidung zwischen Disponent und Monteur durch vergleich der Nummer mit Bereich für jew Rolle
-				verbindung.monteurEinlesen();
-				verbindung.disponentEinlesen();
-				for (Mitarbeiter mitarbeiter : verbindung.getDisponentListe()) {
+				db.monteurEinlesen();
+				db.disponentEinlesen();
+				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
 						DisponentFenster disponent = new DisponentFenster();
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -91,7 +95,7 @@ public class LoginFenster extends JFrame {
 					}
 				}
 				
-				for(Mitarbeiter mitarbeiter : verbindung.getMonteurListe()) {
+				for(Mitarbeiter mitarbeiter : db.getMonteurListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
 						MonteurFenster monteur = new MonteurFenster();
 						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);

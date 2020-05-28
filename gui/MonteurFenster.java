@@ -37,6 +37,8 @@ import Datenbank.datenbankVerbindung;
 
 
 public class MonteurFenster extends JFrame{
+	
+	static datenbankVerbindung db = main.Main.getdb();
 
 	private JTextField suchFeld;
 	private JTable auftraegeMonteurTBL;
@@ -50,7 +52,6 @@ public class MonteurFenster extends JFrame{
 	String details = "Details";// Hier könnte man den Detailsbutton Rendern
 	
 
-	datenbankVerbindung db = new datenbankVerbindung(); //verbindung Datenbank
 	JComboBox auswahlBoxStatus = new JComboBox();
 	
 	/**
@@ -206,12 +207,6 @@ public class MonteurFenster extends JFrame{
 	 * ************************************************************************************************
 	 */
 	private Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
-		db.verbinden();
-		db.auftraggeberEinlesen();
-		db.disponentEinlesen();
-		db.komponenteEinlesen();
-		db.monteurEinlesen();
-		db.auftragEinlesen();
 		zeilen = db.getAuftragsListe().size();//wie viele zeilen hat die Tabelle
 		Object[][] auftraege = new Object[zeilen][6];//Struktur Tabelle
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
