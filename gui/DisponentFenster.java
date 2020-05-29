@@ -42,6 +42,9 @@ public class DisponentFenster extends JFrame {
 
 	JComboBox monteureCombobox = new JComboBox(); // erstellung einer Combobox
 	JComboBox auftraegeCombobox = new JComboBox();
+	
+	private boolean sortiert = false;
+	private boolean sortiert1 = false;
 
 	/**
 	 * Launch the application.
@@ -115,18 +118,10 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Schriftart und -größe in der
 																					// Kopfzeile der Tabelle
 		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		auftraegeTbl.setModel(new DefaultTableModel(auftraege(), // Benötigter Inhalt: (String[][],String[])
-				// Sonst wird hier ein eigenes Modell Eingefügt
-				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "MonteurName",
-						"MonteurNummer", "Auftragsgeber" }) {
-			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-					false, false, false, false, false, true, false, false };
-
-			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
-				return columnEditables[column];
-			}
-		});
 		
+		auftraegeAktualisieren(); //Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
+		
+		auftraegeTbl.setAutoCreateRowSorter(true);
 		monteureCombobox();
 		TableColumn monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);// eine bestimmte Spalte für Combobox
 																				// auswählen
@@ -148,20 +143,13 @@ public class DisponentFenster extends JFrame {
 		monteureTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));// Schriftart und -größe in der Tabelle
 		monteureTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Schriftart und -größe in der
 																					// Kopfzeile der Tabelle
-
-		monteureTbl.setModel(new DefaultTableModel(monteure(), // Benötigter Inhalt: (String[][],String[])
-				// Sonst wird hier ein eigenes Modell Eingefügt
-				new String[] { "Name", "MitarbeiterNummer", "Verfügbarkeit", "Auftraege"// welche spaltennamen
-				}) {
-			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-					false, false, false, true };
-
-			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
-				return columnEditables[column];
-			}
-		});
+		
+		monteureAktualisieren();//Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
+		
 		monteureTblFormat();
 		auftraegeTblFormat();
+		monteureTbl.setAutoCreateRowSorter(true);
+		
 		TableColumn auftraegeColumn = monteureTbl.getColumnModel().getColumn(3);// eine bestimmte Spalte für Combobox
 																				// auswählen
 		auftraegeColumn.setCellEditor(new DefaultCellEditor(auftraegeCombobox));// in die Spalte die Combobox einbinden
@@ -172,6 +160,72 @@ public class DisponentFenster extends JFrame {
 				//Soll die Veränderung der Zelle verhindern, damit nur die Auftragsnummern im Dropdown angezeigt werden
 				//Hier Den inhalt der Zelle wieder auf ""Summe: " + summeAuftraege(i) + "         Details"" setzen
 				);
+		
+//		monteureTbl.getTableHeader().addMouseListener(new MouseAdapter() {
+//
+//		@Override
+//		public void mouseClicked(MouseEvent e) {
+//			int spalte = monteureTbl.columnAtPoint(e.getPoint());
+//
+//			if (spalte == 0) {
+//				if (!sortiert) {
+//					monteureTbl.setAutoCreateRowSorter(false);
+//					db.getMonteurListe().sort((o1, o2) -> {
+//						return o1.getName()
+//								.compareTo(o2.getName());
+//					});
+//					
+//					sortiert = true;
+//				} else if (sortiert) {
+//					monteureTbl.setAutoCreateRowSorter(false);
+//					db.getMonteurListe().sort((o1, o2) -> {
+//						return o1.getName()
+//								.compareTo(o2.getName()) * -1;
+//					});
+//					sortiert = false;
+//				}
+//
+//
+//				monteureAktualisieren();
+//				monteureTbl.setAutoCreateRowSorter(true);
+//
+//			}
+//
+//		}
+//	});
+//		
+//		auftraegeTbl.getTableHeader().addMouseListener(new MouseAdapter() {
+//
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				int spalte1 = auftraegeTbl.columnAtPoint(e.getPoint());
+//
+//				if (spalte1 == 5) {
+//					if (!sortiert1) {
+//						auftraegeTbl.setAutoCreateRowSorter(false);
+//						db.getAuftragsListe().sort((o1, o2) -> {
+//							return o1.getZustaendig().getName()
+//									.compareTo(o2.getZustaendig().getName());
+//						});
+//						
+//						sortiert1 = true;
+//					} else if (sortiert1) {
+//						auftraegeTbl.setAutoCreateRowSorter(false);
+//						db.getAuftragsListe().sort((o1, o2) -> {
+//							return o1.getZustaendig().getName()
+//									.compareTo(o2.getZustaendig().getName());
+//						});
+//						sortiert1 = false;
+//					}
+//
+//
+//					monteureAktualisieren();
+//					auftraegeTbl.setAutoCreateRowSorter(true);
+//
+//				}
+//
+//			}
+//		});
 		
 		auftraegeTbl.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 			public void mouseClicked(MouseEvent e) {
@@ -191,27 +245,27 @@ public class DisponentFenster extends JFrame {
 		});
 	}
 
-	private void auftraegeTblFormat() {
+	private void monteureTblFormat() {
 		monteureTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
 		monteureTbl.getColumnModel().getColumn(0).setMinWidth(100);
-		monteureTbl.getColumnModel().getColumn(0).setMaxWidth(400);
+		monteureTbl.getColumnModel().getColumn(0).setMaxWidth(500);
 
 		monteureTbl.getColumnModel().getColumn(1).setPreferredWidth(100);
 		monteureTbl.getColumnModel().getColumn(1).setMinWidth(100);
-		monteureTbl.getColumnModel().getColumn(1).setMaxWidth(300);
+		monteureTbl.getColumnModel().getColumn(1).setMaxWidth(400);
 
 		monteureTbl.getColumnModel().getColumn(2).setPreferredWidth(100);
 		monteureTbl.getColumnModel().getColumn(2).setMinWidth(100);
-		monteureTbl.getColumnModel().getColumn(2).setMaxWidth(400);
+		monteureTbl.getColumnModel().getColumn(2).setMaxWidth(500);
 
 		monteureTbl.getColumnModel().getColumn(3).setPreferredWidth(100);
 		monteureTbl.getColumnModel().getColumn(3).setMinWidth(100);
-		monteureTbl.getColumnModel().getColumn(3).setMaxWidth(400);
+		monteureTbl.getColumnModel().getColumn(3).setMaxWidth(500);
 
 		monteureTbl.setRowHeight(50);
 	}
 
-	private void monteureTblFormat() {
+	private void auftraegeTblFormat() {
 		auftraegeTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
 		auftraegeTbl.getColumnModel().getColumn(0).setMinWidth(100);
 		auftraegeTbl.getColumnModel().getColumn(0).setMaxWidth(100);
@@ -320,6 +374,31 @@ public class DisponentFenster extends JFrame {
 		}
 		return auftraege;
 	}
+private void auftraegeAktualisieren() {
+	auftraegeTbl.setModel(new DefaultTableModel(auftraege(), // Benötigter Inhalt: (String[][],String[])
+			// Sonst wird hier ein eigenes Modell Eingefügt
+			new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "MonteurName",
+					"MonteurNummer", "Auftragsgeber" }) {
+		boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
+				false, false, false, false, false, true, false, false };
 
+		public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+			return columnEditables[column];
+		}
+	});
+}
+private void monteureAktualisieren() {
+	monteureTbl.setModel(new DefaultTableModel(monteure(), // Benötigter Inhalt: (String[][],String[])
+			// Sonst wird hier ein eigenes Modell Eingefügt
+			new String[] { "Name", "MitarbeiterNummer", "Verfügbarkeit", "Auftraege"// welche spaltennamen
+			}) {
+		boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
+				false, false, false, true };
+
+		public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+			return columnEditables[column];
+		}
+	});
+}
 
 }
