@@ -30,7 +30,7 @@ public class DetailsFenster extends JFrame {
 
 	int zeilen = 3;
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
-	Object[][] monteur = new Object[1][3];
+	Object[][] monteur = new Object[1][5];
 
 	/**
 	 * Launch the application.
@@ -92,7 +92,7 @@ public class DetailsFenster extends JFrame {
 		sPMonteur = new JScrollPane();
 		tMonteur = new JTable();
 		tMonteur.setModel(
-				new DefaultTableModel(monteur, new String[] { "AuftragsNummer", "MonteurNummer", "MonteurName" }));
+				new DefaultTableModel(monteur, new String[] { "AuftragsNummer", "KundenNummer","Auftraggeber", "MonteurNummer", "MonteurName" }));
 
 		sPMonteur.setViewportView(tMonteur);
 
@@ -101,6 +101,7 @@ public class DetailsFenster extends JFrame {
 		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
 		tMonteur.setRowHeight(50); // Zeilen höhe
 		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
+		monteureTblFormat();
 		
 
 		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
@@ -111,19 +112,72 @@ public class DetailsFenster extends JFrame {
 												// in der natürlichen Ordnung und umgekehrt sortiert
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
-								.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 723, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE).addGap(47)
-						.addComponent(sPKomponenten, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(100, Short.MAX_VALUE)));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(sPMonteur, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
+						.addComponent(sPKomponenten, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+					.addGap(47)
+					.addComponent(sPKomponenten, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(101, Short.MAX_VALUE))
+		);
 		contentPane.setLayout(gl_contentPane);
 
+	}
+	
+	private void monteureTblFormat() {
+		tMonteur.getColumnModel().getColumn(0).setPreferredWidth(150);
+		tMonteur.getColumnModel().getColumn(0).setMinWidth(100);
+		tMonteur.getColumnModel().getColumn(0).setMaxWidth(200);
+
+		tMonteur.getColumnModel().getColumn(1).setPreferredWidth(100);
+		tMonteur.getColumnModel().getColumn(1).setMinWidth(100);
+		tMonteur.getColumnModel().getColumn(1).setMaxWidth(200);
+
+		tMonteur.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tMonteur.getColumnModel().getColumn(2).setMinWidth(100);
+		tMonteur.getColumnModel().getColumn(2).setMaxWidth(500);
+
+		tMonteur.getColumnModel().getColumn(3).setPreferredWidth(100);
+		tMonteur.getColumnModel().getColumn(3).setMinWidth(100);
+		tMonteur.getColumnModel().getColumn(3).setMaxWidth(200);
+
+		tMonteur.getColumnModel().getColumn(4).setPreferredWidth(100);
+		tMonteur.getColumnModel().getColumn(4).setMinWidth(100);
+		tMonteur.getColumnModel().getColumn(4).setMaxWidth(500);
+		
+		
+		
+//		((JTable) monteur[0][0]).getColumnModel().getColumn(0).setPreferredWidth(150);
+//		((JTable) monteur[0][0]).getColumn(0).setMinWidth(100);
+//		((JTable) monteur[0][0]).getColumn(0).setMaxWidth(500);
+//
+//		((JTable) monteur[0][1]).getColumn(1).setPreferredWidth(100);
+//		((JTable) monteur[0][1]).getColumn(1).setMinWidth(100);
+//		((JTable) monteur[0][1]).getColumn(1).setMaxWidth(400);
+//
+//		((JTable) monteur[0][2]).getColumn(2).setPreferredWidth(100);
+//		((JTable) monteur[0][2]).getColumn(2).setMinWidth(100);
+//		((JTable) monteur[0][2]).getColumn(2).setMaxWidth(500);
+//
+//		((JTable) monteur[0][3]).getColumn(3).setPreferredWidth(100);
+//		((JTable) monteur[0][3]).getColumn(3).setMinWidth(100);
+//		((JTable) monteur[0][3]).getColumn(3).setMaxWidth(500);
+//
+//		((JTable) monteur[0][4]).getColumn(3).setPreferredWidth(100);
+//		((JTable) monteur[0][4]).getColumn(3).setMinWidth(100);
+//		((JTable) monteur[0][4]).getColumn(3).setMaxWidth(500);
+		
+		
 	}
 
 	private void eilbestellen() {
@@ -163,7 +217,7 @@ public class DetailsFenster extends JFrame {
 			komponenten[i][1] = db.getAuftragsListe().get(row).getKomponenten().get(i).getName();
 			komponenten[i][2] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKategorie();
 			komponenten[i][3] = db.getAuftragsListe().get(row).getKomponenten().get(i).isVerfuegbarkeit();
-
+			
 		}
 
 	}
@@ -171,8 +225,10 @@ public class DetailsFenster extends JFrame {
 	private void autragMonteur(int row) { // fügt auftragsnummer monteurname und nummer in tabelle ein
 
 		monteur[0][0] = db.getAuftragsListe().get(row).getAuftragsNummer();
-		monteur[0][1] = db.getAuftragsListe().get(row).getZustaendig().getMitarbeiterNummer();
-		monteur[0][2] = db.getAuftragsListe().get(row).getZustaendig().getVorname() + " "
+		monteur[0][1] = db.getAuftragsListe().get(row).getAuftraggeber().getKundenNummer();	
+		monteur[0][2] = db.getAuftragsListe().get(row).getAuftraggeber().getName();	
+		monteur[0][3] = db.getAuftragsListe().get(row).getZustaendig().getMitarbeiterNummer(); 
+		monteur[0][4] = db.getAuftragsListe().get(row).getZustaendig().getVorname() + " "
 				+ db.getAuftragsListe().get(row).getZustaendig().getName();
 
 	}
