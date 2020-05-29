@@ -101,12 +101,14 @@ public class DetailsFenster extends JFrame {
 		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
 		tMonteur.setRowHeight(50); // Zeilen höhe
 		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
-		tMonteur.setAutoCreateRowSorter(true);
+		
 
 		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
 		tKomponenten.setRowHeight(50); // Zeilen höhe
 		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
-		tKomponenten.setAutoCreateRowSorter(true);
+		
+		tKomponenten.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Komponenten nach diesem Attribut
+												// in der natürlichen Ordnung und umgekehrt sortiert
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)

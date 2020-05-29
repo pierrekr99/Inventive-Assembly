@@ -155,7 +155,8 @@ public class MonteurFenster extends JFrame {
 		tabelleaktualisieren();
 
 		auftraegeMonteurTBL.setRowHeight(50); // Zeilen höhe
-		auftraegeMonteurTBL.setAutoCreateRowSorter(true);
+		auftraegeMonteurTBL.setAutoCreateRowSorter(true); // durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge nach diesem Attribut
+															// in der natürlichen Ordnung und umgekehrt sortiert
 
 		JComboBox auswahlBoxStatus = new JComboBox();// combo box für den status
 		auswahlBoxStatus.addItem("Im Lager");// auswahlmöglichkeiten

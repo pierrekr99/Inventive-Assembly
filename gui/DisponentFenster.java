@@ -121,7 +121,9 @@ public class DisponentFenster extends JFrame {
 		
 		auftraegeAktualisieren(); //Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 		
-		auftraegeTbl.setAutoCreateRowSorter(true);
+		auftraegeTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge nach diesem Attribut
+												// in der natürlichen Ordnung und umgekehrt sortiert
+		
 		monteureCombobox();
 		TableColumn monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);// eine bestimmte Spalte für Combobox
 																				// auswählen
@@ -148,7 +150,8 @@ public class DisponentFenster extends JFrame {
 		
 		monteureTblFormat();
 		auftraegeTblFormat();
-		monteureTbl.setAutoCreateRowSorter(true);
+		monteureTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure nach diesem Attribut
+												// in der natürlichen Ordnung und umgekehrt sortiert
 		
 		TableColumn auftraegeColumn = monteureTbl.getColumnModel().getColumn(3);// eine bestimmte Spalte für Combobox
 																				// auswählen
