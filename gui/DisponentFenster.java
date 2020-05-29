@@ -1,14 +1,15 @@
 package gui;
 
-import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,9 +23,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import Datenbank.datenbankVerbindung;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class DisponentFenster extends JFrame {
 	
@@ -41,7 +39,7 @@ public class DisponentFenster extends JFrame {
 	String details = "Details";// Hier könnte man den Detailsbutton Rendern
 
 	JComboBox monteureCombobox = new JComboBox(); // erstellung einer Combobox
-	JComboBox auftraegeCombobox = new JComboBox();
+
 	
 	private boolean sortiert = false;
 	private boolean sortiert1 = false;
@@ -153,16 +151,10 @@ public class DisponentFenster extends JFrame {
 		monteureTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure nach diesem Attribut
 												// in der natürlichen Ordnung und umgekehrt sortiert
 		
-		TableColumn auftraegeColumn = monteureTbl.getColumnModel().getColumn(3);// eine bestimmte Spalte für Combobox
-																				// auswählen
-		auftraegeColumn.setCellEditor(new DefaultCellEditor(auftraegeCombobox));// in die Spalte die Combobox einbinden
+
 
 		contentPane.setLayout(gl_contentPane);
 
-		auftraegeCombobox.addActionListener(null
-				//Soll die Veränderung der Zelle verhindern, damit nur die Auftragsnummern im Dropdown angezeigt werden
-				//Hier Den inhalt der Zelle wieder auf ""Summe: " + summeAuftraege(i) + "         Details"" setzen
-				);
 		
 //		monteureTbl.getTableHeader().addMouseListener(new MouseAdapter() {
 //
@@ -246,8 +238,28 @@ public class DisponentFenster extends JFrame {
 				}
 			}
 		});
+		monteureTbl.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
+			public void mouseClicked(MouseEvent e) {
+				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
+												// dazu)
+					JTable target = (JTable) e.getSource();
+					int row = target.getSelectedRow();// wo wurde geklickt
+					int column = target.getSelectedColumn();
+					// do some action if appropriate column
+					if (column == 3) {// wenn in DetailsSpalte
+//						detailsFenster();//Detailsfenster wird geöffnet
+						AuftraegeListeFenster frame = new AuftraegeListeFenster(row); // reihe des Auftrags wird übergeben um details aufrufen zu können
+						frame.setVisible(true);
+					}
+				}
+			}
+		});
 	}
 
+	/**
+	 * Hilfsmethoden
+	 */
+	
 	private void monteureTblFormat() {
 		monteureTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
 		monteureTbl.getColumnModel().getColumn(0).setMinWidth(100);
@@ -304,19 +316,6 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.setRowHeight(50);
 	}
 
-	/**
-	 * Hilfsmethoden
-	 */
-
-	private void auftraegeCombobox(int j) {// Aufträge dropdown
-		// auftraegeCombobox.removeAllItems();
-		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
-			if (db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer()
-					.equals(db.getMonteurListe().get(j).getMitarbeiterNummer())) {
-				auftraegeCombobox.addItem(db.getAuftragsListe().get(i).getAuftragsNummer());
-			}
-		}
-	}
 
 	private String summeAuftraege(int i) {// zählt die zugehörigen Aufträge des Monteurs
 		String summe;
@@ -344,7 +343,7 @@ public class DisponentFenster extends JFrame {
 			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();// Auftragsliste.get(zeile).getAuftragsnr()
 			monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
 			monteure[i][3] = "Summe: " + summeAuftraege(i) + "         Details";// Dropdown fehlt noch
-			auftraegeCombobox(i);
+
 		}
 		return monteure;
 	}
