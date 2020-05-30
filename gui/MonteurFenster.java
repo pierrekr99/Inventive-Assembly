@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import Datenbank.datenbankVerbindung;
+import objekte.Auftrag;
 import objekte.Auftraggeber;
 
 public class MonteurFenster extends JFrame {
@@ -45,9 +47,12 @@ public class MonteurFenster extends JFrame {
 	private JPanel contentPane;
 
 	int zeilen = 0; // zeilen tabelle
+
 	String details = "Details";// Hier könnte man den Detailsbutton Rendern
 
 	JComboBox auswahlBoxStatus = new JComboBox();
+
+	private ArrayList<Auftrag> angepassteAuftragsListe = new ArrayList<Auftrag>();
 
 	/**
 	 * Launch the application.
@@ -198,16 +203,30 @@ public class MonteurFenster extends JFrame {
 	 * ************************************************************************************************
 	 */
 	private Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
-		zeilen = db.getAuftragsListe().size();// wie viele zeilen hat die Tabelle
+
+		
+		zeilen =  // wie viele zeilen hat die Tabelle(mit einem Collection.stream() ermittelt)
+		(int) db.getAuftragsListe().stream()
+		.filter((a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer())) //alle Aufträge von anderen Monteuren werden aussortiert, Vergleich über die Mitarbeiternummer und der Eingabe im tf_MitarbeiterID.
+		.count(); //zählen der übrigen Aufträge
+		 
+//		angepassteAuftragsListe
+				db.getAuftragsListe().stream()
+				.filter((a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer())) //alle Aufträge von anderen Monteuren werden aussortiert, Vergleich über die Mitarbeiternummer und der Eingabe im tf_MitarbeiterID.
+				.forEach(angepassteAuftragsListe::add); //übrigen Aufträge werden der angepassten Auftragsliste hinzugefügt
+		
+	
+		
 		Object[][] auftraege = new Object[zeilen][6];// Struktur Tabelle
-		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
+		for (int i = 0; i < zeilen; i++) {
 			auftraege[i][0] = details;
-			auftraege[i][1] = db.getAuftragsListe().get(i).getAuftragsNummer();// Auftragsliste.get(zeile).getAuftragsnr()
-			auftraege[i][2] = db.getAuftragsListe().get(i).getStatus();
-			auftraege[i][3] = db.getAuftragsListe().get(i).getFrist();
-			auftraege[i][4] = db.getAuftragsListe().get(i).getErstellungsdatum();
-			auftraege[i][5] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
+			auftraege[i][1] = angepassteAuftragsListe.get(i).getAuftragsNummer();// angepassteAuftragsliste.get(zeile).getAuftragsnr()
+			auftraege[i][2] = angepassteAuftragsListe.get(i).getStatus();
+			auftraege[i][3] = angepassteAuftragsListe.get(i).getFrist();
+			auftraege[i][4] = angepassteAuftragsListe.get(i).getErstellungsdatum();
+			auftraege[i][5] = angepassteAuftragsListe.get(i).getAuftraggeber().getKundenNummer();
 		}
+		
 		return auftraege;
 	}
 

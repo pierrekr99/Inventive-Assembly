@@ -33,6 +33,13 @@ public class LoginFenster extends JFrame {
 	private JTextField tf_MitarbeiterID;
 	private JPasswordField tf_password;
 	private Icon icon;
+	private static String mitarbeiternummer;
+	
+
+	public static String getMitarbeiternummer() {
+		return mitarbeiternummer;
+	}
+
 
 	public LoginFenster() {
 		
@@ -83,6 +90,7 @@ public class LoginFenster extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean funktion = false;
 				String id = tf_MitarbeiterID.getText();
+				mitarbeiternummer = tf_MitarbeiterID.getText();
 				
 				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
