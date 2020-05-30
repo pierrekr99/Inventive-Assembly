@@ -211,11 +211,16 @@ public class datenbankVerbindung {
 
 			while (rs.next()) {
 				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("KomponentenNummer"),
-						rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"));
+						rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"), rs.getString("Attribut"));
 				komponentenListe.add(Komponente);
 			}
-			System.out.println("Komponenten einlesen:" + komponentenListe);
+			System.out.println("-------------------------------");
+			for (Komponente	komponente : komponentenListe) {
+				System.out.println(komponente);
+			}
+			System.out.println("-------------------------------");
 
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

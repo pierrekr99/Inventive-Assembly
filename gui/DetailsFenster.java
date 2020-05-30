@@ -29,7 +29,8 @@ public class DetailsFenster extends JFrame {
 	private JTable tMonteur;
 
 	int zeilen = 5;
-	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
+	// die anzahl der spalten war vorher auf 6, obwohl jetzt nur 5 gebraucht werden
+	Object[][] komponenten = new Object[zeilen][5];// Nur das wird später eingelesen
 	Object[][] monteur = new Object[1][5];
 
 	/**
@@ -71,7 +72,7 @@ public class DetailsFenster extends JFrame {
 		tKomponenten = new JTable();// Neue Tabelle
 		tKomponenten.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
 		tKomponenten.setModel(new DefaultTableModel(komponenten,
-				new String[] { "TeileNummer", "Name", "Kategorie", "Verfügbarkeit", })
+				new String[] { "TeileNummer",  "Name", "Attribut", "Kategorie", "Verfügbarkeit", })
 
 		{
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
@@ -156,28 +157,6 @@ public class DetailsFenster extends JFrame {
 		tMonteur.getColumnModel().getColumn(4).setMaxWidth(500);
 		
 		
-		
-//		((JTable) monteur[0][0]).getColumnModel().getColumn(0).setPreferredWidth(150);
-//		((JTable) monteur[0][0]).getColumn(0).setMinWidth(100);
-//		((JTable) monteur[0][0]).getColumn(0).setMaxWidth(500);
-//
-//		((JTable) monteur[0][1]).getColumn(1).setPreferredWidth(100);
-//		((JTable) monteur[0][1]).getColumn(1).setMinWidth(100);
-//		((JTable) monteur[0][1]).getColumn(1).setMaxWidth(400);
-//
-//		((JTable) monteur[0][2]).getColumn(2).setPreferredWidth(100);
-//		((JTable) monteur[0][2]).getColumn(2).setMinWidth(100);
-//		((JTable) monteur[0][2]).getColumn(2).setMaxWidth(500);
-//
-//		((JTable) monteur[0][3]).getColumn(3).setPreferredWidth(100);
-//		((JTable) monteur[0][3]).getColumn(3).setMinWidth(100);
-//		((JTable) monteur[0][3]).getColumn(3).setMaxWidth(500);
-//
-//		((JTable) monteur[0][4]).getColumn(3).setPreferredWidth(100);
-//		((JTable) monteur[0][4]).getColumn(3).setMinWidth(100);
-//		((JTable) monteur[0][4]).getColumn(3).setMaxWidth(500);
-		
-		
 	}
 
 	private void eilbestellen() {
@@ -215,8 +194,9 @@ public class DetailsFenster extends JFrame {
 
 			komponenten[i][0] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKomponentenNummer();
 			komponenten[i][1] = db.getAuftragsListe().get(row).getKomponenten().get(i).getName();
-			komponenten[i][2] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKategorie();
-			komponenten[i][3] = db.getAuftragsListe().get(row).getKomponenten().get(i).isVerfuegbarkeit();
+			komponenten[i][2] = db.getAuftragsListe().get(row).getKomponenten().get(i).getAttribut();
+			komponenten[i][3] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKategorie();
+			komponenten[i][4] = db.getAuftragsListe().get(row).getKomponenten().get(i).isVerfuegbarkeit();
 			
 		}
 

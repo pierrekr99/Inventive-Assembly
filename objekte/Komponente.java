@@ -2,21 +2,31 @@ package objekte;
 
 import java.util.Comparator;
 
-public class Komponente  {
-	
+public class Komponente {
+
 //	Attribute
 	private String name;
 	private String komponentenNummer;
 	private boolean verfuegbarkeit;
 	private String kategorie;
+	private String attribut;
 
-	
-	public Komponente(String name, String komponentenNummer, boolean verfuegbarkeit, String kategorie) {
+	public Komponente(String name, String komponentenNummer, boolean verfuegbarkeit, String kategorie,
+			String attribut) {
 		super();
 		this.name = name;
 		this.komponentenNummer = komponentenNummer;
 		this.verfuegbarkeit = verfuegbarkeit;
 		this.kategorie = kategorie;
+		this.attribut = attribut;
+	}
+
+	public String getAttribut() {
+		return attribut;
+	}
+
+	public void setAttribut(String attribut) {
+		this.attribut = attribut;
 	}
 
 	public String getName() {
@@ -37,8 +47,8 @@ public class Komponente  {
 
 	@Override
 	public String toString() {
-		return "KomponentenNummer = " + komponentenNummer
-			;
+		return "Komponente [name=" + name + ", komponentenNummer=" + komponentenNummer + ", verfuegbarkeit="
+				+ verfuegbarkeit + ", kategorie=" + kategorie + ", attribut=" + attribut + "]";
 	}
 
 }
