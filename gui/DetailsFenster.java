@@ -28,7 +28,7 @@ public class DetailsFenster extends JFrame {
 	private JScrollPane sPMonteur;
 	private JTable tMonteur;
 
-	int zeilen = 3;
+	int zeilen = 5;
 	Object[][] komponenten = new Object[zeilen][6];// Nur das wird später eingelesen
 	Object[][] monteur = new Object[1][5];
 
