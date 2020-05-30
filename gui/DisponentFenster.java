@@ -19,6 +19,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -222,6 +224,35 @@ public class DisponentFenster extends JFrame {
 //			}
 //		});
 		
+		
+		
+		
+		auftraegeTbl.getModel().addTableModelListener(new TableModelListener() { //test Pierre
+			
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				// TODO Auto-generated method stub
+			
+				
+				int row = e.getFirstRow();
+				
+				System.out.println(e.getFirstRow());
+				
+				System.out.println(auftraegeTbl.getValueAt(row, 5));
+				System.out.println(auftraegeTbl.getValueAt(row, 1));
+				
+				
+			
+			}
+	
+		});
+		
+		
+		
+
+		
+		
+		
 		auftraegeTbl.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 			public void mouseClicked(MouseEvent e) {
 				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
@@ -259,6 +290,8 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * Hilfsmethoden
 	 */
+	
+
 	
 	private void monteureTblFormat() {
 		monteureTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
@@ -356,7 +389,7 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
-	private Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
+	public  Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
 		zeilen = db.getAuftragsListe().size();
 		Object[][] auftraege = new Object[zeilen][8];// Nur das wird später eingelesen
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
