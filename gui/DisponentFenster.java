@@ -108,6 +108,10 @@ public class DisponentFenster extends JFrame {
 				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
 											// des Monteurs automatisch mitüberschrieben
 				auftraegeTblFormat(); // Wiederherstellung der selben Ansicht
+				
+				monteureAktualisieren(); // Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs passt sich an die neuen Zahlen an
+				
+				monteureTblFormat(); //Wiederherstellung derselben Ansicht
 
 				// die Combobox muss auch neu erstellt werden, da die alte leider nicht die
 				// Aktualisierung überlebt hat
@@ -370,7 +374,7 @@ public class DisponentFenster extends JFrame {
 			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
 					.equals(db.getMonteurListe().get(i).getMitarbeiterNummer())) {
 				/*
-				 * Hier wird die MitarbeiterNummer des Zuständigen Mitarbeitersi einem Auftrag
+				 * Hier wird die MitarbeiterNummer des Zuständigen Mitarbeiter in einem Auftrag
 				 * mit der Mitarbeiter einse Mitarbeiters aus Der Datenbank Verglichen und wenn
 				 * diese Übereinstimmen wird Hochgezählt.
 				 */
@@ -461,6 +465,11 @@ public class DisponentFenster extends JFrame {
 				return columnEditables[column];
 			}
 		});
+		for (int i = 0; i < db.getMonteurListe().size(); i++) {
+			
+			monteureTbl.setValueAt("Summe: " + summeAuftraege(i) + "         Details", i, 3);
+		}
+		
 	}
 
 	private void tabelleInArrayEinlesen() {

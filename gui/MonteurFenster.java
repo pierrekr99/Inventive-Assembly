@@ -217,7 +217,7 @@ public class MonteurFenster extends JFrame {
 		auswahlBoxStatus.removeAllItems(); 
 		
 		// auswahlmöglichkeiten
-		auswahlBoxStatus.addItem("nicht zugewiesen");
+		
 		auswahlBoxStatus.addItem("Teile fehlen");
 		auswahlBoxStatus.addItem("disponiert");
 		auswahlBoxStatus.addItem("Im Lager");
