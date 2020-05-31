@@ -128,27 +128,50 @@ public class MonteurFenster extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);// layout
-		gl_auftraegeTab.setHorizontalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING).addGroup(
-				Alignment.TRAILING,
-				gl_auftraegeTab.createSequentialGroup().addContainerGap().addGroup(gl_auftraegeTab
-						.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE)
+		
+		JButton dbAktualisierenKnopf = new JButton("DB aktualisieren");
+		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));// formatierung schrift
+		dbAktualisierenKnopf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tabelleInArrayEinlesen();
+				auftraegeAktualisieren();
+				auswahlBoxStatus();
+				
+				System.out.println("--------------------aufträge-----------");
+				
+				for (Auftrag auftrag : db.getAuftragsListe()) {
+					System.out.println(auftrag);
+				}
+			}
+		});
+		
+		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
+		gl_auftraegeTab.setHorizontalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 477, Short.MAX_VALUE)
-								.addComponent(logoutKnopf)))
-						.addContainerGap()));
-		gl_auftraegeTab
-				.setVerticalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap()
-								.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
-										.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(logoutKnopf))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
-								.addContainerGap()));
+							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 378, Short.MAX_VALUE)
+							.addComponent(dbAktualisierenKnopf)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(logoutKnopf)))
+					.addContainerGap())
+		);
+		gl_auftraegeTab.setVerticalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
+						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(logoutKnopf)
+						.addComponent(dbAktualisierenKnopf))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+					.addContainerGap())
+		);
 
 		/**
 		 * ***********************************************************************************************
@@ -157,22 +180,14 @@ public class MonteurFenster extends JFrame {
 
 		auftraegeMonteurTBL = new JTable();// tabelle erstellen
 		auftraegeMonteurTBL.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
-		tabelleaktualisieren();
+		auftraegeAktualisieren();
 
 		auftraegeMonteurTBL.setRowHeight(50); // Zeilen höhe
-		auftraegeMonteurTBL.setAutoCreateRowSorter(true); // durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge nach diesem Attribut
+		auftraegeMonteurTBL.setAutoCreateRowSorter(true); // durch Anklicken der Kopfzeile (in der jeweiligen Spalte)
+															// werden die Aufträge nach diesem Attribut
 															// in der natürlichen Ordnung und umgekehrt sortiert
 
-		JComboBox auswahlBoxStatus = new JComboBox();// combo box für den status
-		auswahlBoxStatus.addItem("Im Lager");// auswahlmöglichkeiten
-		auswahlBoxStatus.addItem("Teile fehlen");
-		auswahlBoxStatus.addItem("disponiert");
-		TableColumn statusSpalte = auftraegeMonteurTBL.getColumnModel().getColumn(2);// auskommentiert weil das bei
-																						// design ansicht weggemacht
-																						// wird
-		statusSpalte.setCellEditor(new DefaultCellEditor(auswahlBoxStatus));
-
-
+		auswahlBoxStatus();
 
 		auftraegeMonteurTBL.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 			public void mouseClicked(MouseEvent e) {
@@ -197,6 +212,22 @@ public class MonteurFenster extends JFrame {
 
 	}
 
+	private void auswahlBoxStatus() {
+		
+		auswahlBoxStatus.removeAllItems(); 
+		
+		// auswahlmöglichkeiten
+		auswahlBoxStatus.addItem("nicht zugewiesen");
+		auswahlBoxStatus.addItem("Teile fehlen");
+		auswahlBoxStatus.addItem("disponiert");
+		auswahlBoxStatus.addItem("Im Lager");
+
+		TableColumn statusSpalte = auftraegeMonteurTBL.getColumnModel().getColumn(2);// auskommentiert weil das bei
+																						// design ansicht weggemacht
+																						// wird
+		statusSpalte.setCellEditor(new DefaultCellEditor(auswahlBoxStatus));
+	}
+
 	/**
 	 * hilfsmethoden Die methode zum Füllen der
 	 * Tabelle*************************************************************************
@@ -204,19 +235,47 @@ public class MonteurFenster extends JFrame {
 	 */
 	private Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
 
-		
-		zeilen =  // wie viele zeilen hat die Tabelle(mit einem Collection.stream() ermittelt)
-		(int) db.getAuftragsListe().stream()
-		.filter((a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer())) //alle Aufträge von anderen Monteuren werden aussortiert, Vergleich über die Mitarbeiternummer und der Eingabe im tf_MitarbeiterID.
-		.count(); //zählen der übrigen Aufträge
-		 
+		zeilen = // wie viele zeilen hat die Tabelle(mit einem Collection.stream() ermittelt)
+				(int) db.getAuftragsListe().stream().filter(
+						(a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer())) // alle
+																														// Aufträge
+																														// von
+																														// anderen
+																														// Monteuren
+																														// werden
+																														// aussortiert,
+																														// Vergleich
+																														// über
+																														// die
+																														// Mitarbeiternummer
+																														// und
+																														// der
+																														// Eingabe
+																														// im
+																														// tf_MitarbeiterID.
+						.count(); // zählen der übrigen Aufträge
+
 //		angepassteAuftragsListe
-				db.getAuftragsListe().stream()
-				.filter((a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer())) //alle Aufträge von anderen Monteuren werden aussortiert, Vergleich über die Mitarbeiternummer und der Eingabe im tf_MitarbeiterID.
-				.forEach(angepassteAuftragsListe::add); //übrigen Aufträge werden der angepassten Auftragsliste hinzugefügt
-		
-	
-		
+		db.getAuftragsListe().stream()
+				.filter((a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer())) // alle
+																														// Aufträge
+																														// von
+																														// anderen
+																														// Monteuren
+																														// werden
+																														// aussortiert,
+																														// Vergleich
+																														// über
+																														// die
+																														// Mitarbeiternummer
+																														// und
+																														// der
+																														// Eingabe
+																														// im
+																														// tf_MitarbeiterID.
+				.forEach(angepassteAuftragsListe::add); // übrigen Aufträge werden der angepassten Auftragsliste
+														// hinzugefügt
+
 		Object[][] auftraege = new Object[zeilen][6];// Struktur Tabelle
 		for (int i = 0; i < zeilen; i++) {
 			auftraege[i][0] = details;
@@ -226,7 +285,7 @@ public class MonteurFenster extends JFrame {
 			auftraege[i][4] = angepassteAuftragsListe.get(i).getErstellungsdatum();
 			auftraege[i][5] = angepassteAuftragsListe.get(i).getAuftraggeber().getKundenNummer();
 		}
-		
+
 		return auftraege;
 	}
 
@@ -243,7 +302,7 @@ public class MonteurFenster extends JFrame {
 		}
 	}
 
-	private void tabelleaktualisieren() {
+	private void auftraegeAktualisieren() {
 		auftraegeMonteurTBL.setModel(new DefaultTableModel(// befüllung
 				auftraege(),
 
@@ -259,6 +318,17 @@ public class MonteurFenster extends JFrame {
 		});
 	}
 
+	private void tabelleInArrayEinlesen() {
+		for (int i = 0; i < zeilen; i++) {
+			for (Auftrag auftrag : db.getAuftragsListe()) {
+				if (auftrag.getAuftragsNummer().equals(auftraegeMonteurTBL.getValueAt(i, 1))) {
+					String status = auftraegeMonteurTBL.getValueAt(i, 2).toString();
+					if (!auftrag.getStatus().equals(status)) {
+						auftrag.setStatus(status);
+					}
+				}
+			}
+		}
 
-
+	}
 }

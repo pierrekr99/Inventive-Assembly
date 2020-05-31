@@ -49,8 +49,6 @@ public class DisponentFenster extends JFrame {
 	JComboBox monteureCombobox = new JComboBox(); // erstellung einer Combobox
 	TableColumn monteureColumn;
 
-	
-
 //	private boolean sortiert = false;
 //	private boolean sortiert1 = false;
 
@@ -58,12 +56,19 @@ public class DisponentFenster extends JFrame {
 	 * Launch the application.
 	 */
 
-	
-	 public static void main(String[] args) { EventQueue.invokeLater(new
-	  Runnable() { public void run() { try { DisponentFenster frame = new
-	  DisponentFenster(); frame.setExtendedState(JFrame.MAXIMIZED_BOTH);// Fenster
-	   frame.setVisible(true); } catch (Exception e) { e.printStackTrace();
-	  } } }); }
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					DisponentFenster frame = new DisponentFenster();
+					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);// Fenster
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
@@ -94,19 +99,20 @@ public class DisponentFenster extends JFrame {
 		});
 
 		JButton dbAktualisierenKnopf = new JButton("DB aktualisieren");
+		
 		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tabelleInArrayEinlesen(); //die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird ggf. überschrieben
-				auftraegeAktualisieren(); //Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch des Monteurs automatisch mitüberschrieben
+				tabelleInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird
+											// ggf. überschrieben
+				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
+											// des Monteurs automatisch mitüberschrieben
+				auftraegeTblFormat(); // Wiederherstellung der selben Ansicht
+
+				// die Combobox muss auch neu erstellt werden, da die alte leider nicht die
+				// Aktualisierung überlebt hat
 				
-				// die Combobox muss auch neu erstellt werden, da die alte leider nicht die Aktualisierung überlebt hat
-				monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 				monteureCombobox();
-				monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);
-				monteureColumn.setCellEditor(new DefaultCellEditor(monteureCombobox));
-				monteureCombobox.addActionListener(null);
-				
 
 				System.out.println("----------------------------juhu----------------------");
 				db.getAuftragsListe().forEach(System.out::println);
@@ -145,7 +151,7 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));// Schriftart und -größe in der Tabelle
 		auftraegeTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Schriftart und -größe in der
 																					// Kopfzeile der Tabelle
-		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+	
 
 		auftraegeAktualisieren(); // Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
@@ -154,14 +160,7 @@ public class DisponentFenster extends JFrame {
 													// in der natürlichen Ordnung und umgekehrt sortiert
 
 		monteureCombobox();
-		monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);// eine bestimmte Spalte für Combobox
-																				// auswählen
-		monteureColumn.setCellEditor(new DefaultCellEditor(monteureCombobox));// in die Spalte die Combobox einbinden
 
-		
-		monteureCombobox.addActionListener(null
-		// zugewiesenen Monteur auslesen und in Datenbank zuweisung ändern
-		);
 		/**
 		 * Monteure Reiter.
 		 */
@@ -397,6 +396,17 @@ public class DisponentFenster extends JFrame {
 	}
 
 	private void monteureCombobox() {// Fügt Optionen zur Statusveränderung hinzu
+		
+		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+
+		monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);// eine bestimmte Spalte für Combobox
+		// auswählen
+		monteureColumn.setCellEditor(new DefaultCellEditor(monteureCombobox));// in die Spalte die Combobox einbinden
+
+		monteureCombobox.addActionListener(null
+// zugewiesenen Monteur auslesen und in Datenbank zuweisung ändern
+		);
+		
 		monteureCombobox.removeAllItems();
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
 			monteureCombobox
@@ -458,29 +468,39 @@ public class DisponentFenster extends JFrame {
 
 			for (Auftrag auftrag : db.getAuftragsListe()) {
 
-				if (auftraegeTbl.getValueAt(i, 1).equals(auftrag.getAuftragsNummer())) { // vergleicht Auftragsnummer aus
-																			// Tabellenzeile mit Aufträgen in der DB
-					
-					//monteureCombobox.getSelectedItem().toString();
-				
-					String ausgewaehlterMonteur = 	auftraegeTbl.getValueAt(i, 5).toString();
+				if (auftraegeTbl.getValueAt(i, 1).equals(auftrag.getAuftragsNummer())) { // vergleicht Auftragsnummer
+																							// aus
+					// Tabellenzeile mit Aufträgen in der DB
+
+					// monteureCombobox.getSelectedItem().toString();
+
+					String ausgewaehlterMonteur = auftraegeTbl.getValueAt(i, 5).toString();
 					String[] namentrennung = ausgewaehlterMonteur.split(" "); // Trennung in Vor und Nachname des
 																				// Monteurs
-					
+
 					System.out.println(namentrennung[0]);
 					System.out.println(namentrennung[1]);
-					
-					if (!namentrennung[1]
-							.equals(auftrag.getZustaendig().getName())) { 
-						// vergleicht den zuständigen Monteur aus dem Auftrag aus der Tabelle mit dem gleichen Auftrag aus der DB, bei Unstimmigkeit wird neuer String erstellt.
 
-						
+					if (!namentrennung[1].equals(auftrag.getZustaendig().getName())) {
+						// vergleicht den zuständigen Monteur aus dem Auftrag aus der Tabelle mit dem
+						// gleichen Auftrag aus der DB, bei Unstimmigkeit wird neuer String erstellt.
 
 						for (Mitarbeiter monteur : db.getMonteurListe()) {
 
 							if (monteur.getName().equals(namentrennung[1])) { // ermitteln der Monteurdaten durch
 																				// Namensabgleich in Monteurliste
-								auftrag.setZustaendig(monteur);
+								auftrag.setZustaendig(monteur); // neuer zuständiger Monteur wird eingetragen
+
+								int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream()
+										.filter((k) -> k.isVerfuegbarkeit()).count(); // überprüfen, ob alle Komponenten
+																						// des Auftrags verfügbar sind
+
+								if (verfuegbareKomponenten == 5) {
+									auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
+								} else {
+									auftrag.setStatus("Teile fehlen"); // falls nein, wird der Status in Teile fehlen
+																		// geändert
+								}
 							}
 						}
 						;
