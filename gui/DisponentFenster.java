@@ -1,10 +1,12 @@
 package gui;
 
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.GroupLayout;
@@ -25,9 +27,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import Datenbank.datenbankVerbindung;
+import objekte.Auftrag;
+import objekte.Mitarbeiter;
 
 public class DisponentFenster extends JFrame {
-	
+
 	static datenbankVerbindung db = main.Main.getdb();
 
 	private JPanel contentPane;
@@ -35,28 +39,31 @@ public class DisponentFenster extends JFrame {
 	private JTable auftraegeTbl;
 	private JTable monteureTbl;
 
+	Object[][] auftraege;
 	int zeilen = 0;
 	int zeilenMonteure = 0;
 	int summeAuftraege = 0;
 	String details = "Details";// Hier könnte man den Detailsbutton Rendern
+	String monteur;
 
 	JComboBox monteureCombobox = new JComboBox(); // erstellung einer Combobox
+	TableColumn monteureColumn;
 
 	
-	private boolean sortiert = false;
-	private boolean sortiert1 = false;
+
+//	private boolean sortiert = false;
+//	private boolean sortiert1 = false;
 
 	/**
 	 * Launch the application.
 	 */
 
-	/*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { DisponentFenster frame = new
-	 * DisponentFenster(); frame.setExtendedState(JFrame.MAXIMIZED_BOTH);// Fenster
-	 * Vollbild frame.setVisible(true); } catch (Exception e) { e.printStackTrace();
-	 * } } }); }
-	 */
+	
+	 public static void main(String[] args) { EventQueue.invokeLater(new
+	  Runnable() { public void run() { try { DisponentFenster frame = new
+	  DisponentFenster(); frame.setExtendedState(JFrame.MAXIMIZED_BOTH);// Fenster
+	   frame.setVisible(true); } catch (Exception e) { e.printStackTrace();
+	  } } }); }
 
 	/**
 	 * Create the frame.
@@ -85,25 +92,46 @@ public class DisponentFenster extends JFrame {
 				dispose();
 			}
 		});
+
+		JButton dbAktualisierenKnopf = new JButton("DB aktualisieren");
+		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		dbAktualisierenKnopf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tabelleInArrayEinlesen(); //die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird ggf. überschrieben
+				auftraegeAktualisieren(); //Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch des Monteurs automatisch mitüberschrieben
+				
+				// die Combobox muss auch neu erstellt werden, da die alte leider nicht die Aktualisierung überlebt hat
+				monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+				monteureCombobox();
+				monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);
+				monteureColumn.setCellEditor(new DefaultCellEditor(monteureCombobox));
+				monteureCombobox.addActionListener(null);
+				
+
+				System.out.println("----------------------------juhu----------------------");
+				db.getAuftragsListe().forEach(System.out::println);
+			}
+		});
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
 				.createSequentialGroup().addContainerGap()
 				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(tabbedPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 956, Short.MAX_VALUE)
+						.addComponent(tabbedPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 954, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 797, Short.MAX_VALUE)
-								.addComponent(logoutKnopf)))
+								.addPreferredGap(ComponentPlacement.RELATED, 620, Short.MAX_VALUE)
+								.addComponent(dbAktualisierenKnopf).addGap(18).addComponent(logoutKnopf)))
 				.addContainerGap()));
 		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addComponent(logoutKnopf))
+								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf))
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE).addContainerGap()));
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE).addContainerGap()));
 
 		/**
 		 * Auftraege Reiter.
@@ -118,21 +146,22 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Schriftart und -größe in der
 																					// Kopfzeile der Tabelle
 		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		
-		auftraegeAktualisieren(); //Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
-		
-		auftraegeTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge nach diesem Attribut
-												// in der natürlichen Ordnung und umgekehrt sortiert
-		
+
+		auftraegeAktualisieren(); // Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
+
+		auftraegeTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die
+													// Aufträge nach diesem Attribut
+													// in der natürlichen Ordnung und umgekehrt sortiert
+
 		monteureCombobox();
-		TableColumn monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);// eine bestimmte Spalte für Combobox
+		monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);// eine bestimmte Spalte für Combobox
 																				// auswählen
 		monteureColumn.setCellEditor(new DefaultCellEditor(monteureCombobox));// in die Spalte die Combobox einbinden
 
-		String monteur;
+		
 		monteureCombobox.addActionListener(null
-				//zugewiesenen Monteur auslesen und in Datenbank zuweisung ändern
-				);
+		// zugewiesenen Monteur auslesen und in Datenbank zuweisung ändern
+		);
 		/**
 		 * Monteure Reiter.
 		 */
@@ -145,19 +174,17 @@ public class DisponentFenster extends JFrame {
 		monteureTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));// Schriftart und -größe in der Tabelle
 		monteureTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Schriftart und -größe in der
 																					// Kopfzeile der Tabelle
-		
-		monteureAktualisieren();//Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
-		
+
+		monteureAktualisieren();// Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
+
 		monteureTblFormat();
 		auftraegeTblFormat();
-		monteureTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure nach diesem Attribut
-												// in der natürlichen Ordnung und umgekehrt sortiert
-		
-
+		monteureTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die
+													// Monteure nach diesem Attribut
+													// in der natürlichen Ordnung und umgekehrt sortiert
 
 		contentPane.setLayout(gl_contentPane);
 
-		
 //		monteureTbl.getTableHeader().addMouseListener(new MouseAdapter() {
 //
 //		@Override
@@ -223,36 +250,24 @@ public class DisponentFenster extends JFrame {
 //
 //			}
 //		});
-		
-		
-		
-		
-		auftraegeTbl.getModel().addTableModelListener(new TableModelListener() { //test Pierre
-			
+
+		auftraegeTbl.getModel().addTableModelListener(new TableModelListener() { // test Pierre
+
 			@Override
 			public void tableChanged(TableModelEvent e) {
 				// TODO Auto-generated method stub
-			
-				
+
 				int row = e.getFirstRow();
-				
+
 				System.out.println(e.getFirstRow());
-				
+
 				System.out.println(auftraegeTbl.getValueAt(row, 5));
 				System.out.println(auftraegeTbl.getValueAt(row, 1));
-				
-				
-			
-			}
-	
-		});
-		
-		
-		
 
-		
-		
-		
+			}
+
+		});
+
 		auftraegeTbl.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 			public void mouseClicked(MouseEvent e) {
 				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
@@ -263,7 +278,8 @@ public class DisponentFenster extends JFrame {
 					// do some action if appropriate column
 					if (column == 0) {// wenn in DetailsSpalte
 //						detailsFenster();//Detailsfenster wird geöffnet
-						DetailsFenster frame = new DetailsFenster(row); // reihe des Auftrags wird übergeben um details aufrufen zu können
+						DetailsFenster frame = new DetailsFenster(row); // reihe des Auftrags wird übergeben um details
+																		// aufrufen zu können
 						frame.setVisible(true);
 					}
 				}
@@ -279,7 +295,9 @@ public class DisponentFenster extends JFrame {
 					// do some action if appropriate column
 					if (column == 3) {// wenn in DetailsSpalte
 //						detailsFenster();//Detailsfenster wird geöffnet
-						AuftraegeListeFenster frame = new AuftraegeListeFenster(row); // reihe des Auftrags wird übergeben um details aufrufen zu können
+						AuftraegeListeFenster frame = new AuftraegeListeFenster(row); // reihe des Auftrags wird
+																						// übergeben um details aufrufen
+																						// zu können
 						frame.setVisible(true);
 					}
 				}
@@ -290,9 +308,7 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * Hilfsmethoden
 	 */
-	
 
-	
 	private void monteureTblFormat() {
 		monteureTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
 		monteureTbl.getColumnModel().getColumn(0).setMinWidth(100);
@@ -349,7 +365,6 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.setRowHeight(50);
 	}
 
-
 	private String summeAuftraege(int i) {// zählt die zugehörigen Aufträge des Monteurs
 		String summe;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
@@ -389,9 +404,9 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
-	public  Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
+	public Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
 		zeilen = db.getAuftragsListe().size();
-		Object[][] auftraege = new Object[zeilen][8];// Nur das wird später eingelesen
+		auftraege = new Object[zeilen][8];// Nur das wird später eingelesen
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
 			auftraege[i][0] = details;
 			auftraege[i][1] = db.getAuftragsListe().get(i).getAuftragsNummer();// Auftragsliste.get(zeile).getAuftragsnr()
@@ -409,31 +424,70 @@ public class DisponentFenster extends JFrame {
 		}
 		return auftraege;
 	}
-private void auftraegeAktualisieren() {
-	auftraegeTbl.setModel(new DefaultTableModel(auftraege(), // Benötigter Inhalt: (String[][],String[])
-			// Sonst wird hier ein eigenes Modell Eingefügt
-			new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "MonteurName",
-					"MonteurNummer", "Auftragsgeber" }) {
-		boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-				false, false, false, false, false, true, false, false };
 
-		public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
-			return columnEditables[column];
+	private void auftraegeAktualisieren() {
+		auftraegeTbl.setModel(new DefaultTableModel(auftraege(), // Benötigter Inhalt: (String[][],String[])
+				// Sonst wird hier ein eigenes Modell Eingefügt
+				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "MonteurName",
+						"MonteurNummer", "Auftragsgeber" }) {
+			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
+					false, false, false, false, false, true, false, false };
+
+			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+				return columnEditables[column];
+			}
+		});
+	}
+
+	private void monteureAktualisieren() {
+		monteureTbl.setModel(new DefaultTableModel(monteure(), // Benötigter Inhalt: (String[][],String[])
+				// Sonst wird hier ein eigenes Modell Eingefügt
+				new String[] { "Name", "MitarbeiterNummer", "Verfügbarkeit", "Auftraege"// welche spaltennamen
+				}) {
+			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
+					false, false, false, true };
+
+			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+				return columnEditables[column];
+			}
+		});
+	}
+
+	private void tabelleInArrayEinlesen() {
+		for (int i = 0; i < zeilen; i++) {
+
+			for (Auftrag auftrag : db.getAuftragsListe()) {
+
+				if (auftraegeTbl.getValueAt(i, 1).equals(auftrag.getAuftragsNummer())) { // vergleicht Auftragsnummer aus
+																			// Tabellenzeile mit Aufträgen in der DB
+					
+					//monteureCombobox.getSelectedItem().toString();
+				
+					String ausgewaehlterMonteur = 	auftraegeTbl.getValueAt(i, 5).toString();
+					String[] namentrennung = ausgewaehlterMonteur.split(" "); // Trennung in Vor und Nachname des
+																				// Monteurs
+					
+					System.out.println(namentrennung[0]);
+					System.out.println(namentrennung[1]);
+					
+					if (!namentrennung[1]
+							.equals(auftrag.getZustaendig().getName())) { 
+						// vergleicht den zuständigen Monteur aus dem Auftrag aus der Tabelle mit dem gleichen Auftrag aus der DB, bei Unstimmigkeit wird neuer String erstellt.
+
+						
+
+						for (Mitarbeiter monteur : db.getMonteurListe()) {
+
+							if (monteur.getName().equals(namentrennung[1])) { // ermitteln der Monteurdaten durch
+																				// Namensabgleich in Monteurliste
+								auftrag.setZustaendig(monteur);
+							}
+						}
+						;
+					}
+
+				}
+			}
 		}
-	});
-}
-private void monteureAktualisieren() {
-	monteureTbl.setModel(new DefaultTableModel(monteure(), // Benötigter Inhalt: (String[][],String[])
-			// Sonst wird hier ein eigenes Modell Eingefügt
-			new String[] { "Name", "MitarbeiterNummer", "Verfügbarkeit", "Auftraege"// welche spaltennamen
-			}) {
-		boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-				false, false, false, true };
-
-		public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
-			return columnEditables[column];
-		}
-	});
-}
-
+	}
 }
