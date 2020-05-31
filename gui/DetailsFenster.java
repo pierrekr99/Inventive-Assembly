@@ -24,10 +24,10 @@ public class DetailsFenster extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tKomponenten;
+	private JTable tMonteur;
 	private JScrollPane sPKomponenten;
 	private JScrollPane sPMonteur;
-	private JTable tMonteur;
-
+	
 	int zeilen = 5;
 	// die anzahl der spalten war vorher auf 6, obwohl jetzt nur 5 gebraucht werden
 	Object[][] komponenten = new Object[zeilen][5];// Nur das wird später eingelesen
@@ -74,8 +74,7 @@ public class DetailsFenster extends JFrame {
 		tKomponenten.setModel(new DefaultTableModel(komponenten,
 				new String[] { "TeileNummer",  "Name", "Attribut", "Kategorie", "Verfügbarkeit", })
 
-		{
-			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
+		{	boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
 					false, false, false, false };
 
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
@@ -93,8 +92,15 @@ public class DetailsFenster extends JFrame {
 		sPMonteur = new JScrollPane();
 		tMonteur = new JTable();
 		tMonteur.setModel(
-				new DefaultTableModel(monteur, new String[] { "AuftragsNummer", "KundenNummer","Auftraggeber", "MonteurNummer", "MonteurName" }));
+				new DefaultTableModel(monteur, new String[] { "AuftragsNummer", "KundenNummer","Auftraggeber", "MonteurNummer", "MonteurName" })
+				
+				{		boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
+							false, false, false, false, false };
 
+					public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+						return columnEditables[column];
+					}
+				});
 		sPMonteur.setViewportView(tMonteur);
 
 //		-------  Formatierung  -------------------------------------------------
