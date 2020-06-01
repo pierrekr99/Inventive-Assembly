@@ -27,7 +27,6 @@ public class DetailsFenster extends JFrame {
 	private JScrollPane sPKomponenten;
 	private JScrollPane sPMonteur;
 
-
 	/**
 	 * Launch the application.
 	 */
@@ -40,8 +39,7 @@ public class DetailsFenster extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	
-	
+
 	public DetailsFenster(int row) { // reihe des auftrags als parameter
 
 //      -------  Fenster  -----------------------------------------------
@@ -62,47 +60,73 @@ public class DetailsFenster extends JFrame {
 		tKomponenten = new JTable();
 		tKomponenten.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
 		tKomponenten.setModel(new DefaultTableModel(komponenten(row),
-				new String[] { "TeileNummer", "Name", "Attribut", "Kategorie", "Verfügbarkeit" })	{// Generierung der Tabelle Benötigter Inhalt: (String[][],String[])
-			
+				new String[] { "TeileNummer", "Name", "Attribut", "Kategorie", "Verfügbarkeit" }) {// Generierung der
+																									// Tabelle
+																									// Benötigter
+																									// Inhalt:
+																									// (String[][],String[])
+
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
 					false, false, false, false, false };
 
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
 				return columnEditables[column];
-			}});
-		
+			}
+		});
+
 		sPKomponenten.setViewportView(tKomponenten);
 		sPKomponenten.setColumnHeaderView(panel);
-		
-//		eilbestellen();
-		
+
 //      -------  Monteur Tabelle  ----------------------------------------
 
 		auftragMonteur(row);
 		sPMonteur = new JScrollPane();
 		tMonteur = new JTable();
 		tMonteur.setModel(new DefaultTableModel(auftragMonteur(row),
-				new String[] { "AuftragsNummer", "KundenNummer", "Auftraggeber", "MonteurNummer", "MonteurName" })	{
-			
+				new String[] { "AuftragsNummer", "KundenNummer", "Auftraggeber", "MonteurNummer", "MonteurName" }) {
+
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
 					false, false, false, false, false };
 
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
 				return columnEditables[column];
-			}});
-		
+			}
+		});
+
 		sPMonteur.setViewportView(tMonteur);
-		
+
+//      -------  Eilbestellung  ----------------------------------------		
+
+		tKomponenten.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
+			public void mouseClicked(MouseEvent e) {
+				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
+												// dazu)
+					JTable target = (JTable) e.getSource();
+					int row1 = target.getSelectedRow();// wo wurde geklickt
+					int column = target.getSelectedColumn();
+					// do some action if appropriate column
+					if (column == 4 && tKomponenten.getValueAt(row1, column).equals(false)) {// wenn man in der
+																								// Verfügbarkeitsspalte
+						// klickt und die verfügbarkeit
+						// false ist
+						JOptionPane.showMessageDialog(null, ("Eilbestellung für [" + tKomponenten.getValueAt(row1, 1)
+								+ " " + tKomponenten.getValueAt(row1, 2) + "] wurde ausgeführt"));
+					}
+
+				}
+			}
+		});
+
 //		-------  Formatierung  -------------------------------------------------
 
-		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
-		tMonteur.setRowHeight(50); // Zeilen höhe
-		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
+		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		tMonteur.setRowHeight(50);
+		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		monteureTblFormat();
 
-		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// formatierung schrift kopf
+		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
 		tKomponenten.setRowHeight(50); // Zeilen höhe
-		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
+		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
 		tKomponenten.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die
 													// Komponenten nach diesem Attribut
@@ -146,36 +170,12 @@ public class DetailsFenster extends JFrame {
 
 	}
 
-//	private void eilbestellen() {
-//
-//		tKomponenten.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
-//			public void mouseClicked(MouseEvent e) {
-//				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
-//												// dazu)
-//					JTable target = (JTable) e.getSource();
-//					int row1 = target.getSelectedRow();// wo wurde geklickt
-//					int column = target.getSelectedColumn();
-//					// do some action if appropriate column
-//					if (column == 4 && komponenten[row1][column].equals(false)) {// wenn man in der Verfügbarkeitsspalte
-//																					// klickt und die verfügbarkeit
-//																					// false ist
-//						JOptionPane.showMessageDialog(null,
-//								("Eilbestellung für [" + komponenten[row1][1] + "] wurde ausgeführt"));
-//						// name der komponenten wird ausgegeben (komponenten spalte 1)
-//					}
-//					
-//				}
-//			}
-//		});
-//
-//	}
-
 	private Object[][] komponenten(int row) {// Komponenten werden aus Komponentensliste ausgelesen und in
 		// komponenten[][]eingebaut
 
 		// int row ist die reihe des auftrags um details des jeweiligen auftrags
 		// ausgeben zu können
-		
+
 		int zeilen1 = db.getAuftragsListe().get(row).getKomponenten().size();
 		Object[][] komponenten = new Object[zeilen1][5];
 
@@ -190,11 +190,12 @@ public class DetailsFenster extends JFrame {
 			komponenten[i][4] = db.getAuftragsListe().get(row).getKomponenten().get(i).isVerfuegbarkeit();
 
 		}
+
 		return komponenten;
 	}
 
 	private Object[][] auftragMonteur(int row) { // fügt auftragsnummer monteurname und nummer in tabelle ein
-		
+
 		Object[][] monteur = new Object[1][5];
 
 		monteur[0][0] = db.getAuftragsListe().get(row).getAuftragsNummer();
@@ -203,8 +204,8 @@ public class DetailsFenster extends JFrame {
 		monteur[0][3] = db.getAuftragsListe().get(row).getZustaendig().getMitarbeiterNummer();
 		monteur[0][4] = db.getAuftragsListe().get(row).getZustaendig().getVorname() + " "
 				+ db.getAuftragsListe().get(row).getZustaendig().getName();
-		
+
 		return monteur;
 	}
-	
+
 }
