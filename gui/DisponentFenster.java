@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -10,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -26,6 +29,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import Datenbank.datenbankVerbindung;
@@ -127,8 +132,24 @@ public class DisponentFenster extends JFrame {
 		});
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane.createSequentialGroup().addContainerGap().addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addComponent(tabbedPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 954, Short.MAX_VALUE).addGroup(gl_contentPane.createSequentialGroup().addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.RELATED, 620, Short.MAX_VALUE).addComponent(dbAktualisierenKnopf).addGap(18).addComponent(logoutKnopf))).addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane.createSequentialGroup().addContainerGap().addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf)).addPreferredGap(ComponentPlacement.RELATED).addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE).addContainerGap()));
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(tabbedPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 954, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 620, Short.MAX_VALUE)
+								.addComponent(dbAktualisierenKnopf).addGap(18).addComponent(logoutKnopf)))
+				.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE).addContainerGap()));
 
 		/**
 		 * Auftraege Reiter.
@@ -174,71 +195,50 @@ public class DisponentFenster extends JFrame {
 
 		contentPane.setLayout(gl_contentPane);
 
-//		monteureTbl.getTableHeader().addMouseListener(new MouseAdapter() {
-//
-//		@Override
-//		public void mouseClicked(MouseEvent e) {
-//			int spalte = monteureTbl.columnAtPoint(e.getPoint());
-//
-//			if (spalte == 0) {
-//				if (!sortiert) {
-//					monteureTbl.setAutoCreateRowSorter(false);
-//					db.getMonteurListe().sort((o1, o2) -> {
-//						return o1.getName()
-//								.compareTo(o2.getName());
-//					});
-//					
-//					sortiert = true;
-//				} else if (sortiert) {
-//					monteureTbl.setAutoCreateRowSorter(false);
-//					db.getMonteurListe().sort((o1, o2) -> {
-//						return o1.getName()
-//								.compareTo(o2.getName()) * -1;
-//					});
-//					sortiert = false;
-//				}
-//
-//
-//				monteureAktualisieren();
-//				monteureTbl.setAutoCreateRowSorter(true);
-//
-//			}
-//
-//		}
-//	});
-//		
-//		auftraegeTbl.getTableHeader().addMouseListener(new MouseAdapter() {
-//
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				int spalte1 = auftraegeTbl.columnAtPoint(e.getPoint());
-//
-//				if (spalte1 == 5) {
-//					if (!sortiert1) {
-//						auftraegeTbl.setAutoCreateRowSorter(false);
-//						db.getAuftragsListe().sort((o1, o2) -> {
-//							return o1.getZustaendig().getName()
-//									.compareTo(o2.getZustaendig().getName());
-//						});
-//						
-//						sortiert1 = true;
-//					} else if (sortiert1) {
-//						auftraegeTbl.setAutoCreateRowSorter(false);
-//						db.getAuftragsListe().sort((o1, o2) -> {
-//							return o1.getZustaendig().getName()
-//									.compareTo(o2.getZustaendig().getName());
-//						});
-//						sortiert1 = false;
-//					}
-//
-//
-//					monteureAktualisieren();
-//					auftraegeTbl.setAutoCreateRowSorter(true);
-//
-//				}
-//
-//			}
-//		});
+		/*
+		 * monteureTbl.getTableHeader().addMouseListener(new MouseAdapter() {
+		 * 
+		 * @Override public void mouseClicked(MouseEvent e) { int spalte =
+		 * monteureTbl.columnAtPoint(e.getPoint());
+		 * 
+		 * if (spalte == 0) { if (!sortiert) {
+		 * monteureTbl.setAutoCreateRowSorter(false); db.getMonteurListe().sort((o1, o2)
+		 * -> { return o1.getName() .compareTo(o2.getName()); });
+		 * 
+		 * sortiert = true; } else if (sortiert) {
+		 * monteureTbl.setAutoCreateRowSorter(false); db.getMonteurListe().sort((o1, o2)
+		 * -> { return o1.getName() .compareTo(o2.getName()) * -1; }); sortiert = false;
+		 * }
+		 * 
+		 * 
+		 * monteureAktualisieren(); monteureTbl.setAutoCreateRowSorter(true);
+		 * 
+		 * }
+		 * 
+		 * } });
+		 * 
+		 * auftraegeTbl.getTableHeader().addMouseListener(new MouseAdapter() {
+		 * 
+		 * @Override public void mouseClicked(MouseEvent e) { int spalte1 =
+		 * auftraegeTbl.columnAtPoint(e.getPoint());
+		 * 
+		 * if (spalte1 == 5) { if (!sortiert1) {
+		 * auftraegeTbl.setAutoCreateRowSorter(false); db.getAuftragsListe().sort((o1,
+		 * o2) -> { return o1.getZustaendig().getName()
+		 * .compareTo(o2.getZustaendig().getName()); });
+		 * 
+		 * sortiert1 = true; } else if (sortiert1) {
+		 * auftraegeTbl.setAutoCreateRowSorter(false); db.getAuftragsListe().sort((o1,
+		 * o2) -> { return o1.getZustaendig().getName()
+		 * .compareTo(o2.getZustaendig().getName()); }); sortiert1 = false; }
+		 * 
+		 * 
+		 * monteureAktualisieren(); auftraegeTbl.setAutoCreateRowSorter(true);
+		 * 
+		 * }
+		 * 
+		 * } });
+		 */
 
 		auftraegeTbl.getModel().addTableModelListener(new TableModelListener() { // test Pierre
 
@@ -256,42 +256,30 @@ public class DisponentFenster extends JFrame {
 			}
 
 		});
-
-		auftraegeTbl.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
-			public void mouseClicked(MouseEvent e) {
-				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
-												// dazu)
-					JTable target = (JTable) e.getSource();
-					int row = target.getSelectedRow();// wo wurde geklickt
-					int column = target.getSelectedColumn();
-					// do some action if appropriate column
-					if (column == 0) {// wenn in DetailsSpalte
-//						detailsFenster();//Detailsfenster wird geöffnet
-						DetailsFenster frame = new DetailsFenster(row); // reihe des Auftrags wird übergeben um details
-																		// aufrufen zu können
-						frame.setVisible(true);
-					}
-				}
-			}
-		});
-		monteureTbl.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
-			public void mouseClicked(MouseEvent e) {
-				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
-												// dazu)
-					JTable target = (JTable) e.getSource();
-					int row = target.getSelectedRow();// wo wurde geklickt
-					int column = target.getSelectedColumn();
-					// do some action if appropriate column
-					if (column == 3) {// wenn in DetailsSpalte
-//						detailsFenster();//Detailsfenster wird geöffnet
-						AuftraegeListeFenster frame = new AuftraegeListeFenster(row); // reihe des Auftrags wird
-																						// übergeben um details aufrufen
-																						// zu können
-						frame.setVisible(true);
-					}
-				}
-			}
-		});
+		/*
+		 * auftraegeTbl.addMouseListener(new MouseAdapter() {// MouseListener für das
+		 * Fenster public void mouseClicked(MouseEvent e) { if (e.MOUSE_PRESSED == 501)
+		 * {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht //
+		 * dazu) JTable target = (JTable) e.getSource(); int row =
+		 * target.getSelectedRow();// wo wurde geklickt int column =
+		 * target.getSelectedColumn(); // do some action if appropriate column if
+		 * (column == 0) {// wenn in DetailsSpalte // detailsFenster();//Detailsfenster
+		 * wird geöffnet DetailsFenster frame = new DetailsFenster(row); // reihe des
+		 * Auftrags wird übergeben um details // aufrufen zu können
+		 * frame.setVisible(true); } } } });
+		 */
+		/*
+		 * monteureTbl.addMouseListener(new MouseAdapter() {// MouseListener für das
+		 * Fenster public void mouseClicked(MouseEvent e) { if (e.MOUSE_PRESSED == 501)
+		 * {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht //
+		 * dazu) JTable target = (JTable) e.getSource(); int row =
+		 * target.getSelectedRow();// wo wurde geklickt int column =
+		 * target.getSelectedColumn(); // do some action if appropriate column if
+		 * (column == 3) {// wenn in DetailsSpalte // detailsFenster();//Detailsfenster
+		 * wird geöffnet AuftraegeListeFenster frame = new AuftraegeListeFenster(row);
+		 * // reihe des Auftrags wird // übergeben um details aufrufen // zu können
+		 * frame.setVisible(true); } } } });
+		 */
 	}
 
 	/**
@@ -357,7 +345,8 @@ public class DisponentFenster extends JFrame {
 	private String summeAuftraege(int i) {// zählt die zugehörigen Aufträge des Monteurs
 		String summe;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
-			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer().equals(db.getMonteurListe().get(i).getMitarbeiterNummer())) {
+			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
+					.equals(db.getMonteurListe().get(i).getMitarbeiterNummer())) {
 				/*
 				 * Hier wird die MitarbeiterNummer des Zuständigen Mitarbeiter in einem Auftrag
 				 * mit der Mitarbeiter einse Mitarbeiters aus Der Datenbank Verglichen und wenn
@@ -378,7 +367,7 @@ public class DisponentFenster extends JFrame {
 			monteure[i][0] = db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName();
 			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();// Auftragsliste.get(zeile).getAuftragsnr()
 			monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
-			monteure[i][3] = "Summe: " + summeAuftraege(i) + "         Details";// Dropdown fehlt noch
+			monteure[i][3] = "Summe: " + summeAuftraege(i);// Dropdown fehlt noch
 
 		}
 		return monteure;
@@ -398,7 +387,8 @@ public class DisponentFenster extends JFrame {
 
 		monteureCombobox.removeAllItems();
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			monteureCombobox.addItem(db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName());
+			monteureCombobox
+					.addItem(db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName());
 		}
 	}
 
@@ -415,7 +405,8 @@ public class DisponentFenster extends JFrame {
 			auftraege[i][6] = "";
 			auftraege[i][7] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
 			if (db.getAuftragsListe().get(i).getZustaendig() != null) {
-				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getVorname() + " " + db.getAuftragsListe().get(i).getZustaendig().getName();
+				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getVorname() + " "
+						+ db.getAuftragsListe().get(i).getZustaendig().getName();
 				auftraege[i][6] = db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer();
 			}
 		}
@@ -425,14 +416,17 @@ public class DisponentFenster extends JFrame {
 	private void auftraegeAktualisieren() {
 		auftraegeTbl.setModel(new DefaultTableModel(auftraege(), // Benötigter Inhalt: (String[][],String[])
 				// Sonst wird hier ein eigenes Modell Eingefügt
-				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" }) {
+				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "MonteurName",
+						"MonteurNummer", "Auftragsgeber" }) {
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-					false, false, false, false, false, true, false, false };
+					true, false, false, false, false, true, false, false };
 
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
 				return columnEditables[column];
 			}
 		});
+		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
+		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
 	}
 
 	private void monteureAktualisieren() {
@@ -447,13 +441,80 @@ public class DisponentFenster extends JFrame {
 				return columnEditables[column];
 			}
 		});
-		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-
-			monteureTbl.setValueAt("Summe: " + summeAuftraege(i) + "         Details", i, 3);
-		}
-
+//		for (int i = 0; i < db.getMonteurListe().size(); i++) {
+//
+//			monteureTbl.setValueAt("Summe: " + summeAuftraege(i) + "         Details", i, 3);
+//		}
+		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));
+		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellEditor(new JButtonEditor());
 	}
 
+	/**
+	 * Buttons in der Tabelle
+	 */
+	
+	class JButtonRenderer implements TableCellRenderer {
+
+		JButton button = new JButton();
+		String tabelle;
+
+		public JButtonRenderer(String string) {
+			this.tabelle = string;
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			table.setShowGrid(true);
+			table.setGridColor(Color.LIGHT_GRAY);
+			if (tabelle.equals("auftraegeTbl"))
+				button.setText(details);
+			if (tabelle.equals("monteureTbl"))
+				button.setText("Summe: " + summeAuftraege(row));
+			return button;
+		}
+	}
+
+	class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
+		JButton button;
+		String txt;
+
+		public JButtonEditor() {
+			super();
+			button = new JButton();
+			button.setOpaque(true);
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (button.getText().equals(details)) {
+						DetailsFenster frame = new DetailsFenster(auftraegeTbl.getEditingRow());
+						frame.setVisible(true);
+					} else {
+						AuftraegeListeFenster frame = new AuftraegeListeFenster(monteureTbl.getEditingRow());
+						frame.setVisible(true);
+					}
+
+				}
+			});
+		}
+
+		@Override
+		public Object getCellEditorValue() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+				int column) {
+			txt = (value == null) ? "" : value.toString();
+			button.setText(txt);
+			return button;
+		}
+	}
+
+	/**
+	 * Tabelle in Array Einlesen
+	 */
+	
 	private void tabelleInArrayEinlesen() {
 		for (int i = 0; i < zeilen; i++) {
 
@@ -486,19 +547,17 @@ public class DisponentFenster extends JFrame {
 									ResultSet rs;
 									Statement stmt = db.getVerbindung().createStatement();
 
-									stmt.executeUpdate("UPDATE `auftrag` SET `ZustaendigName` = '"+monteur.getName()+"', `ZustaendigMitarbeiterNummer` = '" + monteur.getMitarbeiterNummer() + "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
-									
-									
-									
-									
-									
-									
+									stmt.executeUpdate("UPDATE `auftrag` SET `ZustaendigName` = '" + monteur.getName()
+											+ "', `ZustaendigMitarbeiterNummer` = '" + monteur.getMitarbeiterNummer()
+											+ "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
+
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 
-								int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit()).count(); // überprüfen, ob alle Komponenten
-																																					// des Auftrags verfügbar sind
+								int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream()
+										.filter((k) -> k.isVerfuegbarkeit()).count(); // überprüfen, ob alle Komponenten
+																						// des Auftrags verfügbar sind
 
 								if (verfuegbareKomponenten == 5) {
 									auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
@@ -507,7 +566,9 @@ public class DisponentFenster extends JFrame {
 										ResultSet rs;
 										Statement stmt = db.getVerbindung().createStatement();
 
-										stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
+										stmt.executeUpdate(
+												"UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
+														+ auftrag.getAuftragsNummer() + "');");
 
 									} catch (Exception e) {
 										e.printStackTrace();
@@ -522,7 +583,9 @@ public class DisponentFenster extends JFrame {
 									ResultSet rs;
 									Statement stmt = db.getVerbindung().createStatement();
 
-									stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
+									stmt.executeUpdate(
+											"UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
+													+ auftrag.getAuftragsNummer() + "');");
 
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -536,4 +599,5 @@ public class DisponentFenster extends JFrame {
 			}
 		}
 	}
+
 }
