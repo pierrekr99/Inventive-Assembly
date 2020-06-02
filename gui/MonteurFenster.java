@@ -14,7 +14,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -147,6 +150,10 @@ public class MonteurFenster extends JFrame {
 			}
 		});
 		
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); 
+		JLabel DatumLabel = new JLabel(f.format(new Date())); // Datumsanzeige
+		DatumLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
 		gl_auftraegeTab.setHorizontalGroup(
 			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
@@ -156,7 +163,9 @@ public class MonteurFenster extends JFrame {
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
 							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 378, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
+							.addComponent(DatumLabel)
+							.addGap(18)
 							.addComponent(dbAktualisierenKnopf)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(logoutKnopf)))
@@ -169,7 +178,8 @@ public class MonteurFenster extends JFrame {
 					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
 						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 						.addComponent(logoutKnopf)
-						.addComponent(dbAktualisierenKnopf))
+						.addComponent(dbAktualisierenKnopf)
+						.addComponent(DatumLabel))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
 					.addContainerGap())

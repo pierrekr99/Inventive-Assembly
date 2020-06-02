@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.AbstractCellEditor;
@@ -58,6 +59,7 @@ public class DisponentFenster extends JFrame {
 	String monteur;
 
 	JComboBox monteureCombobox = new JComboBox(); // erstellung einer Combobox
+	JComboBox DatumCBox;
 	TableColumn monteureColumn;
 
 //	private boolean sortiert = false;
@@ -119,8 +121,9 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 
-		JLabel DatumLabel = new JLabel(DatumAlsStringBekommen()); // Anzeige des aktuellen Datums
-		DatumLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		datumComboBox();
+		
+		
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -130,9 +133,9 @@ public class DisponentFenster extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 470, Short.MAX_VALUE)
-							.addComponent(DatumLabel)
-							.addGap(37)
+							.addPreferredGap(ComponentPlacement.RELATED, 391, Short.MAX_VALUE)
+							.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
 							.addComponent(dbAktualisierenKnopf)
 							.addGap(18)
 							.addComponent(logoutKnopf))
@@ -143,12 +146,11 @@ public class DisponentFenster extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(logoutKnopf)
-							.addComponent(dbAktualisierenKnopf))
-						.addComponent(DatumLabel))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(logoutKnopf)
+						.addComponent(dbAktualisierenKnopf)
+						.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
 					.addGap(6))
@@ -619,14 +621,50 @@ public class DisponentFenster extends JFrame {
 			}
 		}
 	}
+	
+	private void datumComboBox() { // ComboBox um das Datum auwählen zu können
+		
+		String[] Datum = {datumAlsStringBekommen(),naechsterTag()};
+		DatumCBox = new JComboBox(Datum);
+		
+//		DatumCBox.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//				String wochentag = "";
+//				String [] gewaehltesDatum = DatumCBox.getSelectedItem().toString().split(",");
+//				wochentag = gewaehltesDatum[0];
+//			}
+//		});
+		
+		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		DatumCBox.setSelectedIndex(0);
+		
+		
+		
+		
+		
+	}
 
-	private String DatumAlsStringBekommen() { // gibt heutiges Datum zurück
+	private String datumAlsStringBekommen() { // gibt heutiges Datum zurück
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht für den Wochentag
 		return f.format(new Date());
+	}
+	
+	private String naechsterTag() { // gibt heutiges Datum zurück
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht für den Wochentag
+		Date morgen = new Date();
+		
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(morgen); 
+		c.add(Calendar.DATE, 1);
+		morgen = c.getTime();
+		
+		return f.format(morgen);
 	}
 
 	private int getIndexWochentag() {// gibt Zahl des Wochentags zurück (0-4)
 
+		
+		
 		DateFormat f = new SimpleDateFormat("EEEE");
 		String s = f.format(new Date());
 		int i = 0;
