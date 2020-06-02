@@ -63,6 +63,7 @@ public class datenbankVerbindung {
 		auftragEinlesen();
 
 	}
+	
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
 
@@ -92,6 +93,14 @@ public class datenbankVerbindung {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void einlesen() {
+		auftraggeberEinlesen();
+		disponentEinlesen();
+		komponenteEinlesen();
+		monteurEinlesen();
+		auftragEinlesen();
 	}
 
 	public void auftragEinlesen() {
