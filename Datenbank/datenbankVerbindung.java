@@ -26,7 +26,6 @@ public class datenbankVerbindung {
 	ArrayList<Komponente> komponentenListe = new ArrayList<>();
 	ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
 
-
 	public Connection getVerbindung() {
 		return verbindung;
 	}
@@ -50,7 +49,6 @@ public class datenbankVerbindung {
 	public ArrayList<Komponente> getKomponentenListe() {
 		return komponentenListe;
 	}
-	
 
 	public ArrayList<Mitarbeiter> getMonteurListe() {
 		return monteurListe;
@@ -63,7 +61,7 @@ public class datenbankVerbindung {
 		komponenteEinlesen();
 		monteurEinlesen();
 		auftragEinlesen();
-	
+
 	}
 
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
@@ -76,7 +74,7 @@ public class datenbankVerbindung {
 		try {
 			Class.forName(treiber);
 			verbindung = DriverManager.getConnection(adresse, benutzername, passwort);
-			System.out.println("Verbindung hergestellt");
+			//System.out.println("Verbindung hergestellt");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -88,7 +86,7 @@ public class datenbankVerbindung {
 
 		try {
 			verbindung.close();
-			System.out.println("Verbindung getrennt");
+			//System.out.println("Verbindung getrennt");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,37 +94,31 @@ public class datenbankVerbindung {
 
 	}
 
-	public void auftragEinlesen() { 
+	public void auftragEinlesen() {
 
 		try {
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 
-			
 			while (rs.next()) {
 
-				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();  
-				String[] komponentennrarray = rs.getString("Komponenten").split(","); 
-																				
-				for (String ab : komponentennrarray) { 
-								
-					
+				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
+				String[] komponentennrarray = rs.getString("Komponenten").split(",");
+
+				for (String ab : komponentennrarray) {
+
 					for (int i = 0; i < komponentenListe.size(); i++) {
 						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {
-							komponentenlisteauftrag.add(komponentenListe.get(i)); 
-																				
+							komponentenlisteauftrag.add(komponentenListe.get(i));
+
 						}
 					}
-					
 
 				}
 
-	
-
 				for (int i = 0; i < monteurListe.size(); i++) {
 
-					if (monteurListe.get(i).getMitarbeiterNummer()
-							.equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
+					if (monteurListe.get(i).getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
 						indexmitarbeiter = i;
 					}
 				}
@@ -138,21 +130,16 @@ public class datenbankVerbindung {
 					}
 				}
 
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
-						rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter),
-						auftraggeberListe.get(indexAuftraggeber), komponentenlisteauftrag);
-				
-				
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter), auftraggeberListe.get(indexAuftraggeber), komponentenlisteauftrag);
 
 				auftragsListe.add(Auftrag);
 
 			}
 
-			System.out.println("Aufträge einlesen:");
-			for (Auftrag auftrag : auftragsListe) {
-				System.out.println(auftrag);
-			}
-			
+			//System.out.println("Aufträge einlesen:");
+//			for (Auftrag auftrag : auftragsListe) {
+//				System.out.println(auftrag);
+//			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,18 +147,17 @@ public class datenbankVerbindung {
 
 	}
 
-	public void auftraggeberEinlesen() { 
+	public void auftraggeberEinlesen() {
 
 		try {
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftraggeber`");
 
 			while (rs.next()) {
-				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"),
-						rs.getString("KundenNummer")); 
+				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"), rs.getString("KundenNummer"));
 				auftraggeberListe.add(Auftraggeber);
 			}
-			System.out.println("Auftraggeber einlesen:" + auftraggeberListe);
+			//System.out.println("Auftraggeber einlesen:" + auftraggeberListe);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,17 +172,14 @@ public class datenbankVerbindung {
 			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter`");
 
 			while (rs.next()) {
-				
-				
+
 				if (rs.getString("Rolle").equals("Disponent")) {
-					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
-							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"),
-							rs.getString("Anwesenheit"));
+					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), null);
 					disponentListe.add(Disponent);
 
 				}
 			}
-			System.out.println("Disponenten einlesen:" + disponentListe);
+			//System.out.println("Disponenten einlesen:" + disponentListe);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -211,17 +194,15 @@ public class datenbankVerbindung {
 			rs = stmt.executeQuery("SELECT * FROM `komponente`");
 
 			while (rs.next()) {
-				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("KomponentenNummer"),
-						rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"), rs.getString("Attribut"));
+				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("KomponentenNummer"), rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"), rs.getString("Attribut"));
 				komponentenListe.add(Komponente);
 			}
-			System.out.println("-------------------------------");
-			for (Komponente	komponente : komponentenListe) {
-				System.out.println(komponente);
-			}
-			System.out.println("-------------------------------");
+			//System.out.println("-------------------------------");
+//			for (Komponente komponente : komponentenListe) {
+//				System.out.println(komponente);
+//			}
+			//System.out.println("-------------------------------");
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -229,27 +210,43 @@ public class datenbankVerbindung {
 
 	public void monteurEinlesen() {
 
+		
+
 		try {
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter`");
 
 			while (rs.next()) {
+				ArrayList<String> anwesenheit = new ArrayList<String>();
+				String Mitarbeiternummer = rs.getString("MitarbeiterNummer");
+
+				Statement stmte = verbindung.createStatement();
+				ResultSet rss;
+				rss = stmte.executeQuery("SELECT * FROM `schichtplan` WHERE `Mitarbeiternummer` = " + Mitarbeiternummer + "");
+
+				rss.next();
+				anwesenheit.add(rss.getString("Montag"));
+				anwesenheit.add(rss.getString("Dienstag"));
+				anwesenheit.add(rss.getString("Mittwoch"));
+				anwesenheit.add(rss.getString("Donnerstag"));
+				anwesenheit.add(rss.getString("Freitag"));
+				
+				
+				
+				System.out.println(anwesenheit);
 				
 				if (rs.getString("Rolle").equals("Monteur")) {
-					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
-							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"),
-							rs.getString("Anwesenheit"));
-					monteurListe.add(Monteur);
+					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), Mitarbeiternummer, rs.getString("Passwort"), anwesenheit);
+				monteurListe.add(Monteur);
 				}
+				
 			}
-			System.out.println("Monteur einlesen:" + monteurListe);
+			//System.out.println("Monteur einlesen:" + monteurListe);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-
-	
 
 }
