@@ -10,7 +10,7 @@ public class Mitarbeiter {
 	private String vorname;
 	private String mitarbeiterNummer;
 	private String passwort;
-	private ArrayList<String> anwesenheit;
+	private ArrayList<String> anwesenheit; // Montag bis Freitag
 	
 
 	public Mitarbeiter(String rolle, String name, String vorname, String mitarbeiterNummer, String passwort, ArrayList<String> anwesenheit) {
