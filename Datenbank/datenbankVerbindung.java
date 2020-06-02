@@ -16,7 +16,7 @@ public class datenbankVerbindung {
 
 	Connection verbindung = null;
 	ResultSet rs;
-
+	Statement stmt;
 	int indexmitarbeiter;
 	int indexAuftraggeber;
 
@@ -102,6 +102,7 @@ public class datenbankVerbindung {
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 
+			
 			while (rs.next()) {
 
 				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();  
