@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -325,6 +327,21 @@ public class MonteurFenster extends JFrame {
 					String status = auftraegeMonteurTBL.getValueAt(i, 2).toString();
 					if (!auftrag.getStatus().equals(status)) {
 						auftrag.setStatus(status);
+						
+						
+						try {
+							ResultSet rs;
+							Statement stmt = db.getVerbindung().createStatement();
+
+							stmt.executeUpdate("UPDATE `auftrag` SET `Status` = '"+status+"' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
+						
+						
+						
 					}
 				}
 			}
