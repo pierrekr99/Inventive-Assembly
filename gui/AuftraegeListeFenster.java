@@ -1,17 +1,27 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractCellEditor;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 import Datenbank.datenbankVerbindung;
+import gui.DisponentFenster.JButtonEditor;
+import gui.DisponentFenster.JButtonRenderer;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -86,8 +96,8 @@ public class AuftraegeListeFenster extends JFrame {
 	
 	private void monteureTblFormat() {
 		tabelle.getColumnModel().getColumn(0).setPreferredWidth(150);
-		tabelle.getColumnModel().getColumn(0).setMinWidth(100);
-		tabelle.getColumnModel().getColumn(0).setMaxWidth(100);
+		tabelle.getColumnModel().getColumn(0).setMinWidth(150);
+		tabelle.getColumnModel().getColumn(0).setMaxWidth(150);
 
 		tabelle.getColumnModel().getColumn(1).setPreferredWidth(100);
 		tabelle.getColumnModel().getColumn(1).setMinWidth(200);
@@ -149,5 +159,55 @@ public class AuftraegeListeFenster extends JFrame {
 				return columnEditables[column];
 			}
 		});
+		tabelle.getColumn(tabelle.getColumnName(0)).setCellRenderer(new JButtonRenderer());
+		tabelle.getColumn(tabelle.getColumnName(0)).setCellEditor(new JButtonEditor());
+	}
+	
+	/**
+	 * Buttons in der Tabelle
+	 */
+	
+	class JButtonRenderer implements TableCellRenderer {
+
+		JButton button = new JButton();
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			table.setShowGrid(true);
+			table.setGridColor(Color.LIGHT_GRAY);
+			button.setText("Details anzeigen");
+			return button;
+		}
+	}
+
+	class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
+		JButton button;
+		String txt;
+
+		public JButtonEditor() {
+			super();
+			button = new JButton();
+			button.setOpaque(true);
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+						DetailsFenster frame = new DetailsFenster(tabelle.getEditingRow());
+						frame.setVisible(true);
+				}
+			});
+		}
+
+		@Override
+		public Object getCellEditorValue() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+				int column) {
+			txt = (value == null) ? "" : value.toString();
+			button.setText(txt);
+			return button;
+		}
 	}
 }

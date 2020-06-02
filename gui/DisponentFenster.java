@@ -50,7 +50,7 @@ public class DisponentFenster extends JFrame {
 	int zeilen = 0;
 	int zeilenMonteure = 0;
 	int summeAuftraege = 0;
-	String details = "Details";// Hier könnte man den Detailsbutton Rendern
+	String details = "Details anzeigen";// Hier könnte man den Detailsbutton Rendern
 	String monteur;
 
 	JComboBox monteureCombobox = new JComboBox(); // erstellung einer Combobox
@@ -308,8 +308,8 @@ public class DisponentFenster extends JFrame {
 
 	private void auftraegeTblFormat() {
 		auftraegeTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
-		auftraegeTbl.getColumnModel().getColumn(0).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(0).setMaxWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(0).setMinWidth(150);
+		auftraegeTbl.getColumnModel().getColumn(0).setMaxWidth(150);
 
 		auftraegeTbl.getColumnModel().getColumn(1).setPreferredWidth(100);
 		auftraegeTbl.getColumnModel().getColumn(1).setMinWidth(100);
@@ -367,7 +367,7 @@ public class DisponentFenster extends JFrame {
 			monteure[i][0] = db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName();
 			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();// Auftragsliste.get(zeile).getAuftragsnr()
 			monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
-			monteure[i][3] = "Summe: " + summeAuftraege(i);// Dropdown fehlt noch
+			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(i)+"]";// Dropdown fehlt noch
 
 		}
 		return monteure;
@@ -469,7 +469,7 @@ public class DisponentFenster extends JFrame {
 			if (tabelle.equals("auftraegeTbl"))
 				button.setText(details);
 			if (tabelle.equals("monteureTbl"))
-				button.setText("Summe: " + summeAuftraege(row));
+				button.setText("Aufträge anzeigen [" + summeAuftraege(row)+"]");
 			return button;
 		}
 	}
