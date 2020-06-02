@@ -23,10 +23,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollBar;
 import javax.swing.JComboBox;
+import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSeparator;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -37,9 +40,13 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import Datenbank.datenbankVerbindung;
+import gui.AuftraegeListeFenster.JButtonEditor;
+import gui.AuftraegeListeFenster.JButtonRenderer;
 import objekte.Auftrag;
 import objekte.Auftraggeber;
 
@@ -53,7 +60,7 @@ public class MonteurFenster extends JFrame {
 
 	int zeilen = 0; // zeilen tabelle
 
-	String details = "Details";// Hier könnte man den Detailsbutton Rendern
+	String details = "Details anzeigen";// Hier könnte man den Detailsbutton Rendern
 
 	JComboBox auswahlBoxStatus = new JComboBox();
 
@@ -200,7 +207,7 @@ public class MonteurFenster extends JFrame {
 															// in der natürlichen Ordnung und umgekehrt sortiert
 
 		auswahlBoxStatus();
-
+/*
 		auftraegeMonteurTBL.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 			public void mouseClicked(MouseEvent e) {
 				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
@@ -217,7 +224,10 @@ public class MonteurFenster extends JFrame {
 				}
 			}
 		});
-
+*/
+		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellRenderer(new JButtonRenderer());
+		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());
+		
 		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
 		scrollPane.setViewportView(auftraegeMonteurTBL);
 		auftraegeTab.setLayout(gl_auftraegeTab);
@@ -322,7 +332,7 @@ public class MonteurFenster extends JFrame {
 				new String[] { "", "Auftragsnummer", "Status", "Datum", "Frist", "Auftraggeber"// welche spaltennamen
 				}) {
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-					false, false, true, false, false, false };
+					true, false, true, false, false, false };
 
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
 				return columnEditables[column];
@@ -357,5 +367,53 @@ public class MonteurFenster extends JFrame {
 			}
 		}
 
+	}
+	
+	/**
+	 * Buttons in der Tabelle
+	 */
+	
+	class JButtonRenderer implements TableCellRenderer {
+
+		JButton button = new JButton();
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			table.setShowGrid(true);
+			table.setGridColor(Color.LIGHT_GRAY);
+			button.setText(details);
+			return button;
+		}
+	}
+
+	class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
+		JButton button;
+		String txt;
+
+		public JButtonEditor() {
+			super();
+			button = new JButton();
+			button.setOpaque(true);
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+						DetailsFenster frame = new DetailsFenster(auftraegeMonteurTBL.getEditingRow());
+						frame.setVisible(true);
+						auftraegeAktualisieren();
+				}
+			});
+		}
+
+		@Override
+		public Object getCellEditorValue() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+				int column) {
+			button.setText(details);
+			return button;
+		}
 	}
 }

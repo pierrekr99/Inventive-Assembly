@@ -33,6 +33,7 @@ public class AuftraegeListeFenster extends JFrame {
 	private JPanel contentPane;
 	private JTable tabelle;
 	private int zeilenTabelle = 0;
+	private int zeile = 0;
 
 	/**
 	 * Launch the application.
@@ -55,6 +56,7 @@ public class AuftraegeListeFenster extends JFrame {
 	 * Create the frame.
 	 */
 	public AuftraegeListeFenster(int row) {
+		zeile = row;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1200, 300);
 		contentPane = new JPanel();
@@ -192,6 +194,7 @@ public class AuftraegeListeFenster extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 						DetailsFenster frame = new DetailsFenster(tabelle.getEditingRow());
 						frame.setVisible(true);
+						tabelleAktualisieren(zeile);
 				}
 			});
 		}
