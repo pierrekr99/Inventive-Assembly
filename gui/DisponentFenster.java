@@ -10,7 +10,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
@@ -36,6 +39,7 @@ import javax.swing.table.TableColumn;
 import Datenbank.datenbankVerbindung;
 import objekte.Auftrag;
 import objekte.Mitarbeiter;
+import javax.swing.JLabel;
 
 public class DisponentFenster extends JFrame {
 
@@ -62,27 +66,19 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DisponentFenster frame = new DisponentFenster();
-					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);// Fenster
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-*/
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { DisponentFenster frame = new
+	 * DisponentFenster(); frame.setExtendedState(JFrame.MAXIMIZED_BOTH);// Fenster
+	 * frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); } } });
+	 * }
+	 */
 	/**
 	 * Create the frame.
 	 */
 	public DisponentFenster() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 450);
+		setBounds(100, 100, 1047, 515);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -118,31 +114,45 @@ public class DisponentFenster extends JFrame {
 				monteureAktualisieren(); // Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
 											// passt sich an die neuen Zahlen an
 
-
 				System.out.println("----------------------------juhu----------------------");
 				db.getAuftragsListe().forEach(System.out::println);
 			}
 		});
 
+		JLabel DatumLabel = new JLabel(DatumAlsStringBekommen()); // Anzeige des aktuellen Datums
+		DatumLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(tabbedPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 954, Short.MAX_VALUE)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 620, Short.MAX_VALUE)
-								.addComponent(dbAktualisierenKnopf).addGap(18).addComponent(logoutKnopf)))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+							.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 470, Short.MAX_VALUE)
+							.addComponent(DatumLabel)
+							.addGap(37)
+							.addComponent(dbAktualisierenKnopf)
+							.addGap(18)
+							.addComponent(logoutKnopf))
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE).addContainerGap()));
+							.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(logoutKnopf)
+							.addComponent(dbAktualisierenKnopf))
+						.addComponent(DatumLabel))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+					.addGap(6))
+		);
 
 		/**
 		 * Auftraege Reiter.
@@ -359,8 +369,15 @@ public class DisponentFenster extends JFrame {
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
 			monteure[i][0] = db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName();
 			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();// Auftragsliste.get(zeile).getAuftragsnr()
-			monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
-			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(i)+"]";// Dropdown fehlt noch
+
+			if (getIndexWochentag() <= 4) {// für Montag bis Freitag
+				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(getIndexWochentag()); 
+				// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
+			} else { // Samstag und Sonntag wird die komplette Liste angezeigt
+				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
+			}
+
+			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(i) + "]";// Dropdown fehlt noch
 
 		}
 		return monteure;
@@ -421,7 +438,7 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
 		auftraegeTblFormat();
-		monteureCombobox();	// die Combobox muss auch neu erstellt werden, da die alte leider nicht die
+		monteureCombobox(); // die Combobox muss auch neu erstellt werden, da die alte leider nicht die
 		// Aktualisierung überlebt hat
 	}
 
@@ -441,17 +458,19 @@ public class DisponentFenster extends JFrame {
 //
 //			monteureTbl.setValueAt("Summe: " + summeAuftraege(i) + "         Details", i, 3);
 //		}
-		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));//Button wird hinzugefügt
+		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));// Button
+																												// wird
+																												// hinzugefügt
 		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellEditor(new JButtonEditor());
 		monteureTblFormat();
-		monteureCombobox();	// die Combobox muss auch neu erstellt werden, da die alte leider nicht die
+		monteureCombobox(); // die Combobox muss auch neu erstellt werden, da die alte leider nicht die
 		// Aktualisierung überlebt hat
 	}
 
 	/**
 	 * Buttons in der Tabelle
 	 */
-	
+
 	class JButtonRenderer implements TableCellRenderer {
 
 		JButton button = new JButton();
@@ -465,9 +484,9 @@ public class DisponentFenster extends JFrame {
 				int row, int column) {
 			table.setShowGrid(true);
 			table.setGridColor(Color.LIGHT_GRAY);
-				button.setText(details);
+			button.setText(details);
 			if (tabelle.equals("monteureTbl"))
-				button.setText("Aufträge anzeigen [" + summeAuftraege(row)+"]");
+				button.setText("Aufträge anzeigen [" + summeAuftraege(row) + "]");
 			return button;
 		}
 	}
@@ -486,7 +505,7 @@ public class DisponentFenster extends JFrame {
 						DetailsFenster frame = new DetailsFenster(auftraegeTbl.getEditingRow());
 						frame.setVisible(true);
 						auftraegeAktualisieren();
-						
+
 					} else {
 						AuftraegeListeFenster frame = new AuftraegeListeFenster(monteureTbl.getEditingRow());
 						frame.setVisible(true);
@@ -515,7 +534,7 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * Tabelle in Array Einlesen
 	 */
-	
+
 	private void tabelleInArrayEinlesen() {
 		for (int i = 0; i < zeilen; i++) {
 
@@ -601,4 +620,45 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
+	private String DatumAlsStringBekommen() { // gibt heutiges Datum zurück
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht für den Wochentag
+		return f.format(new Date());
+	}
+
+	private int getIndexWochentag() {// gibt Zahl des Wochentags zurück (0-4)
+
+		DateFormat f = new SimpleDateFormat("EEEE");
+		String s = f.format(new Date());
+		int i = 0;
+
+		switch (s) {
+		case "Montag":
+			i = 0;
+			break;
+		case "Dienstag":
+			i = 1;
+			break;
+		case "Mittwoch":
+			i = 2;
+			break;
+		case "Donnerstag":
+			i = 3;
+			break;
+		case "Freitag":
+			i = 4;
+			break;
+		case "Samstag":
+			i = 5;
+			break;
+		case "Sonntag":
+			i = 6;
+			break;
+		default:
+			i = 6;
+			break;
+		}
+
+		return i;
+
+	}
 }
