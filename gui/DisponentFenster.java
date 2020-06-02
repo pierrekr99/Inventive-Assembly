@@ -114,17 +114,10 @@ public class DisponentFenster extends JFrame {
 											// ggf. überschrieben
 				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
 											// des Monteurs automatisch mitüberschrieben
-				auftraegeTblFormat(); // Wiederherstellung der selben Ansicht
 
 				monteureAktualisieren(); // Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
 											// passt sich an die neuen Zahlen an
 
-				monteureTblFormat(); // Wiederherstellung derselben Ansicht
-
-				// die Combobox muss auch neu erstellt werden, da die alte leider nicht die
-				// Aktualisierung überlebt hat
-
-				monteureCombobox();
 
 				System.out.println("----------------------------juhu----------------------");
 				db.getAuftragsListe().forEach(System.out::println);
@@ -427,6 +420,9 @@ public class DisponentFenster extends JFrame {
 		});
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
+		auftraegeTblFormat();
+		monteureCombobox();	// die Combobox muss auch neu erstellt werden, da die alte leider nicht die
+		// Aktualisierung überlebt hat
 	}
 
 	private void monteureAktualisieren() {
@@ -447,6 +443,9 @@ public class DisponentFenster extends JFrame {
 //		}
 		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));//Button wird hinzugefügt
 		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellEditor(new JButtonEditor());
+		monteureTblFormat();
+		monteureCombobox();	// die Combobox muss auch neu erstellt werden, da die alte leider nicht die
+		// Aktualisierung überlebt hat
 	}
 
 	/**
@@ -487,6 +486,7 @@ public class DisponentFenster extends JFrame {
 						DetailsFenster frame = new DetailsFenster(auftraegeTbl.getEditingRow());
 						frame.setVisible(true);
 						auftraegeAktualisieren();
+						
 					} else {
 						AuftraegeListeFenster frame = new AuftraegeListeFenster(monteureTbl.getEditingRow());
 						frame.setVisible(true);
