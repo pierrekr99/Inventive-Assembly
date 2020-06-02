@@ -486,9 +486,11 @@ public class DisponentFenster extends JFrame {
 					if (button.getText().equals(details)) {
 						DetailsFenster frame = new DetailsFenster(auftraegeTbl.getEditingRow());
 						frame.setVisible(true);
+						auftraegeAktualisieren();
 					} else {
 						AuftraegeListeFenster frame = new AuftraegeListeFenster(monteureTbl.getEditingRow());
 						frame.setVisible(true);
+						monteureAktualisieren();
 					}
 
 				}
