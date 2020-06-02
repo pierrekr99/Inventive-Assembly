@@ -466,7 +466,6 @@ public class DisponentFenster extends JFrame {
 				int row, int column) {
 			table.setShowGrid(true);
 			table.setGridColor(Color.LIGHT_GRAY);
-			if (tabelle.equals("auftraegeTbl"))
 				button.setText(details);
 			if (tabelle.equals("monteureTbl"))
 				button.setText("Aufträge anzeigen [" + summeAuftraege(row)+"]");
@@ -505,7 +504,7 @@ public class DisponentFenster extends JFrame {
 		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
 				int column) {
-			txt = (value == null) ? "" : value.toString();
+			txt = value.toString();
 			button.setText(txt);
 			return button;
 		}
