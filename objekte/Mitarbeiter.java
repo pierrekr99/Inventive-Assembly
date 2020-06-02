@@ -1,5 +1,7 @@
 package objekte;
 
+import java.util.ArrayList;
+
 public class Mitarbeiter {
 
 //	Attribute
@@ -8,10 +10,10 @@ public class Mitarbeiter {
 	private String vorname;
 	private String mitarbeiterNummer;
 	private String passwort;
-	private String anwesenheit;
+	private ArrayList<String> anwesenheit;
 	
 
-	public Mitarbeiter(String rolle, String name, String vorname, String mitarbeiterNummer, String passwort, String anwesenheit) {
+	public Mitarbeiter(String rolle, String name, String vorname, String mitarbeiterNummer, String passwort, ArrayList<String> anwesenheit) {
 		super();
 		this.rolle = rolle;
 		this.name = name;
@@ -54,11 +56,11 @@ public class Mitarbeiter {
 		this.passwort = passwort;
 	}
 
-	public String getAnwesenheit() {
+	public ArrayList<String> getAnwesenheit() {
 		return anwesenheit;
 	}
 
-	public void setAnwesenheit(String anwesenheit) {
+	public void setAnwesenheit(ArrayList<String> anwesenheit) {
 		this.anwesenheit = anwesenheit;
 	}
 
@@ -75,6 +77,8 @@ public class Mitarbeiter {
 		return "Mitarbeiter [rolle=" + rolle + ", name=" + name + ", vorname=" + vorname + ", mitarbeiterNummer="
 				+ mitarbeiterNummer + ", passwort=" + passwort + ", anwesenheit=" + anwesenheit + "]";
 	}
+
+
 
 	
 	
