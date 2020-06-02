@@ -445,7 +445,7 @@ public class DisponentFenster extends JFrame {
 //
 //			monteureTbl.setValueAt("Summe: " + summeAuftraege(i) + "         Details", i, 3);
 //		}
-		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));
+		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));//Button wird hinzugefügt
 		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellEditor(new JButtonEditor());
 	}
 
