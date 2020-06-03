@@ -112,6 +112,8 @@ public class DisponentFenster extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				tabelleInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird
 											// ggf. überschrieben
+				
+				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft und ggf. überschrieben
 				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
 											// des Monteurs automatisch mitüberschrieben
 
@@ -514,6 +516,7 @@ public class DisponentFenster extends JFrame {
 	 */
 
 	private void tabelleInArrayEinlesen() {
+
 		for (int i = 0; i < zeilen; i++) {
 
 			for (Auftrag auftrag : db.getAuftragsListe()) {
@@ -553,40 +556,7 @@ public class DisponentFenster extends JFrame {
 									e.printStackTrace();
 								}
 							}
-							int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream()
-									.filter((k) -> k.isVerfuegbarkeit()).count(); // überprüfen, ob alle Komponenten
-																					// des Auftrags verfügbar sind
-							System.out.println(verfuegbareKomponenten);
-							if (verfuegbareKomponenten == 5) {
-								auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
-
-								try {
-									ResultSet rs;
-									Statement stmt = db.getVerbindung().createStatement();
-
-									stmt.executeUpdate(
-											"UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
-													+ auftrag.getAuftragsNummer() + "');");
-
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-
-							} else {
-								auftrag.setStatus("Teile fehlen"); // falls nein, wird der Status in Teile fehlen
-								// geändert
-								try {
-									ResultSet rs;
-									Statement stmt = db.getVerbindung().createStatement();
-
-									stmt.executeUpdate(
-											"UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
-													+ auftrag.getAuftragsNummer() + "');");
-
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
+							// hier
 						}
 					}
 					;
@@ -595,6 +565,44 @@ public class DisponentFenster extends JFrame {
 			}
 		}
 	}
+
+	private void statusAktualisieren() {
+		for (Auftrag auftrag : db.getAuftragsListe()) {
+			int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
+					.count(); // überprüfen, ob alle Komponenten
+								// des Auftrags verfügbar sind
+
+			if (verfuegbareKomponenten == 5 && !auftrag.getStatus().equals("im Lager")) {
+				auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
+
+				try {
+					ResultSet rs;
+					Statement stmt = db.getVerbindung().createStatement();
+
+					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
+							+ auftrag.getAuftragsNummer() + "');");
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			} else if(verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")){
+				auftrag.setStatus("Teile fehlen"); // falls nein, wird der Status in Teile fehlen
+				// geändert
+				try {
+					ResultSet rs;
+					Statement stmt = db.getVerbindung().createStatement();
+
+					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
+							+ auftrag.getAuftragsNummer() + "');");
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 
 	public int indexWochentag = 0;
 
