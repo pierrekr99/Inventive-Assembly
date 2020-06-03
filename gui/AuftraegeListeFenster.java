@@ -22,6 +22,8 @@ import javax.swing.table.TableCellRenderer;
 import Datenbank.datenbankVerbindung;
 import gui.DisponentFenster.JButtonEditor;
 import gui.DisponentFenster.JButtonRenderer;
+import objekte.Auftrag;
+import objekte.Mitarbeiter;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,6 +36,7 @@ public class AuftraegeListeFenster extends JFrame {
 	private JTable tabelle;
 	private int zeilenTabelle = 0;
 	private int zeile = 0;
+	Mitarbeiter monteur;
 
 	/**
 	 * Launch the application.
@@ -55,8 +58,7 @@ public class AuftraegeListeFenster extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AuftraegeListeFenster(int row) {
-		zeile = row;
+	public AuftraegeListeFenster(Mitarbeiter monteur) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1200, 300);
 		contentPane = new JPanel();
@@ -72,11 +74,12 @@ public class AuftraegeListeFenster extends JFrame {
 		tabelle.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
 		tabelle.setFont(new Font("Tahoma", Font.PLAIN, 18));// Schriftart und -größe in der Tabelle
 		tabelle.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
-		tabelleAktualisieren(row); // Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
+		tabelleAktualisieren(monteur); // Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
 		tabelle.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die
 												// Aufträge nach diesem Attribut
 												// in der natürlichen Ordnung und umgekehrt sortiert
+		/*
 		tabelle.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
 			public void mouseClicked(MouseEvent e) {
 				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
@@ -93,6 +96,7 @@ public class AuftraegeListeFenster extends JFrame {
 				}
 			}
 		});
+		*/
 		monteureTblFormat();
 	}
 	
@@ -124,17 +128,17 @@ public class AuftraegeListeFenster extends JFrame {
 		tabelle.setRowHeight(50);
 	}
 	
-	private Object[][] tabelle(int row) {
+	private Object[][] tabelle(Mitarbeiter monteur) {
 		int zeile = 0;
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
-			if (db.getMonteurListe().get(row).getMitarbeiterNummer()
+			if (monteur.getMitarbeiterNummer()
 					.equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer())) {
 				zeilenTabelle++;
 			}
 		}
 		Object[][] auftraege = new Object[zeilenTabelle][6];
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
-			if (db.getMonteurListe().get(row).getMitarbeiterNummer()
+			if (monteur.getMitarbeiterNummer()
 					.equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer())) {
 				auftraege[zeile][0] = "Details";
 				auftraege[zeile][1] = db.getAuftragsListe().get(i).getAuftragsNummer();
@@ -150,12 +154,13 @@ public class AuftraegeListeFenster extends JFrame {
 		return auftraege;
 	}
 
-	private void tabelleAktualisieren(int row) {
-		tabelle.setModel(new DefaultTableModel(tabelle(row), // Benötigter Inhalt: (String[][],String[])
+	private void tabelleAktualisieren(Mitarbeiter monteur) {
+		
+		tabelle.setModel(new DefaultTableModel(tabelle(monteur), // Benötigter Inhalt: (String[][],String[])
 				// Sonst wird hier ein eigenes Modell Eingefügt
 				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "Auftragsgeber" }) {
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-					false, false, false, false, false, false };
+					true, false, false, false, false, false };
 
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
 				return columnEditables[column];
@@ -192,11 +197,21 @@ public class AuftraegeListeFenster extends JFrame {
 			button.setOpaque(true);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-						DetailsFenster frame = new DetailsFenster(tabelle.getEditingRow());
+					Auftrag auftrag = welcherAuftrag(tabelle.getEditingRow());
+						DetailsFenster frame = new DetailsFenster(auftrag);
 						frame.setVisible(true);
-						tabelleAktualisieren(zeile);
+						tabelleAktualisieren(monteur);
 				}
 			});
+		}
+		private Auftrag welcherAuftrag(int editingRow) {
+			for (Auftrag auftrag : db.getAuftragsListe()) {
+
+				if (tabelle.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())) {
+					return auftrag;
+				}
+			}
+			return null;
 		}
 
 		@Override

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GraphicsConfiguration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -495,7 +496,6 @@ public class DisponentFenster extends JFrame {
 
 	class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
 		JButton button;
-		String txt;
 
 		public JButtonEditor() {
 			super();
@@ -504,17 +504,21 @@ public class DisponentFenster extends JFrame {
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (button.getText().equals(details)) {
-						DetailsFenster frame = new DetailsFenster(auftraegeTbl.getEditingRow());
+						DetailsFenster frame = new DetailsFenster(welcherAuftrag(auftraegeTbl.getEditingRow()));
 						frame.setVisible(true);
 						auftraegeAktualisieren();
 
 					} else {
-						AuftraegeListeFenster frame = new AuftraegeListeFenster(monteureTbl.getEditingRow());
+						AuftraegeListeFenster frame = new AuftraegeListeFenster(welcherMonteur(monteureTbl.getEditingRow()));
 						frame.setVisible(true);
 						monteureAktualisieren();
 					}
 
 				}
+
+
+
+
 			});
 		}
 
@@ -527,10 +531,30 @@ public class DisponentFenster extends JFrame {
 		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
 				int column) {
-			txt = value.toString();
-			button.setText(txt);
+			button.setText(details);
+			if(table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
+					button.setText("Aufträge anzeigen [" + summeAuftraege(row) + "]");
+			}
 			return button;
 		}
+	}
+	private Auftrag welcherAuftrag(int editingRow) {
+		for (Auftrag auftrag : db.getAuftragsListe()) {
+
+			if (auftraegeTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())) {
+				return auftrag;
+			}
+		}
+		return null;
+	}
+	private Mitarbeiter welcherMonteur(int editingRow) {
+		for (Mitarbeiter monteur : db.getMonteurListe()) {
+
+			if (monteureTbl.getValueAt(editingRow, 1).equals(monteur.getMitarbeiterNummer())) {
+				return monteur;
+			}
+		}
+		return null;
 	}
 
 	/**

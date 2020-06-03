@@ -16,6 +16,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import Datenbank.datenbankVerbindung;
+import objekte.Auftrag;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class DetailsFenster extends JFrame {
@@ -40,8 +42,8 @@ public class DetailsFenster extends JFrame {
 	 * Create the frame.
 	 */
 
-	public DetailsFenster(int row) { // reihe des auftrags als parameter
-
+	public DetailsFenster(Auftrag auftrag) { // reihe des auftrags als parameter
+		
 //      -------  Fenster  -----------------------------------------------
 
 		setTitle("Auftragsdetails");
@@ -54,12 +56,12 @@ public class DetailsFenster extends JFrame {
 
 //		-------  Komponenten Tabelle  ----------------------------------------
 
-		komponenten(row);
+		komponenten(auftrag);
 		sPKomponenten = new JScrollPane();
 		sPKomponenten.setBounds(5, 36, 922, 449);
 		tKomponenten = new JTable();
 		tKomponenten.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
-		tKomponenten.setModel(new DefaultTableModel(komponenten(row),
+		tKomponenten.setModel(new DefaultTableModel(komponenten(auftrag),
 				new String[] { "TeileNummer", "Name", "Attribut", "Kategorie", "Verfügbarkeit" }) {// Generierung der
 																									// Tabelle
 																									// Benötigter
@@ -79,10 +81,10 @@ public class DetailsFenster extends JFrame {
 
 //      -------  Monteur Tabelle  ----------------------------------------
 
-		auftragMonteur(row);
+		auftragMonteur(auftrag);
 		sPMonteur = new JScrollPane();
 		tMonteur = new JTable();
-		tMonteur.setModel(new DefaultTableModel(auftragMonteur(row),
+		tMonteur.setModel(new DefaultTableModel(auftragMonteur(auftrag),
 				new String[] { "AuftragsNummer", "KundenNummer", "Auftraggeber", "MonteurNummer", "MonteurName" }) {
 
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
@@ -170,40 +172,40 @@ public class DetailsFenster extends JFrame {
 
 	}
 
-	private Object[][] komponenten(int row) {// Komponenten werden aus Komponentensliste ausgelesen und in
+	private Object[][] komponenten(Auftrag auftrag) {// Komponenten werden aus Komponentensliste ausgelesen und in
 		// komponenten[][]eingebaut
 
 		// int row ist die reihe des auftrags um details des jeweiligen auftrags
 		// ausgeben zu können
 
-		int zeilen1 = db.getAuftragsListe().get(row).getKomponenten().size();
+		int zeilen1 = auftrag.getKomponenten().size();
 		Object[][] komponenten = new Object[zeilen1][5];
 
-		for (int i = 0; i < db.getAuftragsListe().get(row).getKomponenten().size(); i++) { // fügt Komponenten
+		for (int i = 0; i < auftrag.getKomponenten().size(); i++) { // fügt Komponenten
 																							// eines Auftrags in
 																							// die Tabelle ein
 
-			komponenten[i][0] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKomponentenNummer();
-			komponenten[i][1] = db.getAuftragsListe().get(row).getKomponenten().get(i).getName();
-			komponenten[i][2] = db.getAuftragsListe().get(row).getKomponenten().get(i).getAttribut();
-			komponenten[i][3] = db.getAuftragsListe().get(row).getKomponenten().get(i).getKategorie();
-			komponenten[i][4] = db.getAuftragsListe().get(row).getKomponenten().get(i).isVerfuegbarkeit();
+			komponenten[i][0] = auftrag.getKomponenten().get(i).getKomponentenNummer();
+			komponenten[i][1] = auftrag.getKomponenten().get(i).getName();
+			komponenten[i][2] = auftrag.getKomponenten().get(i).getAttribut();
+			komponenten[i][3] = auftrag.getKomponenten().get(i).getKategorie();
+			komponenten[i][4] = auftrag.getKomponenten().get(i).isVerfuegbarkeit();
 
 		}
 
 		return komponenten;
 	}
 
-	private Object[][] auftragMonteur(int row) { // fügt auftragsnummer monteurname und nummer in tabelle ein
+	private Object[][] auftragMonteur(Auftrag auftrag) { // fügt auftragsnummer monteurname und nummer in tabelle ein
 
 		Object[][] monteur = new Object[1][5];
 
-		monteur[0][0] = db.getAuftragsListe().get(row).getAuftragsNummer();
-		monteur[0][1] = db.getAuftragsListe().get(row).getAuftraggeber().getKundenNummer();
-		monteur[0][2] = db.getAuftragsListe().get(row).getAuftraggeber().getName();
-		monteur[0][3] = db.getAuftragsListe().get(row).getZustaendig().getMitarbeiterNummer();
-		monteur[0][4] = db.getAuftragsListe().get(row).getZustaendig().getVorname() + " "
-				+ db.getAuftragsListe().get(row).getZustaendig().getName();
+		monteur[0][0] = auftrag.getAuftragsNummer();
+		monteur[0][1] = auftrag.getAuftraggeber().getKundenNummer();
+		monteur[0][2] = auftrag.getAuftraggeber().getName();
+		monteur[0][3] = auftrag.getZustaendig().getMitarbeiterNummer();
+		monteur[0][4] = auftrag.getZustaendig().getVorname() + " "
+				+ auftrag.getZustaendig().getName();
 
 		return monteur;
 	}

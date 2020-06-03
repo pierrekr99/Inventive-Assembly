@@ -49,6 +49,7 @@ import gui.AuftraegeListeFenster.JButtonEditor;
 import gui.AuftraegeListeFenster.JButtonRenderer;
 import objekte.Auftrag;
 import objekte.Auftraggeber;
+import objekte.Mitarbeiter;
 
 public class MonteurFenster extends JFrame {
 
@@ -69,21 +70,14 @@ public class MonteurFenster extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MonteurFenster window = new MonteurFenster();
-
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { MonteurFenster window = new
+	 * MonteurFenster();
+	 * 
+	 * window.setVisible(true); } catch (Exception e) { e.printStackTrace(); } } });
+	 * }
+	 */
 	/**
 	 * Create the application.
 	 */
@@ -140,7 +134,7 @@ public class MonteurFenster extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		
+
 		JButton dbAktualisierenKnopf = new JButton("DB aktualisieren");
 		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));// formatierung schrift
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
@@ -148,49 +142,37 @@ public class MonteurFenster extends JFrame {
 				tabelleInArrayEinlesen();
 				auftraegeAktualisieren();
 				auswahlBoxStatus();
-				
+
 				System.out.println("--------------------aufträge-----------");
-				
+
 				for (Auftrag auftrag : db.getAuftragsListe()) {
 					System.out.println(auftrag);
 				}
 			}
 		});
-		
-		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); 
+
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
 		JLabel DatumLabel = new JLabel(f.format(new Date())); // Datumsanzeige
 		DatumLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		
+
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
-		gl_auftraegeTab.setHorizontalGroup(
-			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+		gl_auftraegeTab.setHorizontalGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap().addGroup(gl_auftraegeTab
+						.createParallelGroup(Alignment.TRAILING)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
-							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
-							.addComponent(DatumLabel)
-							.addGap(18)
-							.addComponent(dbAktualisierenKnopf)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(logoutKnopf)))
-					.addContainerGap())
-		);
-		gl_auftraegeTab.setVerticalGroup(
-			gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
-						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-						.addComponent(logoutKnopf)
-						.addComponent(dbAktualisierenKnopf)
-						.addComponent(DatumLabel))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-					.addContainerGap())
-		);
+								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
+								.addComponent(DatumLabel).addGap(18).addComponent(dbAktualisierenKnopf)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutKnopf)))
+						.addContainerGap()));
+		gl_auftraegeTab.setVerticalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap()
+						.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
+								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf).addComponent(DatumLabel))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE).addContainerGap()));
 
 		/**
 		 * ***********************************************************************************************
@@ -206,28 +188,22 @@ public class MonteurFenster extends JFrame {
 															// werden die Aufträge nach diesem Attribut
 															// in der natürlichen Ordnung und umgekehrt sortiert
 
-		auswahlBoxStatus();
-/*
-		auftraegeMonteurTBL.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
-			public void mouseClicked(MouseEvent e) {
-				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
-												// dazu)
-					JTable target = (JTable) e.getSource();
-					int row = target.getSelectedRow();// wo wurde geklickt
-					int column = target.getSelectedColumn();
-					// do some action if appropriate column
-					if (column == 0) {// wenn in DetailsSpalte
-						detailsFenster(row);// Detailsfenster wird geöffnet und reihe des auftrags wird übergeben um
-											// details aufrufen zu können
-
-					}
-				}
-			}
-		});
-*/
-		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellRenderer(new JButtonRenderer());
-		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());
 		
+
+		/*
+		 * auftraegeMonteurTBL.addMouseListener(new MouseAdapter() {// MouseListener für
+		 * das Fenster public void mouseClicked(MouseEvent e) { if (e.MOUSE_PRESSED ==
+		 * 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt
+		 * nicht // dazu) JTable target = (JTable) e.getSource(); int row =
+		 * target.getSelectedRow();// wo wurde geklickt int column =
+		 * target.getSelectedColumn(); // do some action if appropriate column if
+		 * (column == 0) {// wenn in DetailsSpalte detailsFenster(row);// Detailsfenster
+		 * wird geöffnet und reihe des auftrags wird übergeben um // details aufrufen zu
+		 * können
+		 * 
+		 * } } } });
+		 */
+
 		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));// formatierung schrift in tabelle
 		scrollPane.setViewportView(auftraegeMonteurTBL);
 		auftraegeTab.setLayout(gl_auftraegeTab);
@@ -235,11 +211,11 @@ public class MonteurFenster extends JFrame {
 	}
 
 	private void auswahlBoxStatus() {
-		
-		auswahlBoxStatus.removeAllItems(); 
-		
+
+		auswahlBoxStatus.removeAllItems();
+
 		// auswahlmöglichkeiten
-		
+
 		auswahlBoxStatus.addItem("Teile fehlen");
 		auswahlBoxStatus.addItem("disponiert");
 		auswahlBoxStatus.addItem("Im Lager");
@@ -315,9 +291,9 @@ public class MonteurFenster extends JFrame {
 	 * *************************************************************************************************
 	 */
 
-	private void detailsFenster(int row) {// Öffnet Detailsfenster
+	private void detailsFenster(Auftrag auftrag) {// Öffnet Detailsfenster
 		try {
-			DetailsFenster detailsFenster = new DetailsFenster(row);// Fenster wird erstellt
+			DetailsFenster detailsFenster = new DetailsFenster(auftrag);// Fenster wird erstellt
 			detailsFenster.setVisible(true);// Fenster wird sichtbar
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -337,7 +313,11 @@ public class MonteurFenster extends JFrame {
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
 				return columnEditables[column];
 			}
+			
 		});
+		auswahlBoxStatus();
+		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeMonteurTBL"));
+		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());
 	}
 
 	private void tabelleInArrayEinlesen() {
@@ -347,35 +327,37 @@ public class MonteurFenster extends JFrame {
 					String status = auftraegeMonteurTBL.getValueAt(i, 2).toString();
 					if (!auftrag.getStatus().equals(status)) {
 						auftrag.setStatus(status);
-						
-						
+
 						try {
 							ResultSet rs;
 							Statement stmt = db.getVerbindung().createStatement();
 
-							stmt.executeUpdate("UPDATE `auftrag` SET `Status` = '"+status+"' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
+							stmt.executeUpdate("UPDATE `auftrag` SET `Status` = '" + status
+									+ "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
 
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						
-						
-						
-						
+
 					}
 				}
 			}
 		}
 
 	}
-	
+
 	/**
 	 * Buttons in der Tabelle
 	 */
-	
+
 	class JButtonRenderer implements TableCellRenderer {
 
 		JButton button = new JButton();
+		String tabelle;
+
+		public JButtonRenderer(String string) {
+			this.tabelle = string;
+		}
 
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
@@ -388,7 +370,6 @@ public class MonteurFenster extends JFrame {
 
 	class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
 		JButton button;
-		String txt;
 
 		public JButtonEditor() {
 			super();
@@ -396,12 +377,13 @@ public class MonteurFenster extends JFrame {
 			button.setOpaque(true);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-						DetailsFenster frame = new DetailsFenster(auftraegeMonteurTBL.getEditingRow());
+						DetailsFenster frame = new DetailsFenster(welcherAuftrag(auftraegeMonteurTBL.getEditingRow()));
 						frame.setVisible(true);
 						auftraegeAktualisieren();
 				}
 			});
 		}
+			
 
 		@Override
 		public Object getCellEditorValue() {
@@ -416,4 +398,14 @@ public class MonteurFenster extends JFrame {
 			return button;
 		}
 	}
+	private Auftrag welcherAuftrag(int editingRow) {
+		for (Auftrag auftrag : db.getAuftragsListe()) {
+
+			if (auftraegeMonteurTBL.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())) {
+				return auftrag;
+			}
+		}
+		return null;
+	}
+
 }
