@@ -118,8 +118,8 @@ public class DisponentFenster extends JFrame {
 				monteureAktualisieren(); // Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
 											// passt sich an die neuen Zahlen an
 
-				System.out.println("----------------------------juhu----------------------");
-				db.getAuftragsListe().forEach(System.out::println);
+//				System.out.println("----------------------------juhu----------------------");
+//				db.getAuftragsListe().forEach(System.out::println);
 			}
 		});
 
@@ -239,22 +239,6 @@ public class DisponentFenster extends JFrame {
 		 * } });
 		 */
 
-		auftraegeTbl.getModel().addTableModelListener(new TableModelListener() { // test Pierre
-
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				// TODO Auto-generated method stub
-
-				int row = e.getFirstRow();
-
-				System.out.println(e.getFirstRow());
-
-				System.out.println(auftraegeTbl.getValueAt(row, 5));
-				System.out.println(auftraegeTbl.getValueAt(row, 1));
-
-			}
-
-		});
 		/*
 		 * auftraegeTbl.addMouseListener(new MouseAdapter() {// MouseListener für das
 		 * Fenster public void mouseClicked(MouseEvent e) { if (e.MOUSE_PRESSED == 501)
@@ -548,8 +532,8 @@ public class DisponentFenster extends JFrame {
 					String[] namentrennung = ausgewaehlterMonteur.split(" "); // Trennung in Vor und Nachname des
 																				// Monteurs
 
-					System.out.println(namentrennung[0]);
-					System.out.println(namentrennung[1]);
+					//System.out.println(namentrennung[0]);
+					//System.out.println(namentrennung[1]);
 
 					if (!namentrennung[1].equals(auftrag.getZustaendig().getName())) {
 						// vergleicht den zuständigen Monteur aus dem Auftrag aus der Tabelle mit dem

@@ -95,7 +95,7 @@ public class datenbankVerbindung {
 
 	}
 	
-	public void einlesen() {
+	public void einlesen() {  //Methode um alle Daten von der Datenbank neu einzulesen
 		auftraggeberEinlesen();
 		disponentEinlesen();
 		komponenteEinlesen();
@@ -103,7 +103,7 @@ public class datenbankVerbindung {
 		auftragEinlesen();
 	}
 
-	public void auftragEinlesen() {
+	public void auftragEinlesen() { //lieﬂt alle Auftr‰ge ein
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -114,7 +114,7 @@ public class datenbankVerbindung {
 				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
 				String[] komponentennrarray = rs.getString("Komponenten").split(",");
 
-				for (String ab : komponentennrarray) {
+				for (String ab : komponentennrarray) { //Passende Exemplare von Komponenten werden geuscht
 
 					for (int i = 0; i < komponentenListe.size(); i++) {
 						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {
@@ -125,23 +125,23 @@ public class datenbankVerbindung {
 
 				}
 
-				for (int i = 0; i < monteurListe.size(); i++) {
+				for (int i = 0; i < monteurListe.size(); i++) { //Passender Exemplare von Monteur wird gesucht
 
 					if (monteurListe.get(i).getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
 						indexmitarbeiter = i;
 					}
 				}
 
-				for (int i = 0; i < auftraggeberListe.size(); i++) {
+				for (int i = 0; i < auftraggeberListe.size(); i++) { //passender Exemplare von Auftraggeber wird gesucht
 
 					if (auftraggeberListe.get(i).getKundenNummer().equals(rs.getString("Auftraggeber"))) {
 						indexAuftraggeber = i;
 					}
 				}
 
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter), auftraggeberListe.get(indexAuftraggeber), komponentenlisteauftrag);
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter), auftraggeberListe.get(indexAuftraggeber), komponentenlisteauftrag); // Exemplar von Aftrag wird erstellt mit den Daten aus der Datenbank
 
-				auftragsListe.add(Auftrag);
+				auftragsListe.add(Auftrag); //Exexmplar Auftrag wird der auftragsListe hinzugef¸gt
 
 			}
 
@@ -156,15 +156,15 @@ public class datenbankVerbindung {
 
 	}
 
-	public void auftraggeberEinlesen() {
+	public void auftraggeberEinlesen() { //Auftraggeber werden eingelesen aus der Datenbank
 
 		try {
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftraggeber`");
 
 			while (rs.next()) {
-				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"), rs.getString("KundenNummer"));
-				auftraggeberListe.add(Auftraggeber);
+				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"), rs.getString("KundenNummer")); //Exemplar von Auftraggeber wird erstellt
+				auftraggeberListe.add(Auftraggeber); //Exemplar Auftraggeber wird der aufttragsliste hinzugef¸gt
 			}
 			//System.out.println("Auftraggeber einlesen:" + auftraggeberListe);
 
@@ -174,7 +174,7 @@ public class datenbankVerbindung {
 
 	}
 
-	public void disponentEinlesen() {
+	public void disponentEinlesen() { //Disponent wird eingelesen
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -183,8 +183,8 @@ public class datenbankVerbindung {
 			while (rs.next()) {
 
 				if (rs.getString("Rolle").equals("Disponent")) {
-					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), null);
-					disponentListe.add(Disponent);
+					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), null); //Exemplar von Disponent wird erstellt mit den Daten aus der Datenbank
+					disponentListe.add(Disponent); //Explar Disponent wird der disponentenListe hinzugef¸gt
 
 				}
 			}
@@ -196,7 +196,7 @@ public class datenbankVerbindung {
 
 	}
 
-	public void komponenteEinlesen() {
+	public void komponenteEinlesen() { //Komponenten werden eingelesen
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -217,7 +217,7 @@ public class datenbankVerbindung {
 		}
 	}
 
-	public void monteurEinlesen() {
+	public void monteurEinlesen() { // Monteure werden eingelesen
 
 		
 
@@ -232,17 +232,15 @@ public class datenbankVerbindung {
 				Statement stmte = verbindung.createStatement();
 				ResultSet rss;
 				rss = stmte.executeQuery("SELECT * FROM `schichtplan` WHERE `Mitarbeiternummer` = " + Mitarbeiternummer + "");
-
+				
+				//Schichtplan Array wird erstellt
+				
 				rss.next();
 				anwesenheit.add(rss.getString("Montag"));
 				anwesenheit.add(rss.getString("Dienstag"));
 				anwesenheit.add(rss.getString("Mittwoch"));
 				anwesenheit.add(rss.getString("Donnerstag"));
 				anwesenheit.add(rss.getString("Freitag"));
-				
-				
-				
-				System.out.println(anwesenheit);
 				
 				if (rs.getString("Rolle").equals("Monteur")) {
 					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), Mitarbeiternummer, rs.getString("Passwort"), anwesenheit);
