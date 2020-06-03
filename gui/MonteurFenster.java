@@ -143,11 +143,8 @@ public class MonteurFenster extends JFrame {
 				auftraegeAktualisieren();
 				auswahlBoxStatus();
 
-				System.out.println("--------------------aufträge-----------");
 
-				for (Auftrag auftrag : db.getAuftragsListe()) {
-					System.out.println(auftrag);
-				}
+				
 			}
 		});
 
@@ -232,12 +229,15 @@ public class MonteurFenster extends JFrame {
 	 * ************************************************************************************************
 	 */
 	private Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
-
-		zeilen = // wie viele zeilen hat die Tabelle(mit einem Collection.stream() ermittelt)
-				(int) db.getAuftragsListe().stream().filter(
-						(a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer())) // alle
-																														// Aufträge
-																														// von
+		db.getAuftragsListe().clear();   //alte liste löschen  
+		db.auftragEinlesen();//neu einlesen mit aktuellen daten
+		angepassteAuftragsListe.clear();     
+		
+		zeilen =(int) db.getAuftragsListe().stream().  
+				filter((a) ->( a.getStatus().equals("disponiert")   || a.getStatus().equals("Teile fehlen") )&&
+				 a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer()))
+				
+												                                                                    	// von
 																														// anderen
 																														// Monteuren
 																														// werden
@@ -251,13 +251,16 @@ public class MonteurFenster extends JFrame {
 																														// Eingabe
 																														// im
 																														// tf_MitarbeiterID.
-						.count(); // zählen der übrigen Aufträge
+				.count();	 // zählen der übrigen Aufträge
 
 //		angepassteAuftragsListe
 		db.getAuftragsListe().stream()
-				.filter((a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer())) // alle
+		 .filter((a) -> a.getStatus().equals("disponiert") || a.getStatus().equals("Teile fehlen"))
+				 .filter((a) ->
+				a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer()))
+						 // alle
 																														// Aufträge
-																														// von
+                                                    																	// von
 																														// anderen
 																														// Monteuren
 																														// werden
@@ -273,19 +276,24 @@ public class MonteurFenster extends JFrame {
 																														// tf_MitarbeiterID.
 				.forEach(angepassteAuftragsListe::add); // übrigen Aufträge werden der angepassten Auftragsliste
 														// hinzugefügt
-
+		
 		Object[][] auftraege = new Object[zeilen][6];// Struktur Tabelle
+		
 		for (int i = 0; i < zeilen; i++) {
-			auftraege[i][0] = details;
-			auftraege[i][1] = angepassteAuftragsListe.get(i).getAuftragsNummer();// angepassteAuftragsliste.get(zeile).getAuftragsnr()
-			auftraege[i][2] = angepassteAuftragsListe.get(i).getStatus();
-			auftraege[i][3] = angepassteAuftragsListe.get(i).getFrist();
-			auftraege[i][4] = angepassteAuftragsListe.get(i).getErstellungsdatum();
-			auftraege[i][5] = angepassteAuftragsListe.get(i).getAuftraggeber().getKundenNummer();
-		}
 
+				auftraege[i][0] = details;
+				auftraege[i][1] = angepassteAuftragsListe.get(i).getAuftragsNummer();// angepassteAuftragsliste.get(zeile).getAuftragsnr()
+				auftraege[i][2] = angepassteAuftragsListe.get(i).getStatus();
+				auftraege[i][3] = angepassteAuftragsListe.get(i).getFrist();
+				auftraege[i][4] = angepassteAuftragsListe.get(i).getErstellungsdatum();
+				auftraege[i][5] = angepassteAuftragsListe.get(i).getAuftraggeber().getKundenNummer();
+
+			 
+		
+		} 
 		return auftraege;
 	}
+
 
 	/**
 	 * *************************************************************************************************
