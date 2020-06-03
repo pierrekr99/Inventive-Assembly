@@ -92,6 +92,8 @@ public class DisponentFenster extends JFrame {
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		datumComboBox();
 
 		JButton logoutKnopf = new JButton("Logout");// Logout schlieﬂt das fenster und ÷ffnet das LoginFenster
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -121,40 +123,32 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 
-		datumComboBox();
-		
 		
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 391, Short.MAX_VALUE)
-							.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(dbAktualisierenKnopf)
-							.addGap(18)
-							.addComponent(logoutKnopf))
-						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(logoutKnopf)
-						.addComponent(dbAktualisierenKnopf)
-						.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
-					.addGap(6))
-		);
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 391, Short.MAX_VALUE)
+										.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(18).addComponent(dbAktualisierenKnopf).addGap(18)
+										.addComponent(logoutKnopf))
+								.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
+						.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf).addComponent(DatumCBox,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE).addGap(6)));
 
 		/**
 		 * Auftraege Reiter.
@@ -364,6 +358,8 @@ public class DisponentFenster extends JFrame {
 		summeAuftraege = 0;
 		return summe;
 	}
+	
+	
 
 	private Object[][] monteure() {// Erstellt Tabelle mit Monteuren
 		zeilenMonteure = db.getMonteurListe().size();
@@ -372,8 +368,8 @@ public class DisponentFenster extends JFrame {
 			monteure[i][0] = db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName();
 			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();// Auftragsliste.get(zeile).getAuftragsnr()
 
-			if (getIndexWochentag() <= 4) {// f¸r Montag bis Freitag
-				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(getIndexWochentag()); 
+			if (indexWochentag <= 4) {// f¸r Montag bis Freitag
+				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(indexWochentag);
 				// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
 			} else { // Samstag und Sonntag wird die komplette Liste angezeigt
 				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
@@ -622,25 +618,33 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 	
+	public int indexWochentag = 0;
 	private void datumComboBox() { // ComboBox um das Datum auw‰hlen zu kˆnnen
-		
-		String[] Datum = {datumAlsStringBekommen(),naechsterTag()};
+		String[] Datum = { datumAlsStringBekommen(), naechsterTag() };
 		DatumCBox = new JComboBox(Datum);
-		
-//		DatumCBox.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//				String wochentag = "";
-//				String [] gewaehltesDatum = DatumCBox.getSelectedItem().toString().split(",");
-//				wochentag = gewaehltesDatum[0];
-//			}
-//		});
-		
 		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		DatumCBox.setSelectedIndex(0);
 		
-		
-		
-		
+		DatumCBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem(); // liest Datum als String aus
+				String [] ausgewaelterWochentag = ausgewaeltesDatum.split(","); // wochentag und datum wird getrennt
+				
+				String s = ausgewaelterWochentag[0]; // nur der wochentag wird in s gespeichert
+				
+				switch (s) { // index f¸r wochentag. wird benˆtigt um verf¸gbarkeit der monteure aufrufen zu kˆnnen
+				case "Montag":indexWochentag = 0;break;		
+				case "Dienstag":indexWochentag = 1;break;
+				case "Mittwoch":indexWochentag = 2;break;
+				case "Donnerstag":indexWochentag = 3;break;
+				case "Freitag":indexWochentag = 4;break;
+				case "Samstag":indexWochentag = 5;break;
+				case "Sonntag":indexWochentag = 6;break;
+				default:indexWochentag = 6;break;
+				}
+			}
+		});
 		
 	}
 
@@ -648,55 +652,15 @@ public class DisponentFenster extends JFrame {
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht f¸r den Wochentag
 		return f.format(new Date());
 	}
-	
+
 	private String naechsterTag() { // gibt heutiges Datum zur¸ck
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht f¸r den Wochentag
 		Date morgen = new Date();
-		
-		Calendar c = Calendar.getInstance(); 
-		c.setTime(morgen); 
+		Calendar c = Calendar.getInstance();
+		c.setTime(morgen);
 		c.add(Calendar.DATE, 1);
 		morgen = c.getTime();
-		
+
 		return f.format(morgen);
-	}
-
-	private int getIndexWochentag() {// gibt Zahl des Wochentags zur¸ck (0-4)
-
-		
-		
-		DateFormat f = new SimpleDateFormat("EEEE");
-		String s = f.format(new Date());
-		int i = 0;
-
-		switch (s) {
-		case "Montag":
-			i = 0;
-			break;
-		case "Dienstag":
-			i = 1;
-			break;
-		case "Mittwoch":
-			i = 2;
-			break;
-		case "Donnerstag":
-			i = 3;
-			break;
-		case "Freitag":
-			i = 4;
-			break;
-		case "Samstag":
-			i = 5;
-			break;
-		case "Sonntag":
-			i = 6;
-			break;
-		default:
-			i = 6;
-			break;
-		}
-
-		return i;
-
 	}
 }
