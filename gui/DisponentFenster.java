@@ -92,7 +92,7 @@ public class DisponentFenster extends JFrame {
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
+
 		datumComboBox();
 
 		JButton logoutKnopf = new JButton("Logout");// Logout schließt das fenster und Öffnet das LoginFenster
@@ -122,8 +122,6 @@ public class DisponentFenster extends JFrame {
 //				db.getAuftragsListe().forEach(System.out::println);
 			}
 		});
-
-		
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -342,8 +340,6 @@ public class DisponentFenster extends JFrame {
 		summeAuftraege = 0;
 		return summe;
 	}
-	
-	
 
 	private Object[][] monteure() {// Erstellt Tabelle mit Monteuren
 		zeilenMonteure = db.getMonteurListe().size();
@@ -532,8 +528,8 @@ public class DisponentFenster extends JFrame {
 					String[] namentrennung = ausgewaehlterMonteur.split(" "); // Trennung in Vor und Nachname des
 																				// Monteurs
 
-					//System.out.println(namentrennung[0]);
-					//System.out.println(namentrennung[1]);
+					// System.out.println(namentrennung[0]);
+					// System.out.println(namentrennung[1]);
 
 					if (!namentrennung[1].equals(auftrag.getZustaendig().getName())) {
 						// vergleicht den zuständigen Monteur aus dem Auftrag aus der Tabelle mit dem
@@ -556,26 +552,24 @@ public class DisponentFenster extends JFrame {
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
+							}
+							int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream()
+									.filter((k) -> k.isVerfuegbarkeit()).count(); // überprüfen, ob alle Komponenten
+																					// des Auftrags verfügbar sind
+							System.out.println(verfuegbareKomponenten);
+							if (verfuegbareKomponenten == 5) {
+								auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
 
-								int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream()
-										.filter((k) -> k.isVerfuegbarkeit()).count(); // überprüfen, ob alle Komponenten
-																						// des Auftrags verfügbar sind
+								try {
+									ResultSet rs;
+									Statement stmt = db.getVerbindung().createStatement();
 
-								if (verfuegbareKomponenten == 5) {
-									auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
+									stmt.executeUpdate(
+											"UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
+													+ auftrag.getAuftragsNummer() + "');");
 
-									try {
-										ResultSet rs;
-										Statement stmt = db.getVerbindung().createStatement();
-
-										stmt.executeUpdate(
-												"UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
-														+ auftrag.getAuftragsNummer() + "');");
-
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-
+								} catch (Exception e) {
+									e.printStackTrace();
 								}
 
 							} else {
@@ -601,35 +595,53 @@ public class DisponentFenster extends JFrame {
 			}
 		}
 	}
-	
+
 	public int indexWochentag = 0;
+
 	private void datumComboBox() { // ComboBox um das Datum auwählen zu können
 		String[] Datum = { datumAlsStringBekommen(), naechsterTag() };
 		DatumCBox = new JComboBox(Datum);
 		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		DatumCBox.setSelectedIndex(0);
-		
+
 		DatumCBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem(); // liest Datum als String aus
-				String [] ausgewaelterWochentag = ausgewaeltesDatum.split(","); // wochentag und datum wird getrennt
-				
+				String[] ausgewaelterWochentag = ausgewaeltesDatum.split(","); // wochentag und datum wird getrennt
+
 				String s = ausgewaelterWochentag[0]; // nur der wochentag wird in s gespeichert
-				
-				switch (s) { // index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu können
-				case "Montag":indexWochentag = 0;break;		
-				case "Dienstag":indexWochentag = 1;break;
-				case "Mittwoch":indexWochentag = 2;break;
-				case "Donnerstag":indexWochentag = 3;break;
-				case "Freitag":indexWochentag = 4;break;
-				case "Samstag":indexWochentag = 5;break;
-				case "Sonntag":indexWochentag = 6;break;
-				default:indexWochentag = 6;break;
+
+				switch (s) { // index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
+								// können
+				case "Montag":
+					indexWochentag = 0;
+					break;
+				case "Dienstag":
+					indexWochentag = 1;
+					break;
+				case "Mittwoch":
+					indexWochentag = 2;
+					break;
+				case "Donnerstag":
+					indexWochentag = 3;
+					break;
+				case "Freitag":
+					indexWochentag = 4;
+					break;
+				case "Samstag":
+					indexWochentag = 5;
+					break;
+				case "Sonntag":
+					indexWochentag = 6;
+					break;
+				default:
+					indexWochentag = 6;
+					break;
 				}
 			}
 		});
-		
+
 	}
 
 	private String datumAlsStringBekommen() { // gibt heutiges Datum zurück
