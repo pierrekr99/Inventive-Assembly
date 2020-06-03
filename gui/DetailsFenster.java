@@ -107,7 +107,7 @@ public class DetailsFenster extends JFrame {
 					int row1 = target.getSelectedRow();// wo wurde geklickt
 					int column = target.getSelectedColumn();
 					// do some action if appropriate column
-					if (column == 4 && tKomponenten.getValueAt(row1, column).equals(false)) {// wenn man in der
+					if (column == 4 && tKomponenten.getValueAt(row1, column).equals("nicht verfügbar")) {// wenn man in der
 																								// Verfügbarkeitsspalte
 						// klickt und die verfügbarkeit
 						// false ist
@@ -189,7 +189,14 @@ public class DetailsFenster extends JFrame {
 			komponenten[i][1] = auftrag.getKomponenten().get(i).getName();
 			komponenten[i][2] = auftrag.getKomponenten().get(i).getAttribut();
 			komponenten[i][3] = auftrag.getKomponenten().get(i).getKategorie();
-			komponenten[i][4] = auftrag.getKomponenten().get(i).isVerfuegbarkeit();
+			
+			if(auftrag.getKomponenten().get(i).isVerfuegbarkeit() == true) {
+				komponenten[i][4] = "verfügbar";
+			}else {
+				komponenten[i][4] = "nicht verfügbar";
+			}
+			
+			
 
 		}
 
