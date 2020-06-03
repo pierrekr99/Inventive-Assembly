@@ -113,7 +113,7 @@ public class DisponentFenster extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				tabelleInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird
 											// ggf. überschrieben
-				
+
 				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft und ggf. überschrieben
 				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
 											// des Monteurs automatisch mitüberschrieben
@@ -487,15 +487,13 @@ public class DisponentFenster extends JFrame {
 						auftraegeAktualisieren();
 
 					} else {
-						AuftraegeListeFenster frame = new AuftraegeListeFenster(welcherMonteur(monteureTbl.getEditingRow()));
+						AuftraegeListeFenster frame = new AuftraegeListeFenster(
+								welcherMonteur(monteureTbl.getEditingRow()));
 						frame.setVisible(true);
 						monteureAktualisieren();
 					}
 
 				}
-
-
-
 
 			});
 		}
@@ -510,12 +508,13 @@ public class DisponentFenster extends JFrame {
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
 				int column) {
 			button.setText(details);
-			if(table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
-					button.setText("Aufträge anzeigen [" + summeAuftraege(row) + "]");
+			if (table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
+				button.setText("Aufträge anzeigen [" + summeAuftraege(row) + "]");
 			}
 			return button;
 		}
 	}
+
 	private Auftrag welcherAuftrag(int editingRow) {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
 
@@ -525,6 +524,7 @@ public class DisponentFenster extends JFrame {
 		}
 		return null;
 	}
+
 	private Mitarbeiter welcherMonteur(int editingRow) {
 		for (Mitarbeiter monteur : db.getMonteurListe()) {
 
@@ -610,7 +610,7 @@ public class DisponentFenster extends JFrame {
 					e.printStackTrace();
 				}
 
-			} else if(verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")){
+			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")) {
 				auftrag.setStatus("Teile fehlen"); // falls nein, wird der Status in Teile fehlen
 				// geändert
 				try {
@@ -626,12 +626,43 @@ public class DisponentFenster extends JFrame {
 			}
 		}
 	}
-	
 
 	public int indexWochentag = 0;
 
 	private void datumComboBox() { // ComboBox um das Datum auwählen zu können
-		String[] Datum = { datumAlsStringBekommen(), naechsterTag() };
+
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht für den Wochentag
+		Calendar c = Calendar.getInstance();
+
+		Date datum = new Date();
+
+		String tag1 = datumAlsStringBekommen(datum);
+
+		c.setTime(datum);
+		c.add(Calendar.DATE, 1);
+		datum = c.getTime();
+
+		String tag2 = f.format(datum);
+
+		c.setTime(datum);
+		c.add(Calendar.DATE, 1);
+		datum = c.getTime();
+
+		String tag3 = f.format(datum);
+
+		c.setTime(datum);
+		c.add(Calendar.DATE, 1);
+		datum = c.getTime();
+
+		String tag4 = f.format(datum);
+
+		c.setTime(datum);
+		c.add(Calendar.DATE, 1);
+		datum = c.getTime();
+
+		String tag5 = f.format(datum);
+
+		String[] Datum = { tag1, tag2, tag3, tag4, tag5 };
 		DatumCBox = new JComboBox(Datum);
 		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		DatumCBox.setSelectedIndex(0);
@@ -676,19 +707,10 @@ public class DisponentFenster extends JFrame {
 
 	}
 
-	private String datumAlsStringBekommen() { // gibt heutiges Datum zurück
+	private String datumAlsStringBekommen(Date date) { // gibt heutiges Datum zurück
+
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht für den Wochentag
-		return f.format(new Date());
+		return f.format(date);
 	}
 
-	private String naechsterTag() { // gibt heutiges Datum zurück
-		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht für den Wochentag
-		Date morgen = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(morgen);
-		c.add(Calendar.DATE, 1);
-		morgen = c.getTime();
-
-		return f.format(morgen);
-	}
 }
