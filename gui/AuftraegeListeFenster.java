@@ -35,18 +35,19 @@ public class AuftraegeListeFenster extends JFrame {
 	private JPanel contentPane;
 	private JTable tabelle;
 	private int zeilenTabelle = 0;
+	int summeAuftraege = 0;
 	private int zeile = 0;
-	Mitarbeiter monteur;
+	Mitarbeiter monteure;
 
 	/**
 	 * Launch the application.
 	 */
-	/*
+/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AuftraegeListeFenster frame = new AuftraegeListeFenster(1);
+					AuftraegeListeFenster frame = new AuftraegeListeFenster(db.getMonteurListe().get(1));
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,6 +60,7 @@ public class AuftraegeListeFenster extends JFrame {
 	 * Create the frame.
 	 */
 	public AuftraegeListeFenster(Mitarbeiter monteur) {
+		monteure = monteur;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1200, 300);
 		contentPane = new JPanel();
@@ -80,26 +82,19 @@ public class AuftraegeListeFenster extends JFrame {
 												// Aufträge nach diesem Attribut
 												// in der natürlichen Ordnung und umgekehrt sortiert
 		/*
-		tabelle.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
-			public void mouseClicked(MouseEvent e) {
-				if (e.MOUSE_PRESSED == 501) {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht
-												// dazu)
-					JTable target = (JTable) e.getSource();
-					int row = target.getSelectedRow();// wo wurde geklickt
-					int column = target.getSelectedColumn();
-					// do some action if appropriate column
-					if (column == 0) {// wenn in DetailsSpalte
-//						detailsFenster();//Detailsfenster wird geöffnet
-						DetailsFenster frame = new DetailsFenster(row); // reihe des Auftrags wird übergeben um details aufrufen zu können
-						frame.setVisible(true);
-					}
-				}
-			}
-		});
-		*/
+		 * tabelle.addMouseListener(new MouseAdapter() {// MouseListener für das Fenster
+		 * public void mouseClicked(MouseEvent e) { if (e.MOUSE_PRESSED == 501) {// Wenn
+		 * die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht // dazu)
+		 * JTable target = (JTable) e.getSource(); int row = target.getSelectedRow();//
+		 * wo wurde geklickt int column = target.getSelectedColumn(); // do some action
+		 * if appropriate column if (column == 0) {// wenn in DetailsSpalte //
+		 * detailsFenster();//Detailsfenster wird geöffnet DetailsFenster frame = new
+		 * DetailsFenster(row); // reihe des Auftrags wird übergeben um details aufrufen
+		 * zu können frame.setVisible(true); } } } });
+		 */
 		monteureTblFormat();
 	}
-	
+
 	private void monteureTblFormat() {
 		tabelle.getColumnModel().getColumn(0).setPreferredWidth(150);
 		tabelle.getColumnModel().getColumn(0).setMinWidth(150);
@@ -116,7 +111,7 @@ public class AuftraegeListeFenster extends JFrame {
 		tabelle.getColumnModel().getColumn(3).setPreferredWidth(100);
 		tabelle.getColumnModel().getColumn(3).setMinWidth(200);
 		tabelle.getColumnModel().getColumn(3).setMaxWidth(200);
-		
+
 		tabelle.getColumnModel().getColumn(2).setPreferredWidth(100);
 		tabelle.getColumnModel().getColumn(2).setMinWidth(200);
 		tabelle.getColumnModel().getColumn(2).setMaxWidth(200);
@@ -127,19 +122,17 @@ public class AuftraegeListeFenster extends JFrame {
 
 		tabelle.setRowHeight(50);
 	}
-	
+
 	private Object[][] tabelle(Mitarbeiter monteur) {
 		int zeile = 0;
-		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
-			if (monteur.getMitarbeiterNummer()
-					.equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer())) {
-				zeilenTabelle++;
+		for (int i = 0; i < db.getMonteurListe().size(); i++) {
+			if (richtigerMonteur(i)) {
+				zeilenTabelle = summeAuftraege(monteur);
 			}
 		}
 		Object[][] auftraege = new Object[zeilenTabelle][6];
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
-			if (monteur.getMitarbeiterNummer()
-					.equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer())) {
+			if (richtigerAuftrag(i)) {
 				auftraege[zeile][0] = "Details";
 				auftraege[zeile][1] = db.getAuftragsListe().get(i).getAuftragsNummer();
 				auftraege[zeile][2] = db.getAuftragsListe().get(i).getStatus();
@@ -148,14 +141,14 @@ public class AuftraegeListeFenster extends JFrame {
 				auftraege[zeile][5] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
 				zeile++;
 			}
-			}
+		}
 		zeile = 0;
-		zeilenTabelle=0;
+		zeilenTabelle = 0;
 		return auftraege;
 	}
 
 	private void tabelleAktualisieren(Mitarbeiter monteur) {
-		
+
 		tabelle.setModel(new DefaultTableModel(tabelle(monteur), // Benötigter Inhalt: (String[][],String[])
 				// Sonst wird hier ein eigenes Modell Eingefügt
 				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "Auftragsgeber" }) {
@@ -169,11 +162,38 @@ public class AuftraegeListeFenster extends JFrame {
 		tabelle.getColumn(tabelle.getColumnName(0)).setCellRenderer(new JButtonRenderer());
 		tabelle.getColumn(tabelle.getColumnName(0)).setCellEditor(new JButtonEditor());
 	}
+
+	private boolean richtigerAuftrag(int i) {
+		return monteure.getMitarbeiterNummer().equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer());
+	}
+
+	private boolean richtigerMonteur(int i) {
+		return 
+				monteure.getMitarbeiterNummer().equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer());
+	}
 	
+	private int summeAuftraege(Mitarbeiter monteur) {// zählt die zugehörigen Aufträge des Monteurs
+		int summe;
+		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
+			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
+					.equals(monteur.getMitarbeiterNummer())) {
+				/*
+				 * Hier wird die MitarbeiterNummer des Zuständigen Mitarbeiter in einem Auftrag
+				 * mit der Mitarbeiter einse Mitarbeiters aus Der Datenbank Verglichen und wenn
+				 * diese Übereinstimmen wird Hochgezählt.
+				 */
+				summeAuftraege = summeAuftraege + 1;
+			}
+		}
+		summe = summeAuftraege;
+		summeAuftraege = 0;
+		return summe;
+	}
+
 	/**
 	 * Buttons in der Tabelle
 	 */
-	
+
 	class JButtonRenderer implements TableCellRenderer {
 
 		JButton button = new JButton();
@@ -198,12 +218,13 @@ public class AuftraegeListeFenster extends JFrame {
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Auftrag auftrag = welcherAuftrag(tabelle.getEditingRow());
-						DetailsFenster frame = new DetailsFenster(auftrag);
-						frame.setVisible(true);
-						tabelleAktualisieren(monteur);
+					DetailsFenster frame = new DetailsFenster(auftrag);
+					frame.setVisible(true);
+					tabelleAktualisieren(monteure);
 				}
 			});
 		}
+
 		private Auftrag welcherAuftrag(int editingRow) {
 			for (Auftrag auftrag : db.getAuftragsListe()) {
 
