@@ -508,7 +508,7 @@ public class DisponentFenster extends JFrame {
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
 				int column) {
 			button.setText(details);
-			if (table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
+			if (table.getRowCount()==monteureTbl.getRowCount()&&table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
 				button.setText("Aufträge anzeigen [" + summeAuftraege(welcherMonteur(row)) + "]");
 			}
 			return button;
