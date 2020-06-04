@@ -215,7 +215,7 @@ public class MonteurFenster extends JFrame {
 
 		auswahlBoxStatus.addItem("Teile fehlen");
 		auswahlBoxStatus.addItem("disponiert");
-		auswahlBoxStatus.addItem("Im Lager");
+		auswahlBoxStatus.addItem("im Lager");
 
 		TableColumn statusSpalte = auftraegeMonteurTBL.getColumnModel().getColumn(2);// auskommentiert weil das bei
 																						// design ansicht weggemacht
