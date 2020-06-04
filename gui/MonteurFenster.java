@@ -323,6 +323,7 @@ public class MonteurFenster extends JFrame {
 			}
 			
 		});
+		auftraegeMonteurTBL.getTableHeader().setReorderingAllowed(false);
 		auswahlBoxStatus();
 		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeMonteurTBL"));
 		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());

@@ -290,6 +290,7 @@ public class DisponentFenster extends JFrame {
 		monteureTbl.getColumnModel().getColumn(3).setMaxWidth(500);
 
 		monteureTbl.setRowHeight(50);
+		monteureTbl.getTableHeader().setReorderingAllowed(false);
 	}
 
 	private void auftraegeTblFormat() {
@@ -326,6 +327,7 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.getColumnModel().getColumn(7).setMaxWidth(200);
 
 		auftraegeTbl.setRowHeight(50);
+		auftraegeTbl.getTableHeader().setReorderingAllowed(false);
 	}
 
 	private String summeAuftraege(Mitarbeiter monteur) {// zählt die zugehörigen Aufträge des Monteurs
