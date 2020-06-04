@@ -111,7 +111,7 @@ public class DisponentFenster extends JFrame {
 		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tabelleInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird
+				monteureInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird
 											// ggf. überschrieben
 
 				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft und ggf. überschrieben
@@ -539,7 +539,7 @@ public class DisponentFenster extends JFrame {
 	 * Tabelle in Array Einlesen
 	 */
 
-	private void tabelleInArrayEinlesen() {
+	private void monteureInArrayEinlesen() {
 
 		for (int i = 0; i < zeilen; i++) {
 
