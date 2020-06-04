@@ -111,10 +111,12 @@ public class DisponentFenster extends JFrame {
 		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft und ggf. überschrieben
 				monteureInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird
 											// ggf. überschrieben
 
-				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft und ggf. überschrieben
+				
 				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
 											// des Monteurs automatisch mitüberschrieben
 
@@ -579,9 +581,41 @@ public class DisponentFenster extends JFrame {
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
-							}
+							}//1
 							// hier
-						}
+							int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
+									.count(); // überprüfen, ob alle Komponenten
+												// des Auftrags verfügbar sind
+
+							if (verfuegbareKomponenten == 5 ) {
+								auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
+
+								try {
+									ResultSet rs;
+									Statement stmt = db.getVerbindung().createStatement();
+
+									stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
+											+ auftrag.getAuftragsNummer() + "');");
+
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+
+							} else if (verfuegbareKomponenten != 5) {
+								auftrag.setStatus("Teile fehlen"); // falls nein, wird der Status in Teile fehlen
+								// geändert
+								try {
+									ResultSet rs;
+									Statement stmt = db.getVerbindung().createStatement();
+
+									stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
+											+ auftrag.getAuftragsNummer() + "');");
+
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}//2
 					}
 					;
 				}
