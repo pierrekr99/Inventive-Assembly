@@ -326,11 +326,11 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.setRowHeight(50);
 	}
 
-	private String summeAuftraege(int i) {// zählt die zugehörigen Aufträge des Monteurs
+	private String summeAuftraege(Mitarbeiter monteur) {// zählt die zugehörigen Aufträge des Monteurs
 		String summe;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
 			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
-					.equals(db.getMonteurListe().get(i).getMitarbeiterNummer())) {
+					.equals(monteur.getMitarbeiterNummer())) {
 				/*
 				 * Hier wird die MitarbeiterNummer des Zuständigen Mitarbeiter in einem Auftrag
 				 * mit der Mitarbeiter einse Mitarbeiters aus Der Datenbank Verglichen und wenn
@@ -358,7 +358,7 @@ public class DisponentFenster extends JFrame {
 				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
 			}
 
-			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(i) + "]";// Dropdown fehlt noch
+			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";// Dropdown fehlt noch
 
 		}
 		return monteure;
@@ -467,7 +467,7 @@ public class DisponentFenster extends JFrame {
 			table.setGridColor(Color.LIGHT_GRAY);
 			button.setText(details);
 			if (tabelle.equals("monteureTbl"))
-				button.setText("Aufträge anzeigen [" + summeAuftraege(row) + "]");
+				button.setText("Aufträge anzeigen [" + summeAuftraege(welcherMonteur(row)) + "]");
 			return button;
 		}
 	}
@@ -509,7 +509,7 @@ public class DisponentFenster extends JFrame {
 				int column) {
 			button.setText(details);
 			if (table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
-				button.setText("Aufträge anzeigen [" + summeAuftraege(row) + "]");
+				button.setText("Aufträge anzeigen [" + summeAuftraege(welcherMonteur(row)) + "]");
 			}
 			return button;
 		}
