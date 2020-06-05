@@ -15,6 +15,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.swing.AbstractCellEditor;
@@ -338,6 +340,18 @@ public class DisponentFenster extends JFrame {
 			monteureCombobox
 					.addItem(db.getMonteurListe().get(i).getName()+ " " + db.getMonteurListe().get(i).getVorname());
 		}
+		Collections.sort(db.getMonteurListe(), new Comparator<Mitarbeiter>() {
+
+
+
+            @Override
+            public int compare(Mitarbeiter o1, Mitarbeiter o2) {
+                // TODO Auto-generated method stub
+                return o1.getName().compareTo(o2.getName());
+
+
+            }
+        });
 	}
 
 	public Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
