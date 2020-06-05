@@ -13,7 +13,7 @@ public class Mitarbeiter {
 	private String vorname;
 	private String mitarbeiterNummer;
 	private String passwort;
-	private ArrayList<String> anwesenheit; // Montag bis Freitag
+	private ArrayList<String> anwesenheit; // Montag bis Freitag, dargestellt in der DB
 	
 	/** *****************************************************
 	 *	Konstruktor
