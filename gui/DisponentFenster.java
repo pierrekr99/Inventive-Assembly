@@ -63,8 +63,7 @@ public class DisponentFenster extends JFrame {
 	JComboBox DatumCBox;
 	TableColumn monteureColumn;
 
-//	private boolean sortiert = false;
-//	private boolean sortiert1 = false;
+
 
 	/**
 	 * Launch the application.
@@ -197,51 +196,7 @@ public class DisponentFenster extends JFrame {
 
 		contentPane.setLayout(gl_contentPane);
 
-		/*
-		 * monteureTbl.getTableHeader().addMouseListener(new MouseAdapter() {
-		 * 
-		 * @Override public void mouseClicked(MouseEvent e) { int spalte =
-		 * monteureTbl.columnAtPoint(e.getPoint());
-		 * 
-		 * if (spalte == 0) { if (!sortiert) {
-		 * monteureTbl.setAutoCreateRowSorter(false); db.getMonteurListe().sort((o1, o2)
-		 * -> { return o1.getName() .compareTo(o2.getName()); });
-		 * 
-		 * sortiert = true; } else if (sortiert) {
-		 * monteureTbl.setAutoCreateRowSorter(false); db.getMonteurListe().sort((o1, o2)
-		 * -> { return o1.getName() .compareTo(o2.getName()) * -1; }); sortiert = false;
-		 * }
-		 * 
-		 * 
-		 * monteureAktualisieren(); monteureTbl.setAutoCreateRowSorter(true);
-		 * 
-		 * }
-		 * 
-		 * } });
-		 * 
-		 * auftraegeTbl.getTableHeader().addMouseListener(new MouseAdapter() {
-		 * 
-		 * @Override public void mouseClicked(MouseEvent e) { int spalte1 =
-		 * auftraegeTbl.columnAtPoint(e.getPoint());
-		 * 
-		 * if (spalte1 == 5) { if (!sortiert1) {
-		 * auftraegeTbl.setAutoCreateRowSorter(false); db.getAuftragsListe().sort((o1,
-		 * o2) -> { return o1.getZustaendig().getName()
-		 * .compareTo(o2.getZustaendig().getName()); });
-		 * 
-		 * sortiert1 = true; } else if (sortiert1) {
-		 * auftraegeTbl.setAutoCreateRowSorter(false); db.getAuftragsListe().sort((o1,
-		 * o2) -> { return o1.getZustaendig().getName()
-		 * .compareTo(o2.getZustaendig().getName()); }); sortiert1 = false; }
-		 * 
-		 * 
-		 * monteureAktualisieren(); auftraegeTbl.setAutoCreateRowSorter(true);
-		 * 
-		 * }
-		 * 
-		 * } });
-		 */
-
+		
 		/*
 		 * auftraegeTbl.addMouseListener(new MouseAdapter() {// MouseListener für das
 		 * Fenster public void mouseClicked(MouseEvent e) { if (e.MOUSE_PRESSED == 501)
@@ -352,7 +307,7 @@ public class DisponentFenster extends JFrame {
 		zeilenMonteure = db.getMonteurListe().size();
 		Object[][] monteure = new Object[zeilenMonteure][4];// Nur das wird später eingelesen
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			monteure[i][0] = db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName();
+			monteure[i][0] = db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname();
 			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();// Auftragsliste.get(zeile).getAuftragsnr()
 
 			if (indexWochentag <= 4) {// für Montag bis Freitag
@@ -383,7 +338,7 @@ public class DisponentFenster extends JFrame {
 		monteureCombobox.removeAllItems();
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
 			monteureCombobox
-					.addItem(db.getMonteurListe().get(i).getVorname() + " " + db.getMonteurListe().get(i).getName());
+					.addItem(db.getMonteurListe().get(i).getName()+ " " + db.getMonteurListe().get(i).getVorname());
 		}
 	}
 
@@ -400,8 +355,8 @@ public class DisponentFenster extends JFrame {
 			auftraege[i][6] = "";
 			auftraege[i][7] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
 			if (db.getAuftragsListe().get(i).getZustaendig() != null) {
-				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getVorname() + " "
-						+ db.getAuftragsListe().get(i).getZustaendig().getName();
+				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + " "
+						+ db.getAuftragsListe().get(i).getZustaendig().getVorname();
 				auftraege[i][6] = db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer();
 			}
 		}
@@ -559,16 +514,14 @@ public class DisponentFenster extends JFrame {
 					String[] namentrennung = ausgewaehlterMonteur.split(" "); // Trennung in Vor und Nachname des
 																				// Monteurs
 
-					// System.out.println(namentrennung[0]);
-					// System.out.println(namentrennung[1]);
 
-					if (!namentrennung[1].equals(auftrag.getZustaendig().getName())) {
+					if (!namentrennung[0].equals(auftrag.getZustaendig().getName())) {
 						// vergleicht den zuständigen Monteur aus dem Auftrag aus der Tabelle mit dem
 						// gleichen Auftrag aus der DB, bei Unstimmigkeit wird neuer String erstellt.
 
 						for (Mitarbeiter monteur : db.getMonteurListe()) {
 
-							if (monteur.getName().equals(namentrennung[1])) { // ermitteln der Monteurdaten durch
+							if (monteur.getName().equals(namentrennung[0])) { // ermitteln der Monteurdaten durch
 																				// Namensabgleich in Monteurliste
 								auftrag.setZustaendig(monteur); // neuer zuständiger Monteur wird eingetragen
 
