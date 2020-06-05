@@ -105,25 +105,23 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 
-		JButton dbAktualisierenKnopf = new JButton("DB aktualisieren");
+		JButton dbAktualisierenKnopf = new JButton("Aktualisieren");
 
 		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft und ggf. überschrieben
-				monteureInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, diese wird
-											// ggf. überschrieben
+				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile werden überprüft)  und ggf. überschrieben
+				monteureInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
+											// ggf. ein neuer Monteur zugewiesen (stimmt dann wieder mit der Tabelle ein)
 
 				
 				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
-											// des Monteurs automatisch mitüberschrieben
+											// des Monteurs automatisch mitüberschrieben, auch der Status wird überprüft
 
 				monteureAktualisieren(); // Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
 											// passt sich an die neuen Zahlen an
 
-//				System.out.println("----------------------------juhu----------------------");
-//				db.getAuftragsListe().forEach(System.out::println);
 			}
 		});
 
