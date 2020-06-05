@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 public class Mitarbeiter {
 
-//	Attribute
+	/** *****************************************************
+	 *	Attribute
+	 	*****************************************************/
+	
 	private String rolle;
 	private String name;
 	private String vorname;
@@ -12,7 +15,10 @@ public class Mitarbeiter {
 	private String passwort;
 	private ArrayList<String> anwesenheit; // Montag bis Freitag
 	
-
+	/** *****************************************************
+	 *	Konstruktor
+	 	*****************************************************/
+	
 	public Mitarbeiter(String rolle, String name, String vorname, String mitarbeiterNummer, String passwort, ArrayList<String> anwesenheit) {
 		super();
 		this.rolle = rolle;
@@ -21,8 +27,11 @@ public class Mitarbeiter {
 		this.mitarbeiterNummer = mitarbeiterNummer;
 		this.passwort = passwort;
 		this.anwesenheit = anwesenheit;
-		
 	}
+	
+	/** *****************************************************
+	 *	Getter + Setter
+	 	*****************************************************/
 
 	public String getName() {
 		return name;
@@ -72,6 +81,10 @@ public class Mitarbeiter {
 		this.rolle = rolle;
 	}
 
+	/** *****************************************************
+	 *	toString Methode
+	 	*****************************************************/
+	
 	@Override
 	public String toString() {
 		return "Mitarbeiter [rolle=" + rolle + ", name=" + name + ", vorname=" + vorname + ", mitarbeiterNummer="

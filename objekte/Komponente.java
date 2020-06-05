@@ -4,13 +4,20 @@ import java.util.Comparator;
 
 public class Komponente {
 
-//	Attribute
+	/** *****************************************************
+	 *	Attribute
+	 	*****************************************************/
+	
 	private String name;
 	private String komponentenNummer;
 	private boolean verfuegbarkeit;
 	private String kategorie;
 	private String attribut;
 
+	/** *****************************************************
+	 *	Konstruktor
+	 	*****************************************************/
+	
 	public Komponente(String name, String komponentenNummer, boolean verfuegbarkeit, String kategorie,
 			String attribut) {
 		super();
@@ -20,6 +27,10 @@ public class Komponente {
 		this.kategorie = kategorie;
 		this.attribut = attribut;
 	}
+	
+	/** *****************************************************
+	 *	Getter + Setter
+	 	*****************************************************/
 
 	public String getAttribut() {
 		return attribut;
@@ -45,6 +56,10 @@ public class Komponente {
 		return kategorie;
 	}
 
+	/** *****************************************************
+	 *	toString Methode
+	 	*****************************************************/
+	
 	@Override
 	public String toString() {
 		return "Komponente [name=" + name + ", komponentenNummer=" + komponentenNummer + ", verfuegbarkeit="

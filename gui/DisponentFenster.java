@@ -63,8 +63,6 @@ public class DisponentFenster extends JFrame {
 	JComboBox DatumCBox;
 	TableColumn monteureColumn;
 
-
-
 	/**
 	 * Launch the application.
 	 */
@@ -110,12 +108,13 @@ public class DisponentFenster extends JFrame {
 		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile werden überprüft)  und ggf. überschrieben
-				monteureInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
-											// ggf. ein neuer Monteur zugewiesen (stimmt dann wieder mit der Tabelle ein)
 
-				
+				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile
+										// werden überprüft) und ggf. überschrieben
+				monteureInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
+											// ggf. ein neuer Monteur zugewiesen (stimmt dann wieder mit der Tabelle
+											// ein)
+
 				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
 											// des Monteurs automatisch mitüberschrieben, auch der Status wird überprüft
 
@@ -194,31 +193,6 @@ public class DisponentFenster extends JFrame {
 
 		contentPane.setLayout(gl_contentPane);
 
-		
-		/*
-		 * auftraegeTbl.addMouseListener(new MouseAdapter() {// MouseListener für das
-		 * Fenster public void mouseClicked(MouseEvent e) { if (e.MOUSE_PRESSED == 501)
-		 * {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht //
-		 * dazu) JTable target = (JTable) e.getSource(); int row =
-		 * target.getSelectedRow();// wo wurde geklickt int column =
-		 * target.getSelectedColumn(); // do some action if appropriate column if
-		 * (column == 0) {// wenn in DetailsSpalte // detailsFenster();//Detailsfenster
-		 * wird geöffnet DetailsFenster frame = new DetailsFenster(row); // reihe des
-		 * Auftrags wird übergeben um details // aufrufen zu können
-		 * frame.setVisible(true); } } } });
-		 */
-		/*
-		 * monteureTbl.addMouseListener(new MouseAdapter() {// MouseListener für das
-		 * Fenster public void mouseClicked(MouseEvent e) { if (e.MOUSE_PRESSED == 501)
-		 * {// Wenn die Maus Gedrückt wird (Beim Drücken die Maus bewegen zählt nicht //
-		 * dazu) JTable target = (JTable) e.getSource(); int row =
-		 * target.getSelectedRow();// wo wurde geklickt int column =
-		 * target.getSelectedColumn(); // do some action if appropriate column if
-		 * (column == 3) {// wenn in DetailsSpalte // detailsFenster();//Detailsfenster
-		 * wird geöffnet AuftraegeListeFenster frame = new AuftraegeListeFenster(row);
-		 * // reihe des Auftrags wird // übergeben um details aufrufen // zu können
-		 * frame.setVisible(true); } } } });
-		 */
 	}
 
 	/**
@@ -315,7 +289,8 @@ public class DisponentFenster extends JFrame {
 				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
 			}
 
-			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";// Dropdown fehlt noch
+			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";// Dropdown fehlt
+																										// noch
 
 		}
 		return monteure;
@@ -336,7 +311,7 @@ public class DisponentFenster extends JFrame {
 		monteureCombobox.removeAllItems();
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
 			monteureCombobox
-					.addItem(db.getMonteurListe().get(i).getName()+ " " + db.getMonteurListe().get(i).getVorname());
+					.addItem(db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname());
 		}
 	}
 
@@ -465,7 +440,8 @@ public class DisponentFenster extends JFrame {
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
 				int column) {
 			button.setText(details);
-			if (table.getRowCount()==monteureTbl.getRowCount()&&table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
+			if (table.getRowCount() == monteureTbl.getRowCount()
+					&& table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
 				button.setText("Aufträge anzeigen [" + summeAuftraege(welcherMonteur(row)) + "]");
 			}
 			return button;
@@ -498,30 +474,39 @@ public class DisponentFenster extends JFrame {
 
 	private void monteureInArrayEinlesen() {
 
-		for (int i = 0; i < zeilen; i++) {
+		for (int i = 0; i < zeilen; i++) {// jede Tabellenzeile wird mit dieser for-Schleife durchlaufen
 
 			for (Auftrag auftrag : db.getAuftragsListe()) {
 
-				if (auftraegeTbl.getValueAt(i, 1).equals(auftrag.getAuftragsNummer())) { // vergleicht Auftragsnummer
-																							// aus
-					// Tabellenzeile mit Aufträgen in der DB
-
-					// monteureCombobox.getSelectedItem().toString();
+				if (auftraegeTbl.getValueAt(i, 1).equals(auftrag.getAuftragsNummer())) {
+					// vergleicht Auftragsnummer aus Tabellenzeile mit Auftragsnummer in der
+					// db.getAuftragsliste();
 
 					String ausgewaehlterMonteur = auftraegeTbl.getValueAt(i, 5).toString();
-					String[] namentrennung = ausgewaehlterMonteur.split(" "); // Trennung in Vor und Nachname des
-																				// Monteurs
+					// der in der Combobox ausgewählte Monteur wird in einen String umgewandelt und
+					// die Combobox somit eliminiert
 
+					String[] namentrennung = ausgewaehlterMonteur.split(" ");
+					// Trennung in Vor- [1] und Nachname [0] des Monteurs
 
 					if (!namentrennung[0].equals(auftrag.getZustaendig().getName())) {
-						// vergleicht den zuständigen Monteur aus dem Auftrag aus der Tabelle mit dem
-						// gleichen Auftrag aus der DB, bei Unstimmigkeit wird neuer String erstellt.
+						// vergleicht den zuständigen Monteur (anhand des Nachnamens) aus dem Auftrag
+						// aus der Tabellenzeile mit dem
+						// gleichen Auftrag aus der db.getAuftragsliste();
 
 						for (Mitarbeiter monteur : db.getMonteurListe()) {
 
-							if (monteur.getName().equals(namentrennung[0])) { // ermitteln der Monteurdaten durch
-																				// Namensabgleich in Monteurliste
-								auftrag.setZustaendig(monteur); // neuer zuständiger Monteur wird eingetragen
+							if (monteur.getName().equals(namentrennung[0])) {
+								// sollte der Monteur nicht übereinstimmen (er wurde also vom Diponenten
+								// geändert), dann wird die db.getMonteurliste() mit einer for-each Schleife
+								// durchlaufen und der Nachnam des Monteurs (aus der Tabelle) mit den Nachnamen
+								// aus der Monteurliste verglichen
+
+								auftrag.setZustaendig(monteur);
+								// wenn in der Monteurliste der passende Monteur gefunden wurde (d.h. er stimmt
+								// mit dem Monteur aus der Tabelle überein), dann wird der jeweilige Auftrag
+								// überschrieben und bekommt den neuen Monteur zugewiesen (dies geschieht mit
+								// dem Setter)
 
 								try {
 									ResultSet rs;
@@ -534,41 +519,57 @@ public class DisponentFenster extends JFrame {
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
-							}//1
-							// hier
-							int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
-									.count(); // überprüfen, ob alle Komponenten
-												// des Auftrags verfügbar sind
+							}
+							int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream()
+									.filter((k) -> k.isVerfuegbarkeit()).count();
+							// der gerade geänderte Auftrag wird nun auch nochmal auf seinen Status
+							// überprüft. Hierfür werden die verfügbaren Komponenten gezählt (mittels eines
+							// Streams)
 
-							if (verfuegbareKomponenten == 5 ) {
-								auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
+							if (verfuegbareKomponenten == 5) {
+
+								auftrag.setStatus("disponiert");
+								// wenn die Anzahl der verfügbaren Komponenten genau 5 beträgt, sind alle
+								// relevanten Bauteile vorhanden und der Status wird ggf. in der
+								// db.getAuftragsliste() auf "disponiert" gesetzt (falls er noch auf "Teile
+								// fehlen" gesetzt ist)
+								// Anmerkung: Diese Methode ist auch nochmal als eigene Methode vorzufinden,
+								// allerdings hat der Disponent hier die Möglichkeit, einen Auftrag, welcher
+								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
+								// Auftragsstatus wird dann wieder geändert.
 
 								try {
 									ResultSet rs;
 									Statement stmt = db.getVerbindung().createStatement();
 
-									stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
-											+ auftrag.getAuftragsNummer() + "');");
-
+									stmt.executeUpdate(
+											"UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
+													+ auftrag.getAuftragsNummer() + "');");
+									// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 
 							} else if (verfuegbareKomponenten != 5) {
-								auftrag.setStatus("Teile fehlen"); // falls nein, wird der Status in Teile fehlen
-								// geändert
+								auftrag.setStatus("Teile fehlen");
+								// wenn die Anzahl der Teile kleiner als 5 ist, heißt das im Umkehrschluss, dass
+								// mind. ein Teil nicht verfügbar ist und somit wird der Auftragsstatus auf
+								// "Teile fehlen" gesetzt.
+
 								try {
 									ResultSet rs;
 									Statement stmt = db.getVerbindung().createStatement();
 
-									stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
-											+ auftrag.getAuftragsNummer() + "');");
+									stmt.executeUpdate(
+											"UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
+													+ auftrag.getAuftragsNummer() + "');");
+									// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
 
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 							}
-						}//2
+						} // 2
 					}
 					;
 				}
@@ -580,11 +581,18 @@ public class DisponentFenster extends JFrame {
 	private void statusAktualisieren() {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
 			int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
-					.count(); // überprüfen, ob alle Komponenten
-								// des Auftrags verfügbar sind
+					.count();
+			// der gerade geänderte Auftrag wird nun auch nochmal auf seinen Status
+			// überprüft. Hierfür werden die verfügbaren Komponenten gezählt (mittels eines
+			// Streams)
 
 			if (verfuegbareKomponenten == 5 && !auftrag.getStatus().equals("im Lager")) {
-				auftrag.setStatus("disponiert"); // falls ja. wird der Status in disponiert geändert
+				auftrag.setStatus("disponiert");
+				// wenn die Anzahl der verfügbaren Komponenten genau 5 beträgt (und der Auftrag
+				// nicht "im Lager" ist), sind alle
+				// relevanten Bauteile vorhanden und der Status wird ggf. in der
+				// db.getAuftragsliste() auf "disponiert" gesetzt (falls er noch auf "Teile
+				// fehlen" gesetzt ist)
 
 				try {
 					ResultSet rs;
@@ -592,20 +600,25 @@ public class DisponentFenster extends JFrame {
 
 					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
 							+ auftrag.getAuftragsNummer() + "');");
+					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 
 			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")) {
-				auftrag.setStatus("Teile fehlen"); // falls nein, wird der Status in Teile fehlen
-				// geändert
+				auftrag.setStatus("Teile fehlen");
+				// wenn die Anzahl der Teile kleiner als 5 ist (und der Auftrag nicht "im Lager"
+				// ist, heißt das im Umkehrschluss, dass mind. ein Teil nicht verfügbar ist und
+				// somit wird der Auftragsstatus auf "Teile fehlen" gesetzt.
+
 				try {
 					ResultSet rs;
 					Statement stmt = db.getVerbindung().createStatement();
 
 					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
 							+ auftrag.getAuftragsNummer() + "');");
+					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
 
 				} catch (Exception e) {
 					e.printStackTrace();
