@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import objekte.Auftrag;
-import objekte.Komponente;
 import objekte.*;
 
 public class datenbankVerbindung {
@@ -17,8 +15,7 @@ public class datenbankVerbindung {
 	Connection verbindung = null;
 	ResultSet rs;
 	Statement stmt;
-	int indexmitarbeiter;
-	int indexAuftraggeber;
+
 
 	ArrayList<Auftrag> auftragsListe = new ArrayList<>();
 	ArrayList<Auftraggeber> auftraggeberListe = new ArrayList<>();
@@ -61,7 +58,11 @@ public class datenbankVerbindung {
 		komponenteEinlesen();
 		monteurEinlesen();
 		auftragEinlesen();
-
+		
+		
+		
+		//monteurListe.add(new Mitarbeiter(null, "Nicht zugewieﬂen", "", "0000", "", null));
+		
 	}
 	
 
@@ -110,7 +111,12 @@ public class datenbankVerbindung {
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 
 			while (rs.next()) {
-
+				int indexmitarbeiter = -1;
+				int indexAuftraggeber = -1;
+				Auftraggeber a;
+				Mitarbeiter m;
+				
+				
 				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
 				String[] komponentennrarray = rs.getString("Komponenten").split(",");
 
@@ -124,9 +130,9 @@ public class datenbankVerbindung {
 					}
 
 				}
-
+				
 				for (int i = 0; i < monteurListe.size(); i++) { //Passender Exemplare von Monteur wird gesucht
-
+					
 					if (monteurListe.get(i).getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
 						indexmitarbeiter = i;
 					}
@@ -138,11 +144,28 @@ public class datenbankVerbindung {
 						indexAuftraggeber = i;
 					}
 				}
+				
+			
+				if(indexmitarbeiter == -1) {
+					 m = null; // Wenn kein Monteur dem Auftrag zugewieﬂen ist oder keiner gefunden wurde
+					 System.out.println("Kein Monteur konnte dem Auftrag zugewieﬂen werden"); 
+				}
+				else {
+					 m = monteurListe.get(indexmitarbeiter);
+				}
+				
+				if(indexAuftraggeber == -1) {
+					 a = null; // Wenn kein auftraggeber dem Auftrag zugewieﬂen ist oder keiner gefunden wurde
+				}
+				else {
+					 a = auftraggeberListe.get(indexAuftraggeber);
+				}
+				
 
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), monteurListe.get(indexmitarbeiter), auftraggeberListe.get(indexAuftraggeber), komponentenlisteauftrag); // Exemplar von Aftrag wird erstellt mit den Daten aus der Datenbank
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), m, a, komponentenlisteauftrag); // Exemplar von Aftrag wird erstellt mit den Daten aus der Datenbank
 
 				auftragsListe.add(Auftrag); //Exexmplar Auftrag wird der auftragsListe hinzugef¸gt
-
+				
 			}
 
 			//System.out.println("Auftr‰ge einlesen:");
@@ -219,8 +242,6 @@ public class datenbankVerbindung {
 
 	public void monteurEinlesen() { // Monteure werden eingelesen
 
-		
-
 		try {
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `mitarbeiter`");
@@ -255,5 +276,60 @@ public class datenbankVerbindung {
 		}
 
 	}
+	
+	
+	
+	
+	public void setZustaendig(Auftrag auftrag, Mitarbeiter monteur) {
+		
+		try {
+			
+			Statement stmt = verbindung.createStatement();
+
+			stmt.executeUpdate("UPDATE `auftrag` SET `ZustaendigName` = '" + monteur.getName()
+					+ "', `ZustaendigMitarbeiterNummer` = '" + monteur.getMitarbeiterNummer()
+					+ "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	public void setStatus(Auftrag auftrag, String status) {
+		// TODO Auto-generated method stub
+		
+		try {
+			
+			Statement stmt = verbindung.createStatement();
+
+			stmt.executeUpdate(
+					"UPDATE `auftrag` SET `Status` = '"+ status +"' WHERE (`AuftragsNummer` = '"
+							+ auftrag.getAuftragsNummer() + "');");
+			// die ver‰nderten Werte werden von der ArrayList direkt in die DB ¸bertragen
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

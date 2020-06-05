@@ -522,17 +522,8 @@ public class DisponentFenster extends JFrame {
 								// überschrieben und bekommt den neuen Monteur zugewiesen (dies geschieht mit
 								// dem Setter)
 
-								try {
-									ResultSet rs;
-									Statement stmt = db.getVerbindung().createStatement();
-
-									stmt.executeUpdate("UPDATE `auftrag` SET `ZustaendigName` = '" + monteur.getName()
-											+ "', `ZustaendigMitarbeiterNummer` = '" + monteur.getMitarbeiterNummer()
-											+ "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
-
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+								db.setZustaendig(auftrag, monteur); // auftrag bekommt neuen Monteur zugewießen in der Datenbank
+								
 							}
 							int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream()
 									.filter((k) -> k.isVerfuegbarkeit()).count();
@@ -550,19 +541,10 @@ public class DisponentFenster extends JFrame {
 								// Anmerkung: Diese Methode ist auch nochmal als eigene Methode vorzufinden,
 								// allerdings hat der Disponent hier die Möglichkeit, einen Auftrag, welcher
 								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
-								// Auftragsstatus wird dann wieder geändert.
-
-								try {
-									ResultSet rs;
-									Statement stmt = db.getVerbindung().createStatement();
-
-									stmt.executeUpdate(
-											"UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
-													+ auftrag.getAuftragsNummer() + "');");
-									// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+								// Auftragsstatus wird dann wieder geändert.							
+								
+								db.setStatus(auftrag, "disponiert"); //Verändert den Status in der Datenbank 
+								
 
 							} else if (verfuegbareKomponenten != 5) {
 								auftrag.setStatus("Teile fehlen");
@@ -570,20 +552,9 @@ public class DisponentFenster extends JFrame {
 								// mind. ein Teil nicht verfügbar ist und somit wird der Auftragsstatus auf
 								// "Teile fehlen" gesetzt.
 
-								try {
-									ResultSet rs;
-									Statement stmt = db.getVerbindung().createStatement();
-
-									stmt.executeUpdate(
-											"UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
-													+ auftrag.getAuftragsNummer() + "');");
-									// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
-
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+								db.setStatus(auftrag, "Teile fehlen"); //Verändert den Status in der Datenbank 
 							}
-						} // 2
+						} 
 					}
 					;
 				}
