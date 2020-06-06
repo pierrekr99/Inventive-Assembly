@@ -53,6 +53,7 @@ public class DetailsFenster extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		JPanel panel = new JPanel();
+		this.setTitle("Details");
 
 //		-------  Komponenten Tabelle  ----------------------------------------
 

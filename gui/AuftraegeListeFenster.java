@@ -42,20 +42,12 @@ public class AuftraegeListeFenster extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AuftraegeListeFenster frame = new AuftraegeListeFenster(db.getMonteurListe().get(1));
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-*/
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { AuftraegeListeFenster frame = new
+	 * AuftraegeListeFenster(db.getMonteurListe().get(1)); frame.setVisible(true); }
+	 * catch (Exception e) { e.printStackTrace(); } } }); }
+	 */
 	/**
 	 * Create the frame.
 	 */
@@ -93,6 +85,9 @@ public class AuftraegeListeFenster extends JFrame {
 		 * zu können frame.setVisible(true); } } } });
 		 */
 		monteureTblFormat();
+
+		this.setTitle(monteur.getName() + ", " + monteur.getVorname());
+
 	}
 
 	private void monteureTblFormat() {
@@ -164,14 +159,15 @@ public class AuftraegeListeFenster extends JFrame {
 	}
 
 	private boolean richtigerAuftrag(int i) {
-		return monteure.getMitarbeiterNummer().equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer());
+		return monteure.getMitarbeiterNummer()
+				.equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer());
 	}
 
 	private boolean richtigerMonteur(int i) {
-		return 
-				monteure.getMitarbeiterNummer().equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer());
+		return monteure.getMitarbeiterNummer()
+				.equals(db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer());
 	}
-	
+
 	private int summeAuftraege(Mitarbeiter monteur) {// zählt die zugehörigen Aufträge des Monteurs
 		int summe;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {

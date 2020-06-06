@@ -97,6 +97,7 @@ public class LoginFenster extends JFrame {
 						DisponentFenster disponent = new DisponentFenster();
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						disponent.setVisible(true);
+						disponent.setTitle("Inventive Assembly");
 						dispose();
 						funktion = true;
 					}
@@ -107,6 +108,7 @@ public class LoginFenster extends JFrame {
 						MonteurFenster monteur = new MonteurFenster();
 						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						monteur.setVisible(true);
+						monteur.setTitle("Inventive Assembly");
 						dispose();
 						funktion = true;
 					}
