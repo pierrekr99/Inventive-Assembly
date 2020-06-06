@@ -350,18 +350,10 @@ public class MonteurFenster extends JFrame {
 						auftrag.setStatus(status);
 						// wenn ein Unterschied festgestellt wird, wird der Auftragsstatus aus der
 						// ArrayList mit dem Status aus der Tabelle überschrieben
-
-						try {
-							ResultSet rs; 
-							Statement stmt = db.getVerbindung().createStatement();
-							
-							stmt.executeUpdate("UPDATE `auftrag` SET `Status` = '" + status
-									+ "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
-							// die Veränderung wird dann von der ArrayList in die DB geladen
-							
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						
+						db.setStatus(auftrag, status); // nimmt Änderung in der DB vor
+						
+				
 
 					}
 				}
