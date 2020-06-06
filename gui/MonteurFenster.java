@@ -292,6 +292,7 @@ public class MonteurFenster extends JFrame {
 		auswahlBoxStatus.addItem("Teile fehlen");
 		auswahlBoxStatus.addItem("disponiert");
 		auswahlBoxStatus.addItem("im Lager");
+		auswahlBoxStatus.addItem("nicht zugewiesen");
 
 		TableColumn statusSpalte = auftraegeMonteurTBL.getColumnModel().getColumn(2);// in welche Spalte soll die
 																						// Combobox
