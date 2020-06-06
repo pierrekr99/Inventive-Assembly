@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,8 +35,16 @@ public class LoginFenster extends JFrame {
 	private JTextField tf_MitarbeiterID;
 	private JPasswordField tf_password;
 	private Icon icon;
+	private static Image image = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_IA.png").getImage();
 	private static String mitarbeiternummer;
 	
+	
+	
+
+	public static Image getImage() {
+		return image;
+	}
+
 
 	public static String getMitarbeiternummer() {
 		return mitarbeiternummer;
@@ -98,6 +108,7 @@ public class LoginFenster extends JFrame {
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						disponent.setVisible(true);
 						disponent.setTitle("Inventive Assembly");
+						disponent.setIconImage(image);
 						dispose();
 						funktion = true;
 					}
@@ -109,6 +120,7 @@ public class LoginFenster extends JFrame {
 						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						monteur.setVisible(true);
 						monteur.setTitle("Inventive Assembly");
+						monteur.setIconImage(image);
 						dispose();
 						funktion = true;
 					}
@@ -136,6 +148,8 @@ public class LoginFenster extends JFrame {
 		panel.add(logoLabel);
 		icon = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_final180x100.png");
 		logoLabel.setIcon(icon);
+		
+		setIconImage(image);
 
 	}
 }
