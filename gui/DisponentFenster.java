@@ -69,7 +69,7 @@ public class DisponentFenster extends JFrame {
 	TableColumn monteureColumn;
 
 	/**
-	 * Launch the application.__________________________________________________
+	 * Launch the application.
 	 */
 	/*
 	 * public static void main(String[] args) { EventQueue.invokeLater(new
@@ -80,7 +80,7 @@ public class DisponentFenster extends JFrame {
 	 */
 
 	/**
-	 * Create the frame.__________________________________________________
+	 * Create the frame.
 	 */
 	public DisponentFenster() {
 
@@ -170,7 +170,7 @@ public class DisponentFenster extends JFrame {
 						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE).addGap(6)));
 
 		/**
-		 * Auftraege Reiter.__________________________________________________
+		 * Auftraege Reiter.==================================================
 		 */
 		JScrollPane auftraegeSp = new JScrollPane();
 		tabbedPane.addTab("Aufträge", null, auftraegeSp, null);
@@ -199,7 +199,7 @@ public class DisponentFenster extends JFrame {
 		// Befüllt die monteureCombobox
 
 		/**
-		 * Monteure Reiter.__________________________________________________
+		 * Monteure Reiter.==================================================
 		 */
 		JScrollPane monteureSp = new JScrollPane();
 		tabbedPane.addTab("Monteure", null, monteureSp, null);
@@ -236,7 +236,7 @@ public class DisponentFenster extends JFrame {
 	}
 
 	/**
-	 * GUI-Hilfsmethoden.__________________________________________________
+	 * GUI-Hilfsmethoden.==================================================
 	 */
 	private void auftraegeAktualisieren() {
 
@@ -473,7 +473,7 @@ public class DisponentFenster extends JFrame {
 	}
 
 	/**
-	 * Buttons in der Tabelle
+	 * Buttons in der Tabelle.==================================================
 	 */
 
 	class JButtonRenderer implements TableCellRenderer {
@@ -610,7 +610,7 @@ public class DisponentFenster extends JFrame {
 	}
 
 	/**
-	 * funktionale Hilfsmethoden
+	 * funktionale Hilfsmethoden.==================================================
 	 */
 
 	private String summeAuftraege(Mitarbeiter monteur) {
