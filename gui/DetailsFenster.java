@@ -211,8 +211,13 @@ public class DetailsFenster extends JFrame {
 		monteur[0][0] = auftrag.getAuftragsNummer();
 		monteur[0][1] = auftrag.getAuftraggeber().getKundenNummer();
 		monteur[0][2] = auftrag.getAuftraggeber().getName();
+		monteur[0][3] = "nicht Zugewiesen";
+		monteur[0][4] = "nicht Zugewiesen";
+		
+		if(auftrag.getZustaendig()!=null) {
 		monteur[0][3] = auftrag.getZustaendig().getMitarbeiterNummer();
 		monteur[0][4] = auftrag.getZustaendig().getVorname() + " " + auftrag.getZustaendig().getName();
+		}
 
 		return monteur;
 	}

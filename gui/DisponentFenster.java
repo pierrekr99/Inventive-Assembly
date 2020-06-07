@@ -44,6 +44,7 @@ import Datenbank.datenbankVerbindung;
 import objekte.Auftrag;
 import objekte.Mitarbeiter;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class DisponentFenster extends JFrame {
 
@@ -341,7 +342,7 @@ public class DisponentFenster extends JFrame {
 			auftraege[i][5] = "";
 			auftraege[i][6] = "";
 			auftraege[i][7] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
-			if (db.getAuftragsListe().get(i).getZustaendig() != null) {
+			if (db.getAuftragsListe().get(i).getZustaendig()!=null && db.getAuftragsListe().get(i).getZustaendig() != null) {
 				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + " "
 						+ db.getAuftragsListe().get(i).getZustaendig().getVorname();
 				auftraege[i][6] = db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer();
@@ -427,18 +428,29 @@ public class DisponentFenster extends JFrame {
 			button.setOpaque(true);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
+					JOptionPane nichtZugewiesenraege = new JOptionPane();
+					
 					if (button.getText().equals(details)) {
-						DetailsFenster frame = new DetailsFenster(welcherAuftrag(auftraegeTbl.getEditingRow()));
+						Auftrag auftrag = welcherAuftrag(auftraegeTbl.getEditingRow());
+						if(auftrag != null) {
+						DetailsFenster frame = new DetailsFenster(auftrag);
 						frame.setVisible(true);
 						auftraegeAktualisieren();
+						}else {
+							nichtZugewiesenraege.showMessageDialog(null, "Kein Auftrag vorhanden");
+						}
 
 					} else {
-						AuftraegeListeFenster frame = new AuftraegeListeFenster(
-								welcherMonteur(monteureTbl.getEditingRow()));
+						Mitarbeiter monteur = welcherMonteur(monteureTbl.getEditingRow());
+						if(monteur!=null && !summeAuftraege(monteur).equals("0")) {
+						AuftraegeListeFenster frame = new AuftraegeListeFenster(monteur);
 						frame.setVisible(true);
 						monteureAktualisieren();
+						} else if(summeAuftraege(monteur).equals("0")){
+							nichtZugewiesenraege.showMessageDialog(null, "keine Aufträge zugewiesen");
+						}
 					}
-
 				}
 
 			});
