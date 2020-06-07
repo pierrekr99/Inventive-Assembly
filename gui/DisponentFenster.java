@@ -488,13 +488,8 @@ public class DisponentFenster extends JFrame {
 		// Wie soll der Button ausehen und was soll drin stehen
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-
 			table.setShowGrid(true);
-			// sollen die Zellen der Tabelle durch linien getrennt werden?
-
 			table.setGridColor(Color.LIGHT_GRAY);
-			// Farbe der Tabelle
-
 			button.setText(details);
 			if (tabelle.equals("monteureTbl"))
 				// wird ein knopf in der Monteur Tabelle gedrückt?
@@ -520,8 +515,6 @@ public class DisponentFenster extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					// was passiert wenn man den Button anklickt
 
-					JOptionPane nichtZugewiesen = new JOptionPane();
-
 					if (button.getText().equals(details)) {
 						// wird der deteilsButton gedrückt?
 
@@ -537,30 +530,26 @@ public class DisponentFenster extends JFrame {
 
 							auftraegeAktualisieren();
 							// Tabelle wird neu geladen, damit der Button wieder erscheint
-
-						} else {
-							nichtZugewiesen.showMessageDialog(null, "Kein Auftrag vorhanden");
-							// kein Auftrag gefunden -> Warnung
 						}
 
 					} else {
 						Mitarbeiter monteur = welcherMonteur(monteureTbl.getEditingRow());
-						if (monteur != null && !summeAuftraege(monteur).equals("0")) {
-							// Monteur existiert und ist für mindestens einen Auftrag zuständig
-
-							AuftraegeListeFenster frame = new AuftraegeListeFenster(monteur);
-							frame.setVisible(true);
-							// AuftraegeListeFenster und der Monteur
-
-							monteureAktualisieren();
-							// Tabelle wird neu geladen, damit der Button wieder erscheint
-
-						} else if (summeAuftraege(monteur).equals("0")) {
+						if (summeAuftraege(monteur).equals("0")) {
 							// ist der der Monteur für 0 Aufträge zuständig?
 
+							JOptionPane nichtZugewiesen = new JOptionPane();
 							nichtZugewiesen.showMessageDialog(null, "keine Aufträge zugewiesen");
 							// Monteur ist für keinen Auftrag zuständig -> Warnung
 						}
+
+						// Monteur existiert und ist für mindestens einen Auftrag zuständig
+
+						AuftraegeListeFenster frame = new AuftraegeListeFenster(monteur);
+						frame.setVisible(true);
+						// AuftraegeListeFenster und der Monteur
+
+						monteureAktualisieren();
+						// Tabelle wird neu geladen, damit der Button wieder erscheint
 					}
 				}
 			});
@@ -568,7 +557,6 @@ public class DisponentFenster extends JFrame {
 
 		@Override
 		public Object getCellEditorValue() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -587,26 +575,6 @@ public class DisponentFenster extends JFrame {
 			}
 			return button;
 		}
-	}
-
-	private Auftrag welcherAuftrag(int editingRow) {
-		for (Auftrag auftrag : db.getAuftragsListe()) {
-
-			if (auftraegeTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())) {
-				return auftrag;
-			}
-		}
-		return null;
-	}
-
-	private Mitarbeiter welcherMonteur(int editingRow) {
-		for (Mitarbeiter monteur : db.getMonteurListe()) {
-
-			if (monteureTbl.getValueAt(editingRow, 1).equals(monteur.getMitarbeiterNummer())) {
-				return monteur;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -630,6 +598,26 @@ public class DisponentFenster extends JFrame {
 		// SummeAuftraege wird zurückgesetzt
 
 		return summe;
+	}
+
+	private Auftrag welcherAuftrag(int editingRow) {
+		for (Auftrag auftrag : db.getAuftragsListe()) {
+
+			if (auftraegeTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())) {
+				return auftrag;
+			}
+		}
+		return null;
+	}
+
+	private Mitarbeiter welcherMonteur(int editingRow) {
+		for (Mitarbeiter monteur : db.getMonteurListe()) {
+
+			if (monteureTbl.getValueAt(editingRow, 1).equals(monteur.getMitarbeiterNummer())) {
+				return monteur;
+			}
+		}
+		return null;
 	}
 
 	private void monteureInArrayEinlesen() {
