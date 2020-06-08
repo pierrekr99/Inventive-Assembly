@@ -719,19 +719,8 @@ public class DisponentFenster extends JFrame {
 								// allerdings hat der Disponent hier die Möglichkeit, einen Auftrag, welcher
 								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
 								// Auftragsstatus wird dann wieder geändert.
-
-								try {
-									ResultSet rs;
-									Statement stmt = db.getVerbindung().createStatement();
-
-									stmt.executeUpdate(
-											"UPDATE `auftrag` SET `Status` = 'nicht zugewiesen' WHERE (`AuftragsNummer` = '"
-													+ auftrag.getAuftragsNummer() + "');");
-									// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
-
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+								
+								db.setStatus(auftrag, "nicht zugewiesen"); // Verändert den Status in der Datenbank
 							}
 
 						}
@@ -761,17 +750,7 @@ public class DisponentFenster extends JFrame {
 				// db.getAuftragsliste() auf "disponiert" gesetzt (falls er noch auf "Teile
 				// fehlen" gesetzt ist)
 
-				try {
-					ResultSet rs;
-					Statement stmt = db.getVerbindung().createStatement();
-
-					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
-							+ auftrag.getAuftragsNummer() + "');");
-					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				db.setStatus(auftrag, "disponiert"); // Verändert den Status in der Datenbank
 
 			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")
 					&& !auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
@@ -780,34 +759,14 @@ public class DisponentFenster extends JFrame {
 				// ist, heißt das im Umkehrschluss, dass mind. ein Teil nicht verfügbar ist und
 				// somit wird der Auftragsstatus auf "Teile fehlen" gesetzt.
 
-				try {
-					ResultSet rs;
-					Statement stmt = db.getVerbindung().createStatement();
-
-					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
-							+ auftrag.getAuftragsNummer() + "');");
-					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				db.setStatus(auftrag, "Teile fehlen"); // Verändert den Status in der Datenbank
 
 			} else if (auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				auftrag.setStatus("nicht zugewiesen");
 				// wenn kein Monteur einem Auftrag zugewiesen ist, wird der Status auf nicht
 				// zugewiesen gestellt
 
-				try {
-					ResultSet rs;
-					Statement stmt = db.getVerbindung().createStatement();
-
-					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'nicht zugewiesen' WHERE (`AuftragsNummer` = '"
-							+ auftrag.getAuftragsNummer() + "');");
-					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				db.setStatus(auftrag, "nicht zugewiesen"); // Verändert den Status in der Datenbank
 			}
 		}
 	}
