@@ -485,13 +485,13 @@ public class DisponentFenster extends JFrame {
 		// monteureCombobox wird geleert vor Befüllung
 
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-		
+
 			if (db.getMonteurListe().get(i).getMitarbeiterNummer().equals("0000")) {
 				monteureCombobox.addItem(
 						db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname());
 				// wenn kein Monteur dem Auftrag zugewiesen ist, wird die Combobox an dieser
 				// Stelle mit "nicht (Nachname) zugewiesen (Vorname)" befüllt
-				
+
 			} else {
 				monteureCombobox.addItem(
 						db.getMonteurListe().get(i).getName() + ", " + db.getMonteurListe().get(i).getVorname());
@@ -626,9 +626,13 @@ public class DisponentFenster extends JFrame {
 
 		String summe;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
-			if (monteur != null && db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
-					.equals(monteur.getMitarbeiterNummer())) {
+			if (monteur != null
+					&& db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
+							.equals(monteur.getMitarbeiterNummer())
+					&& !db.getAuftragsListe().get(j).getStatus().equals("im Lager")) {
 				// Zuständiger Monteur = Monteur in der MonteurListe?
+				// Aufträge, welche bereits abgeschlossen/ im Lager sind, zählen nicht mehr in
+				// die Auftragssumme des einzelnen Monteurs
 
 				summeAuftraege = summeAuftraege + 1;
 			}
