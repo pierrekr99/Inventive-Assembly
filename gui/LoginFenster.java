@@ -1,28 +1,26 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import Datenbank.datenbankVerbindung;
-import objekte.Mitarbeiter;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.Color;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import Datenbank.datenbankVerbindung;
+import objekte.Mitarbeiter;
 
 public class LoginFenster extends JFrame {
 
@@ -35,9 +33,15 @@ public class LoginFenster extends JFrame {
 	private JTextField tf_MitarbeiterID;
 	private JPasswordField tf_password;
 	private Icon icon;
+	private static Image image = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_IA.png").getImage();
 	private static String mitarbeiternummer;
 	
+	
 
+	public static Image getImage() {
+        return image;
+    }
+	
 	public static String getMitarbeiternummer() {
 		return mitarbeiternummer;
 	}
@@ -53,6 +57,7 @@ public class LoginFenster extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
+		setIconImage(image);
 
 		JLabel titelLabel = new JLabel("L O G I N ");
 		titelLabel.setFont(new Font("Verdana", Font.BOLD | Font.ITALIC, 18));
@@ -89,87 +94,91 @@ public class LoginFenster extends JFrame {
 		
 		JButton bt_Login = new JButton("Login");
 		
-		bt_Login.addKeyListener(new KeyListener() {
-		    // listen to keys
-		    public void keyPressed(KeyEvent e){
-		        // find ENTER key press
-		        if(e.getKeyCode() == KeyEvent.VK_ENTER){
-		            
-		        	
-					boolean funktion = false;
-					String id = tf_MitarbeiterID.getText();
-					mitarbeiternummer = tf_MitarbeiterID.getText();
-					
-					for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
-						if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-							DisponentFenster disponent = new DisponentFenster();
-							disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
-							disponent.setVisible(true);
-							dispose();
-							funktion = true;
-						}
-					}
-					
-					for(Mitarbeiter mitarbeiter : db.getMonteurListe()) {
-						if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-							MonteurFenster monteur = new MonteurFenster();
-							monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
-							monteur.setVisible(true);
-							dispose();
-							funktion = true;
-						}
-					}
-					if(!funktion) {
-						JOptionPane.showMessageDialog(null, "Anmeldedaten überprüfen!");
-					}
-		        }
-		    }
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-//		}
-	});
-		
-//		bt_Login.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//				boolean funktion = false;
-//				String id = tf_MitarbeiterID.getText();
-//				mitarbeiternummer = tf_MitarbeiterID.getText();
-//				
-//				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
-//					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-//						DisponentFenster disponent = new DisponentFenster();
-//						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//						disponent.setVisible(true);
-//						dispose();
-//						funktion = true;
+//		bt_Login.addKeyListener(new KeyListener() {
+//		    // listen to keys
+//		    public void keyPressed(KeyEvent e){
+//		        // find ENTER key press
+//		        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+//		            
+//		        	
+//					boolean funktion = false;
+//					String id = tf_MitarbeiterID.getText();
+//					mitarbeiternummer = tf_MitarbeiterID.getText();
+//					
+//					for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
+//						if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
+//							DisponentFenster disponent = new DisponentFenster();
+//							disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//							disponent.setVisible(true);
+//							disponent.setIconImage(image);
+//							dispose();
+//							funktion = true;
+//						}
 //					}
-//				}
-//				
-//				for(Mitarbeiter mitarbeiter : db.getMonteurListe()) {
-//					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-//						MonteurFenster monteur = new MonteurFenster();
-//						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//						monteur.setVisible(true);
-//						dispose();
-//						funktion = true;
+//					
+//					for(Mitarbeiter mitarbeiter : db.getMonteurListe()) {
+//						if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
+//							MonteurFenster monteur = new MonteurFenster();
+//							monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//							monteur.setVisible(true);
+//							monteur.setIconImage(image);
+//							dispose();
+//							funktion = true;
+//						}
 //					}
-//				}
-//				if(!funktion) {
-//					JOptionPane.showMessageDialog(null, "Anmeldedaten überprüfen!");
-//				}
+//					if(!funktion) {
+//						JOptionPane.showMessageDialog(null, "Anmeldedaten überprüfen!");
+//					}
+//		        }
+//		    }
+//
+//			@Override
+//			public void keyReleased(KeyEvent arg0) {
+//				// TODO Auto-generated method stub
 //				
 //			}
-//		});
+//
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+////		}
+//	});
+		
+		bt_Login.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				boolean funktion = false;
+				String id = tf_MitarbeiterID.getText();
+				mitarbeiternummer = tf_MitarbeiterID.getText();
+				
+				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
+					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
+						DisponentFenster disponent = new DisponentFenster();
+						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
+						disponent.setVisible(true);
+						disponent.setIconImage(image);
+						dispose();
+						funktion = true;
+					}
+				}
+				
+				for(Mitarbeiter mitarbeiter : db.getMonteurListe()) {
+					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
+						MonteurFenster monteur = new MonteurFenster();
+						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
+						monteur.setVisible(true);
+						monteur.setIconImage(image);
+						dispose();
+						funktion = true;
+					}
+				}
+				if(!funktion) {
+					JOptionPane.showMessageDialog(null, "Anmeldedaten überprüfen!");
+				}
+				
+			}
+		});
 		
 		
 		bt_Login.setFont(new Font("Verdana", Font.ITALIC, 11));
