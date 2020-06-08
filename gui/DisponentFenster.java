@@ -33,6 +33,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -55,6 +57,7 @@ public class DisponentFenster extends JFrame {
 	private JTextField txtSuche;
 	private JTable auftraegeTbl;
 	private JTable monteureTbl;
+	private JScrollPane auftraegeSp;
 	public int indexWochentag = 0;
 
 	Object[][] auftraege;
@@ -97,6 +100,17 @@ public class DisponentFenster extends JFrame {
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		tabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				
+				if(tabbedPane.getSelectedComponent() == auftraegeSp) {
+					DatumCBox.setVisible(false);
+				}else {
+					DatumCBox.setVisible(true);
+				}
+				
+			}
+		});
 
 		JButton logoutKnopf = new JButton("Logout");// Logout schließt das fenster und Öffnet das LoginFenster
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -146,7 +160,6 @@ public class DisponentFenster extends JFrame {
 		// Befüllt die datumComboBox
 
 		DatumCBox = new JComboBox(gebeDatumAus());
-
 		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		DatumCBox.setSelectedIndex(0);
 
@@ -229,7 +242,7 @@ public class DisponentFenster extends JFrame {
 		/**
 		 * Auftraege Reiter.==================================================
 		 */
-		JScrollPane auftraegeSp = new JScrollPane();
+		auftraegeSp = new JScrollPane();
 		tabbedPane.addTab("Aufträge", null, auftraegeSp, null);
 
 		auftraegeTbl = new JTable();

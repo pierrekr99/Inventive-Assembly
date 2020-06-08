@@ -112,9 +112,7 @@ public class MonteurFenster extends JFrame {
 		suchFeld.setText("search");// Suchfeld name
 		suchFeld.setColumns(10);
 
-		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
-		JLabel DatumLabel = new JLabel(f.format(new Date())); // Datumsanzeige
-		DatumLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		
 
 		JButton logoutKnopf = new JButton("Logout");// logout button erstellen
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
@@ -169,14 +167,12 @@ public class MonteurFenster extends JFrame {
 				.addGroup(gl_auftraegeTab.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
 							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(DatumLabel)
-							.addGap(18)
+							.addPreferredGap(ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
 							.addComponent(dbAktualisierenKnopf)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(logoutKnopf)))
@@ -190,7 +186,6 @@ public class MonteurFenster extends JFrame {
 						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 						.addComponent(logoutKnopf)
 						.addComponent(dbAktualisierenKnopf)
-						.addComponent(DatumLabel)
 						.addComponent(lbl_eingeloggterMonteur))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
