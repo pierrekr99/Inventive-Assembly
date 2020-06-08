@@ -101,15 +101,16 @@ public class DisponentFenster extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tabbedPane.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				
-				if(tabbedPane.getSelectedComponent() == auftraegeSp) {
-					DatumCBox.setVisible(false);
-				}else {
-					DatumCBox.setVisible(true);
-				}
-				
-			}
+		    public void stateChanged(ChangeEvent e) {
+		       
+		    	if(tabbedPane.getSelectedComponent() == auftraegeSp) {
+		    		DatumCBox.setVisible(false);
+		    	}else {
+		    		DatumCBox.setVisible(true);
+		    	}
+		    	
+		    	
+		    }
 		});
 
 		JButton logoutKnopf = new JButton("Logout");// Logout schließt das fenster und Öffnet das LoginFenster
@@ -156,58 +157,10 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 
-//		gebeDatumAus();
+		datumBefuellen();
 		// Befüllt die datumComboBox
 
-		DatumCBox = new JComboBox(gebeDatumAus());
-		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		DatumCBox.setSelectedIndex(0);
-
-		DatumCBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem();
-				// liest Datum als String aus
-
-				String[] ausgewaelterWochentag = ausgewaeltesDatum.split(",");
-				// wochentag und datum wird getrennt
-
-				String s = ausgewaelterWochentag[0];
-				// nur der wochentag wird in s gespeichert
-
-				switch (s) {
-				/*
-				 * index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
-				 * können
-				 */
-
-				case "Montag":
-					indexWochentag = 0;
-					break;
-				case "Dienstag":
-					indexWochentag = 1;
-					break;
-				case "Mittwoch":
-					indexWochentag = 2;
-					break;
-				case "Donnerstag":
-					indexWochentag = 3;
-					break;
-				case "Freitag":
-					indexWochentag = 4;
-					break;
-				case "Samstag":
-					indexWochentag = 5;
-					break;
-				case "Sonntag":
-					indexWochentag = 6;
-					break;
-				default:
-					indexWochentag = 6;
-					break;
-				}
-			}
-		});
+		
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -218,9 +171,6 @@ public class DisponentFenster extends JFrame {
 								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
-								.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(18).addComponent(dbAktualisierenKnopf).addGap(18).addComponent(logoutKnopf))
@@ -816,7 +766,7 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
-	private String[] gebeDatumAus() {
+	private void datumBefuellen() {
 		// ComboBox um das Datum auwählen zu können
 
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
@@ -854,7 +804,58 @@ public class DisponentFenster extends JFrame {
 
 		String[] Datum = { tag1, tag2, tag3, tag4, tag5 };
 
-		return Datum;
+		DatumCBox = new JComboBox(Datum);
+		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		DatumCBox.setSelectedIndex(0);
+	
+		DatumCBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem();
+				// liest Datum als String aus
+
+				String[] ausgewaelterWochentag = ausgewaeltesDatum.split(",");
+				// wochentag und datum wird getrennt
+
+				String s = ausgewaelterWochentag[0];
+				// nur der wochentag wird in s gespeichert
+
+				switch (s) {
+				/*
+				 * index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
+				 * können
+				 */
+
+				case "Montag":
+					indexWochentag = 0;
+					break;
+				case "Dienstag":
+					indexWochentag = 1;
+					break;
+				case "Mittwoch":
+					indexWochentag = 2;
+					break;
+				case "Donnerstag":
+					indexWochentag = 3;
+					break;
+				case "Freitag":
+					indexWochentag = 4;
+					break;
+				case "Samstag":
+					indexWochentag = 5;
+					break;
+				case "Sonntag":
+					indexWochentag = 6;
+					break;
+				default:
+					indexWochentag = 6;
+					break;
+				}
+				
+				monteureAktualisieren();
+				
+			}
+		});
 
 	}
 
