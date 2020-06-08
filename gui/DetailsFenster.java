@@ -216,7 +216,7 @@ public class DetailsFenster extends JFrame {
 		
 		if(auftrag.getZustaendig()!=null) {
 		monteur[0][3] = auftrag.getZustaendig().getMitarbeiterNummer();
-		monteur[0][4] = auftrag.getZustaendig().getVorname() + " " + auftrag.getZustaendig().getName();
+		monteur[0][4] = auftrag.getZustaendig().getName() + " " + auftrag.getZustaendig().getVorname();
 		}
 
 		return monteur;

@@ -112,18 +112,15 @@ public class AuftraegeListeFenster extends JFrame {
 	private Object[][] tabelle(Mitarbeiter monteur) {
 		int zeile = 0;
 
-		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			// Wie größ soll die tabelle für diesen Monteur werden
-			if (richtigerMonteur(i)) {
+			// Wie groß soll die tabelle für diesen Monteur werden
 				zeilenTabelle = summeAuftraege(monteur);
-			}
-		}
+	
 
 		Object[][] auftraege = new Object[zeilenTabelle][6];
 		// dieses Array befüllt die Tabelle
 
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
-			if (richtigerMonteur(i)) {
+			if (richtigerAuftrag(i)) {
 				auftraege[zeile][0] = "Details";
 				auftraege[zeile][1] = db.getAuftragsListe().get(i).getAuftragsNummer();
 				// AuftragsNummer
@@ -238,7 +235,7 @@ public class AuftraegeListeFenster extends JFrame {
 	/**
 	 * funktionale Hilfsmethoden.
 	 */
-	private boolean richtigerMonteur(int i) {
+	private boolean richtigerAuftrag(int i) {
 		/*
 		 * überprüft ob der Monteur der gleiche ist wie der in der AuftragsListe an der
 		 * Stelle i

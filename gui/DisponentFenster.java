@@ -101,16 +101,15 @@ public class DisponentFenster extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tabbedPane.addChangeListener(new ChangeListener() {
-		    public void stateChanged(ChangeEvent e) {
-		       
-		    	if(tabbedPane.getSelectedComponent() == auftraegeSp) {
-		    		DatumCBox.setVisible(false);
-		    	}else {
-		    		DatumCBox.setVisible(true);
-		    	}
-		    	
-		    	
-		    }
+			public void stateChanged(ChangeEvent e) {
+
+				if (tabbedPane.getSelectedComponent() == auftraegeSp) {
+					DatumCBox.setVisible(false);
+				} else {
+					DatumCBox.setVisible(true);
+				}
+
+			}
 		});
 
 		JButton logoutKnopf = new JButton("Logout");// Logout schließt das fenster und Öffnet das LoginFenster
@@ -160,21 +159,20 @@ public class DisponentFenster extends JFrame {
 		datumBefuellen();
 		// Befüllt die datumComboBox
 
-		
-
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap().addGroup(gl_contentPane
-						.createParallelGroup(
-								Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
-								.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(18).addComponent(dbAktualisierenKnopf).addGap(18).addComponent(logoutKnopf))
-						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)).addContainerGap()));
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
+										.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(18).addComponent(dbAktualisierenKnopf).addGap(18)
+										.addComponent(logoutKnopf))
+								.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
+						.addContainerGap()));
 		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
 				.createSequentialGroup().addContainerGap()
 				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -351,33 +349,34 @@ public class DisponentFenster extends JFrame {
 	private Object[][] monteure() {
 		// Erstellt Inhalt zur befüllung der monteureTabelle
 
-		zeilenMonteure = db.getMonteurListe().size();
+		zeilenMonteure = db.getMonteurListe().size() - 1;
 		// größe der Tabelle wird ermittelt
 
 		Object[][] monteure = new Object[zeilenMonteure][4];
 		// dieses Array wird die Tabelle befüllen
 
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			monteure[i][0] = db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname();
-			// MitarbeiterName (Name Vorname)
+			if (!db.getMonteurListe().get(i).getMitarbeiterNummer().equals("0000")) {
+				monteure[i][0] = db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname();
+				// MitarbeiterName (Name Vorname)
 
-			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();
-			// MitarbeiterNummer
+				monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();
+				// MitarbeiterNummer
 
-			if (indexWochentag <= 4) {
-				// für Montag bis Freitag
+				if (indexWochentag <= 4) {
+					// für Montag bis Freitag
 
-				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(indexWochentag);
-				// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
+					monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(indexWochentag);
+					// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
 
-			} else {
-				// Samstag und Sonntag wird die komplette Liste angezeigt
-				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
+				} else {
+					// Samstag und Sonntag wird die komplette Liste angezeigt
+					monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
+				}
+
+				monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";
+				// Summe der Aufträge
 			}
-
-			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";
-			// Summe der Aufträge
-
 		}
 		return monteure;
 	}
@@ -560,6 +559,9 @@ public class DisponentFenster extends JFrame {
 							JOptionPane nichtZugewiesen = new JOptionPane();
 							nichtZugewiesen.showMessageDialog(null, "keine Aufträge zugewiesen");
 							// Monteur ist für keinen Auftrag zuständig -> Warnung
+
+							return;
+							// Button wird vorzeitig beendet
 						}
 
 						// Monteur existiert und ist für mindestens einen Auftrag zuständig
@@ -606,7 +608,7 @@ public class DisponentFenster extends JFrame {
 
 		String summe;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
-			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
+			if (monteur != null && db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
 					.equals(monteur.getMitarbeiterNummer())) {
 				// Zuständiger Monteur = Monteur in der MonteurListe?
 
@@ -807,7 +809,7 @@ public class DisponentFenster extends JFrame {
 		DatumCBox = new JComboBox(Datum);
 		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		DatumCBox.setSelectedIndex(0);
-	
+
 		DatumCBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -851,9 +853,9 @@ public class DisponentFenster extends JFrame {
 					indexWochentag = 6;
 					break;
 				}
-				
+
 				monteureAktualisieren();
-				
+
 			}
 		});
 
