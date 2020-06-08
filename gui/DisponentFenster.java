@@ -107,6 +107,7 @@ public class DisponentFenster extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				LoginFenster login = new LoginFenster();
 				login.setVisible(true);
+				login.setLocationRelativeTo(null);
 				dispose();
 			}
 		});

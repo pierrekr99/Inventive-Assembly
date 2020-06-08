@@ -125,6 +125,7 @@ public class MonteurFenster extends JFrame {
 
 				LoginFenster login = new LoginFenster();// loginfenster erstellen
 				login.setVisible(true);
+				login.setLocationRelativeTo(null);
 				dispose();// aktuelles Fenster schlieﬂen
 
 			}
