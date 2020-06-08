@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import objekte.*;
 
 public class datenbankVerbindung {
@@ -53,6 +55,16 @@ public class datenbankVerbindung {
 
 	public datenbankVerbindung() {
 		verbinden();
+		
+		
+		ArrayList<String> test = new ArrayList<String>();
+		
+		
+		for (int i = 0; i < 5; i++) {
+			test.add("Strich");
+		}
+		
+		monteurListe.add(new Mitarbeiter("Monteur", "nicht zugewiesen", "", "0000", "123", test));
 		auftraggeberEinlesen();
 		disponentEinlesen();
 		komponenteEinlesen();
@@ -60,8 +72,6 @@ public class datenbankVerbindung {
 		auftragEinlesen();
 		
 		
-		
-		//monteurListe.add(new Mitarbeiter(null, "Nicht zugewießen", "", "0000", "", null));
 		
 	}
 	
@@ -114,7 +124,7 @@ public class datenbankVerbindung {
 				int indexmitarbeiter = -1;
 				int indexAuftraggeber = -1;
 				Auftraggeber a;
-				Mitarbeiter m;
+				Mitarbeiter m = null;
 				
 				
 				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
@@ -147,7 +157,16 @@ public class datenbankVerbindung {
 				
 			
 				if(indexmitarbeiter == -1) {
-					 m = null; // Wenn kein Monteur dem Auftrag zugewießen ist oder keiner gefunden wurde
+									
+					for (Mitarbeiter monteur : monteurListe) {
+						if(monteur.getName().equals("nicht zugewiesen")) {
+							m = monteur;
+						}
+						else {
+							
+						}
+					}
+					
 					 System.out.println("Kein Monteur konnte dem Auftrag zugewießen werden"); 
 				}
 				else {

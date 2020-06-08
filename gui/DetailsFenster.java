@@ -43,7 +43,7 @@ public class DetailsFenster extends JFrame {
 	 */
 
 	public DetailsFenster(Auftrag auftrag) { // reihe des auftrags als parameter
-		
+
 //      -------  Fenster  -----------------------------------------------
 
 		setTitle("Auftragsdetails");
@@ -53,6 +53,8 @@ public class DetailsFenster extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		JPanel panel = new JPanel();
+		setTitle("Details");
+		setIconImage(LoginFenster.getImage());
 
 //		-------  Komponenten Tabelle  ----------------------------------------
 
@@ -107,8 +109,9 @@ public class DetailsFenster extends JFrame {
 					int row1 = target.getSelectedRow();// wo wurde geklickt
 					int column = target.getSelectedColumn();
 					// do some action if appropriate column
-					if (column == 4 && tKomponenten.getValueAt(row1, column).equals("nicht verfügbar")) {// wenn man in der
-																								// Verfügbarkeitsspalte
+					if (column == 4 && tKomponenten.getValueAt(row1, column).equals("nicht verfügbar")) {// wenn man in
+																											// der
+						// Verfügbarkeitsspalte
 						// klickt und die verfügbarkeit
 						// false ist
 						JOptionPane.showMessageDialog(null, ("Eilbestellung für [" + tKomponenten.getValueAt(row1, 1)
@@ -182,21 +185,19 @@ public class DetailsFenster extends JFrame {
 		Object[][] komponenten = new Object[zeilen1][5];
 
 		for (int i = 0; i < auftrag.getKomponenten().size(); i++) { // fügt Komponenten
-																							// eines Auftrags in
-																							// die Tabelle ein
+																	// eines Auftrags in
+																	// die Tabelle ein
 
 			komponenten[i][0] = auftrag.getKomponenten().get(i).getKomponentenNummer();
 			komponenten[i][1] = auftrag.getKomponenten().get(i).getName();
 			komponenten[i][2] = auftrag.getKomponenten().get(i).getAttribut();
 			komponenten[i][3] = auftrag.getKomponenten().get(i).getKategorie();
-			
-			if(auftrag.getKomponenten().get(i).isVerfuegbarkeit() == true) {
+
+			if (auftrag.getKomponenten().get(i).isVerfuegbarkeit() == true) {
 				komponenten[i][4] = "verfügbar";
-			}else {
+			} else {
 				komponenten[i][4] = "nicht verfügbar";
 			}
-			
-			
 
 		}
 
@@ -210,9 +211,13 @@ public class DetailsFenster extends JFrame {
 		monteur[0][0] = auftrag.getAuftragsNummer();
 		monteur[0][1] = auftrag.getAuftraggeber().getKundenNummer();
 		monteur[0][2] = auftrag.getAuftraggeber().getName();
+		monteur[0][3] = "nicht Zugewiesen";
+		monteur[0][4] = "nicht Zugewiesen";
+		
+		if(auftrag.getZustaendig()!=null) {
 		monteur[0][3] = auftrag.getZustaendig().getMitarbeiterNummer();
-		monteur[0][4] = auftrag.getZustaendig().getVorname() + " "
-				+ auftrag.getZustaendig().getName();
+		monteur[0][4] = auftrag.getZustaendig().getVorname() + " " + auftrag.getZustaendig().getName();
+		}
 
 		return monteur;
 	}

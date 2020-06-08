@@ -89,7 +89,7 @@ public class MonteurFenster extends JFrame {
 		setBounds(0, 0, 700, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// fenster schließen bei x
 		GridBagLayout gridBagLayout = new GridBagLayout();// layout von hier...
-		gridBagLayout.columnWidths = new int[] { 0, 0 };//
+		gridBagLayout.columnWidths = new int[] {0, 0};//
 		gridBagLayout.rowHeights = new int[] { 362, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, Double.MIN_VALUE };//
 		gridBagLayout.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };//
@@ -116,7 +116,7 @@ public class MonteurFenster extends JFrame {
 		JLabel DatumLabel = new JLabel(f.format(new Date())); // Datumsanzeige
 		DatumLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
-		JButton logoutKnopf = new JButton("logout");// logout button erstellen
+		JButton logoutKnopf = new JButton("Logout");// logout button erstellen
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
 		logoutKnopf.addActionListener(new ActionListener() { // was passiert, wenn der Knopf gedrückt wird
 
@@ -125,6 +125,7 @@ public class MonteurFenster extends JFrame {
 
 				LoginFenster login = new LoginFenster();// loginfenster erstellen
 				login.setVisible(true);
+				login.setLocationRelativeTo(null);
 				dispose();// aktuelles Fenster schließen
 
 			}
@@ -152,25 +153,49 @@ public class MonteurFenster extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		JLabel lbl_eingeloggterMonteur = new JLabel("Nachname Vorname");
+		String mitarbeiternummer = LoginFenster.getMitarbeiternummer();
+		for (Mitarbeiter monteur : db.getMonteurListe()) {
+			if (monteur.getMitarbeiterNummer().equals(mitarbeiternummer)) {
+				lbl_eingeloggterMonteur.setText(monteur.getName() + ", " + monteur.getVorname());
+			}
+		}
+		lbl_eingeloggterMonteur.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
-		gl_auftraegeTab.setHorizontalGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap().addGroup(gl_auftraegeTab
-						.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
+		gl_auftraegeTab.setHorizontalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
-								.addComponent(DatumLabel).addGap(18).addComponent(dbAktualisierenKnopf)
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutKnopf)))
-						.addContainerGap()));
-		gl_auftraegeTab.setVerticalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap()
-						.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf).addComponent(DatumLabel))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE).addContainerGap()));
+							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(DatumLabel)
+							.addGap(18)
+							.addComponent(dbAktualisierenKnopf)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(logoutKnopf)))
+					.addContainerGap())
+		);
+		gl_auftraegeTab.setVerticalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
+						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(logoutKnopf)
+						.addComponent(dbAktualisierenKnopf)
+						.addComponent(DatumLabel)
+						.addComponent(lbl_eingeloggterMonteur))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+					.addContainerGap())
+		);
 
 		/**
 		 * ***********************************************************************************************
@@ -292,6 +317,7 @@ public class MonteurFenster extends JFrame {
 		auswahlBoxStatus.addItem("Teile fehlen");
 		auswahlBoxStatus.addItem("disponiert");
 		auswahlBoxStatus.addItem("im Lager");
+		auswahlBoxStatus.addItem("nicht zugewiesen");
 
 		TableColumn statusSpalte = auftraegeMonteurTBL.getColumnModel().getColumn(2);// in welche Spalte soll die
 																						// Combobox
@@ -325,18 +351,10 @@ public class MonteurFenster extends JFrame {
 						auftrag.setStatus(status);
 						// wenn ein Unterschied festgestellt wird, wird der Auftragsstatus aus der
 						// ArrayList mit dem Status aus der Tabelle überschrieben
-
-						try {
-							ResultSet rs; 
-							Statement stmt = db.getVerbindung().createStatement();
-							
-							stmt.executeUpdate("UPDATE `auftrag` SET `Status` = '" + status
-									+ "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
-							// die Veränderung wird dann von der ArrayList in die DB geladen
-							
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						
+						db.setStatus(auftrag, status); // nimmt Änderung in der DB vor
+						
+				
 
 					}
 				}
@@ -406,5 +424,4 @@ public class MonteurFenster extends JFrame {
 		}
 		return null;
 	}
-
 }

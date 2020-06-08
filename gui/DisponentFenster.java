@@ -44,24 +44,27 @@ import Datenbank.datenbankVerbindung;
 import objekte.Auftrag;
 import objekte.Mitarbeiter;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class DisponentFenster extends JFrame {
 
 	static datenbankVerbindung db = main.Main.getdb();
+	// ermöglicht auf den Inhalt der DB, die in der Main geladen wurde
 
 	private JPanel contentPane;
 	private JTextField txtSuche;
 	private JTable auftraegeTbl;
 	private JTable monteureTbl;
+	public int indexWochentag = 0;
 
 	Object[][] auftraege;
 	int zeilen = 0;
 	int zeilenMonteure = 0;
 	int summeAuftraege = 0;
-	String details = "Details anzeigen";// Hier könnte man den Detailsbutton Rendern
+	String details = "Details anzeigen";
 	String monteur;
 
-	JComboBox monteureCombobox = new JComboBox(); // erstellung einer Combobox
+	JComboBox monteureCombobox = new JComboBox();
 	JComboBox DatumCBox;
 	TableColumn monteureColumn;
 
@@ -75,10 +78,12 @@ public class DisponentFenster extends JFrame {
 	 * frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); } } });
 	 * }
 	 */
+
 	/**
 	 * Create the frame.
 	 */
 	public DisponentFenster() {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1047, 515);
 		contentPane = new JPanel();
@@ -94,6 +99,7 @@ public class DisponentFenster extends JFrame {
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		datumComboBox();
+		// Befüllt die datumComboBox
 
 		JButton logoutKnopf = new JButton("Logout");// Logout schließt das fenster und Öffnet das LoginFenster
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -101,6 +107,7 @@ public class DisponentFenster extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				LoginFenster login = new LoginFenster();
 				login.setVisible(true);
+				login.setLocationRelativeTo(null);
 				dispose();
 			}
 		});
@@ -111,17 +118,29 @@ public class DisponentFenster extends JFrame {
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				statusAktualisieren(); // Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile
-										// werden überprüft) und ggf. überschrieben
-				monteureInArrayEinlesen(); // die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
-											// ggf. ein neuer Monteur zugewiesen (stimmt dann wieder mit der Tabelle
-											// ein)
+				statusAktualisieren();
+				/*
+				 * Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile
+				 * werden überprüft) und ggf. überschrieben
+				 */
 
-				auftraegeAktualisieren(); // Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch
-											// des Monteurs automatisch mitüberschrieben, auch der Status wird überprüft
+				monteureInArrayEinlesen();
+				/*
+				 * die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
+				 * ggf. ein neuer Monteur zugewiesen (stimmt dann wieder mit der Tabelle ein)
+				 */
 
-				monteureAktualisieren(); // Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
-											// passt sich an die neuen Zahlen an
+				auftraegeAktualisieren();
+				/*
+				 * Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch des
+				 * Monteurs automatisch mitüberschrieben, auch der Status wird überprüft
+				 */
+
+				monteureAktualisieren();
+				/*
+				 * Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
+				 * passt sich an die neuen Zahlen an
+				 */
 
 			}
 		});
@@ -152,268 +171,334 @@ public class DisponentFenster extends JFrame {
 						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE).addGap(6)));
 
 		/**
-		 * Auftraege Reiter.
+		 * Auftraege Reiter.==================================================
 		 */
 		JScrollPane auftraegeSp = new JScrollPane();
 		tabbedPane.addTab("Aufträge", null, auftraegeSp, null);
 
 		auftraegeTbl = new JTable();
 		auftraegeSp.setViewportView(auftraegeTbl);
-		auftraegeTbl.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
-		auftraegeTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));// Schriftart und -größe in der Tabelle
-		auftraegeTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Schriftart und -größe in der
-																					// Kopfzeile der Tabelle
+		auftraegeTbl.setCellSelectionEnabled(true);
+		// Einzelne Zellen können ausgewählt werden
 
-		auftraegeAktualisieren(); // Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
+		auftraegeTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		// Schriftart und -größe in der Tabelle
 
-		auftraegeTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die
-													// Aufträge nach diesem Attribut
-													// in der natürlichen Ordnung und umgekehrt sortiert
+		auftraegeTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		// Schriftart und -größe in der Kopfzeile der Tabelle
+
+		auftraegeAktualisieren();
+		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
+
+		auftraegeTbl.setAutoCreateRowSorter(true);
+		/*
+		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
+		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
+		 */
 
 		monteureCombobox();
+		// Befüllt die monteureCombobox
 
 		/**
-		 * Monteure Reiter.
+		 * Monteure Reiter.==================================================
 		 */
 		JScrollPane monteureSp = new JScrollPane();
 		tabbedPane.addTab("Monteure", null, monteureSp, null);
 
 		monteureTbl = new JTable();
 		monteureSp.setViewportView(monteureTbl);
-		monteureTbl.setCellSelectionEnabled(true);// Einzelne Zellen können ausgewählt werden
-		monteureTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));// Schriftart und -größe in der Tabelle
-		monteureTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Schriftart und -größe in der
-																					// Kopfzeile der Tabelle
+		monteureTbl.setCellSelectionEnabled(true);
+		// Einzelne Zellen können ausgewählt werden
 
-		monteureAktualisieren();// Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
+		monteureTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		// Schriftart und -größe in der Tabelle
+
+		monteureTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		// Schriftart und -größe in der Kopfzeile der Tabelle
+
+		monteureAktualisieren();
+		// Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
 
 		monteureTblFormat();
+		// Monteure Tabelle wird formatiert
+
 		auftraegeTblFormat();
-		monteureTbl.setAutoCreateRowSorter(true);// durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die
-													// Monteure nach diesem Attribut
-													// in der natürlichen Ordnung und umgekehrt sortiert
+		// Aufträge Tabelle wird formatiert
+
+		monteureTbl.setAutoCreateRowSorter(true);
+		/*
+		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure
+		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
+		 */
 
 		contentPane.setLayout(gl_contentPane);
+		// Group-Layout im contentPane wird festgelegt
 
 	}
 
 	/**
-	 * Hilfsmethoden
+	 * GUI-Hilfsmethoden.==================================================
 	 */
+	private void auftraegeAktualisieren() {
 
-	private void monteureTblFormat() {
-		monteureTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
-		monteureTbl.getColumnModel().getColumn(0).setMinWidth(100);
-		monteureTbl.getColumnModel().getColumn(0).setMaxWidth(500);
+		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
+		auftraegeTbl.setModel(new DefaultTableModel(auftraege(), new String[] { "", "AuftragsNummer", "Status",
+				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" }) {
 
-		monteureTbl.getColumnModel().getColumn(1).setPreferredWidth(100);
-		monteureTbl.getColumnModel().getColumn(1).setMinWidth(100);
-		monteureTbl.getColumnModel().getColumn(1).setMaxWidth(400);
+			boolean[] columnEditables = new boolean[] { true, false, false, false, false, true, false, false };
+			// welche spalten lassen sich ändern
+		});
 
-		monteureTbl.getColumnModel().getColumn(2).setPreferredWidth(100);
-		monteureTbl.getColumnModel().getColumn(2).setMinWidth(100);
-		monteureTbl.getColumnModel().getColumn(2).setMaxWidth(500);
+		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
+		// ButtonRenderer wird in Spalte 0 ausgeführt
 
-		monteureTbl.getColumnModel().getColumn(3).setPreferredWidth(100);
-		monteureTbl.getColumnModel().getColumn(3).setMinWidth(100);
-		monteureTbl.getColumnModel().getColumn(3).setMaxWidth(500);
+		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
+		// ButtonEditorwird in Spalte 0 ausgeführt
 
-		monteureTbl.setRowHeight(50);
-		monteureTbl.getTableHeader().setReorderingAllowed(false);
+		auftraegeTblFormat();
+		// Tabelle wird formatiert
+
+		monteureCombobox();
+		// monteureCombobox wird konfiguriert (muss bei jeder Aktualisierung geschehen)
 	}
 
-	private void auftraegeTblFormat() {
-		auftraegeTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
-		auftraegeTbl.getColumnModel().getColumn(0).setMinWidth(150);
-		auftraegeTbl.getColumnModel().getColumn(0).setMaxWidth(150);
+	private void monteureAktualisieren() {
 
-		auftraegeTbl.getColumnModel().getColumn(1).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(1).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(1).setMaxWidth(250);
+		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
+		monteureTbl.setModel(new DefaultTableModel(monteure(),
+				new String[] { "Name", "MitarbeiterNummer", "Verfügbarkeit", "Auftraege" }) {
 
-		auftraegeTbl.getColumnModel().getColumn(2).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(2).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(2).setMaxWidth(200);
+			boolean[] columnEditables = new boolean[] { false, false, false, true };
+			// welche spalten lassen sich ändern
+		});
 
-		auftraegeTbl.getColumnModel().getColumn(3).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(3).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(3).setMaxWidth(250);
+		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));
+		// ButtonRenderer wird in Spalte 3 ausgeführt
 
-		auftraegeTbl.getColumnModel().getColumn(4).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(4).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(4).setMaxWidth(250);
+		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellEditor(new JButtonEditor());
+		// ButtonEditorwird in Spalte 3 ausgeführt
 
-		auftraegeTbl.getColumnModel().getColumn(5).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(5).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(5).setMaxWidth(500);
-
-		auftraegeTbl.getColumnModel().getColumn(6).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(6).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(6).setMaxWidth(200);
-
-		auftraegeTbl.getColumnModel().getColumn(7).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(7).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(7).setMaxWidth(200);
-
-		auftraegeTbl.setRowHeight(50);
-		auftraegeTbl.getTableHeader().setReorderingAllowed(false);
+		monteureTblFormat();
+		// Tabelle wird formatiert
 	}
 
-	private String summeAuftraege(Mitarbeiter monteur) {// zählt die zugehörigen Aufträge des Monteurs
-		String summe;
-		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
-			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
-					.equals(monteur.getMitarbeiterNummer())) {
-				/*
-				 * Hier wird die MitarbeiterNummer des Zuständigen Mitarbeiter in einem Auftrag
-				 * mit der Mitarbeiter einse Mitarbeiters aus Der Datenbank Verglichen und wenn
-				 * diese Übereinstimmen wird Hochgezählt.
-				 */
-				summeAuftraege = summeAuftraege + 1;
-			}
-		}
-		summe = "" + summeAuftraege;
-		summeAuftraege = 0;
-		return summe;
-	}
+	public Object[][] auftraege() {
+		// Erstellt Inhalt zur befüllung der auftraegeTabelle
 
-	private Object[][] monteure() {// Erstellt Tabelle mit Monteuren
-		zeilenMonteure = db.getMonteurListe().size();
-		Object[][] monteure = new Object[zeilenMonteure][4];// Nur das wird später eingelesen
-		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			monteure[i][0] = db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname();
-			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();// Auftragsliste.get(zeile).getAuftragsnr()
-
-			if (indexWochentag <= 4) {// für Montag bis Freitag
-				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(indexWochentag);
-				// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
-			} else { // Samstag und Sonntag wird die komplette Liste angezeigt
-				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
-			}
-
-			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";// Dropdown fehlt
-																										// noch
-
-		}
-		return monteure;
-	}
-
-	private void monteureCombobox() {// Fügt Optionen zur Statusveränderung hinzu
-
-		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
-
-		monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);// eine bestimmte Spalte für Combobox
-		// auswählen
-		monteureColumn.setCellEditor(new DefaultCellEditor(monteureCombobox));// in die Spalte die Combobox einbinden
-
-		monteureCombobox.addActionListener(null
-// zugewiesenen Monteur auslesen und in Datenbank zuweisung ändern
-		);
-
-		monteureCombobox.removeAllItems();
-		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			monteureCombobox
-					.addItem(db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname());
-		}
-		Collections.sort(db.getMonteurListe(), new Comparator<Mitarbeiter>() {
-
-
-
-            @Override
-            public int compare(Mitarbeiter o1, Mitarbeiter o2) {
-                // TODO Auto-generated method stub
-                return o1.getName().compareTo(o2.getName());
-
-
-            }
-        });
-	}
-
-	public Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
 		zeilen = db.getAuftragsListe().size();
-		auftraege = new Object[zeilen][8];// Nur das wird später eingelesen
+		// größe der Tabelle wird ermittelt
+
+		auftraege = new Object[zeilen][8];
+		// dieses Array wird die Tabelle befüllen
+
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
 			auftraege[i][0] = details;
-			auftraege[i][1] = db.getAuftragsListe().get(i).getAuftragsNummer();// Auftragsliste.get(zeile).getAuftragsnr()
+			auftraege[i][1] = db.getAuftragsListe().get(i).getAuftragsNummer();
+			// AuftragsNummer
+
 			auftraege[i][2] = db.getAuftragsListe().get(i).getStatus();
+			// Status
+
 			auftraege[i][3] = db.getAuftragsListe().get(i).getErstellungsdatum();
+			// Erstellungsdatum
+
 			auftraege[i][4] = db.getAuftragsListe().get(i).getFrist();
+			// Frist
+
 			auftraege[i][5] = "";
+			// MitarbeiterName (Name Vorname) wenn kein Monteur zugwiesen ist
+
 			auftraege[i][6] = "";
+			// MitarbeiterNummer wenn kein Monteur zugwiesen ist
+
 			auftraege[i][7] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
-			if (db.getAuftragsListe().get(i).getZustaendig() != null) {
+			// Auftraggeber
+
+			if (db.getAuftragsListe().get(i).getZustaendig() != null
+					&& db.getAuftragsListe().get(i).getZustaendig() != null) {
+				// ist ein Monteur zuständug?
+
 				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + " "
 						+ db.getAuftragsListe().get(i).getZustaendig().getVorname();
+				// MitarbeiterName (Name Vorname)
+
 				auftraege[i][6] = db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer();
+				// MitarbeiterNummer
 			}
 		}
 		return auftraege;
 	}
 
-	private void auftraegeAktualisieren() {
-		auftraegeTbl.setModel(new DefaultTableModel(auftraege(), // Benötigter Inhalt: (String[][],String[])
-				// Sonst wird hier ein eigenes Modell Eingefügt
-				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "MonteurName",
-						"MonteurNummer", "Auftragsgeber" }) {
-			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-					true, false, false, false, false, true, false, false };
+	private Object[][] monteure() {
+		// Erstellt Inhalt zur befüllung der monteureTabelle
 
-			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
-				return columnEditables[column];
+		zeilenMonteure = db.getMonteurListe().size();
+		// größe der Tabelle wird ermittelt
+
+		Object[][] monteure = new Object[zeilenMonteure][4];
+		// dieses Array wird die Tabelle befüllen
+
+		for (int i = 0; i < db.getMonteurListe().size(); i++) {
+			monteure[i][0] = db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname();
+			// MitarbeiterName (Name Vorname)
+
+			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();
+			// MitarbeiterNummer
+
+			if (indexWochentag <= 4) {
+				// für Montag bis Freitag
+
+				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(indexWochentag);
+				// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
+
+			} else {
+				// Samstag und Sonntag wird die komplette Liste angezeigt
+				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
 			}
-		});
-		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
-		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
-		auftraegeTblFormat();
-		monteureCombobox(); // die Combobox muss auch neu erstellt werden, da die alte leider nicht die
-		// Aktualisierung überlebt hat
+
+			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";
+			// Summe der Aufträge
+
+		}
+		return monteure;
 	}
 
-	private void monteureAktualisieren() {
-		monteureTbl.setModel(new DefaultTableModel(monteure(), // Benötigter Inhalt: (String[][],String[])
-				// Sonst wird hier ein eigenes Modell Eingefügt
-				new String[] { "Name", "MitarbeiterNummer", "Verfügbarkeit", "Auftraege"// welche spaltennamen
-				}) {
-			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
-					false, false, false, true };
+	private void auftraegeTblFormat() {
+		// Details
+		auftraegeTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
+		auftraegeTbl.getColumnModel().getColumn(0).setMinWidth(150);
+		auftraegeTbl.getColumnModel().getColumn(0).setMaxWidth(150);
 
-			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
-				return columnEditables[column];
+		// Auftragsnummer
+		auftraegeTbl.getColumnModel().getColumn(1).setPreferredWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(1).setMinWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(1).setMaxWidth(250);
+
+		// Status
+		auftraegeTbl.getColumnModel().getColumn(2).setPreferredWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(2).setMinWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(2).setMaxWidth(200);
+
+		// Erstellungsdatum
+		auftraegeTbl.getColumnModel().getColumn(3).setPreferredWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(3).setMinWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(3).setMaxWidth(250);
+
+		// Frist
+		auftraegeTbl.getColumnModel().getColumn(4).setPreferredWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(4).setMinWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(4).setMaxWidth(250);
+
+		// MonteurName
+		auftraegeTbl.getColumnModel().getColumn(5).setPreferredWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(5).setMinWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(5).setMaxWidth(500);
+
+		// MonteurNummer
+		auftraegeTbl.getColumnModel().getColumn(6).setPreferredWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(6).setMinWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(6).setMaxWidth(200);
+
+		// Aufraggeber
+		auftraegeTbl.getColumnModel().getColumn(7).setPreferredWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(7).setMinWidth(100);
+		auftraegeTbl.getColumnModel().getColumn(7).setMaxWidth(200);
+
+		// Zeilenhöhe
+		auftraegeTbl.setRowHeight(50);
+
+		// Nur lesen nicht schreiben
+		auftraegeTbl.getTableHeader().setReorderingAllowed(false);
+	}
+
+	private void monteureTblFormat() {
+		// Name
+		monteureTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
+		monteureTbl.getColumnModel().getColumn(0).setMinWidth(100);
+		monteureTbl.getColumnModel().getColumn(0).setMaxWidth(500);
+
+		// MitarbeiterNummer
+		monteureTbl.getColumnModel().getColumn(1).setPreferredWidth(100);
+		monteureTbl.getColumnModel().getColumn(1).setMinWidth(100);
+		monteureTbl.getColumnModel().getColumn(1).setMaxWidth(400);
+
+		// Verfügbarkeit
+		monteureTbl.getColumnModel().getColumn(2).setPreferredWidth(100);
+		monteureTbl.getColumnModel().getColumn(2).setMinWidth(100);
+		monteureTbl.getColumnModel().getColumn(2).setMaxWidth(500);
+
+		// AuftragsNummer
+		monteureTbl.getColumnModel().getColumn(3).setPreferredWidth(100);
+		monteureTbl.getColumnModel().getColumn(3).setMinWidth(100);
+		monteureTbl.getColumnModel().getColumn(3).setMaxWidth(500);
+
+		// Zeilenhöhe
+		monteureTbl.setRowHeight(50);
+
+		// Nur lesen nicht schreiben
+		monteureTbl.getTableHeader().setReorderingAllowed(false);
+	}
+
+	private void monteureCombobox() {
+		// Fügt Optionen zur Statusveränderung hinzu
+
+		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		// Schriftart und Größe
+
+		monteureColumn = auftraegeTbl.getColumnModel().getColumn(5);
+		// eine bestimmte Spalte für Combobox auswählen
+
+		monteureColumn.setCellEditor(new DefaultCellEditor(monteureCombobox));
+		// in die Spalte die Combobox einbinden
+
+		monteureCombobox.addActionListener(null);
+		// zugewiesenen Monteur auslesen und in Datenbank zuweisung ändern
+
+		monteureCombobox.removeAllItems();
+		// monteureCombobox wird geleert vor befüllung
+
+		for (int i = 0; i < db.getMonteurListe().size(); i++) {
+			monteureCombobox
+					.addItem(db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname());
+			// Name Vorname
+		}
+		Collections.sort(db.getMonteurListe(), new Comparator<Mitarbeiter>() {
+			// sortiert die monteureCombobox
+
+			@Override
+			public int compare(Mitarbeiter o1, Mitarbeiter o2) {
+
+				return o1.getName().compareTo(o2.getName());
 			}
 		});
-//		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-//
-//			monteureTbl.setValueAt("Summe: " + summeAuftraege(i) + "         Details", i, 3);
-//		}
-		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));// Button
-																												// wird
-																												// hinzugefügt
-		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellEditor(new JButtonEditor());
-		monteureTblFormat();
-		monteureCombobox(); // die Combobox muss auch neu erstellt werden, da die alte leider nicht die
-		// Aktualisierung überlebt hat
 	}
 
 	/**
-	 * Buttons in der Tabelle
+	 * Buttons in der Tabelle.==================================================
 	 */
 
 	class JButtonRenderer implements TableCellRenderer {
-
 		JButton button = new JButton();
 		String tabelle;
+		// in welcher Tabelle ist der Button
 
 		public JButtonRenderer(String string) {
 			this.tabelle = string;
 		}
 
+		// Wie soll der Button ausehen und was soll drin stehen
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
 			table.setShowGrid(true);
 			table.setGridColor(Color.LIGHT_GRAY);
 			button.setText(details);
 			if (tabelle.equals("monteureTbl"))
+				// wird ein knopf in der Monteur Tabelle gedrückt?
+
 				button.setText("Aufträge anzeigen [" + summeAuftraege(welcherMonteur(row)) + "]");
+			// Text im Button wird festgelegt und anzahl der Aufräge für die der Monteur
+			// zuständig ist wird gezählt
+
 			return button;
 		}
 	}
@@ -425,41 +510,95 @@ public class DisponentFenster extends JFrame {
 			super();
 			button = new JButton();
 			button.setOpaque(true);
+			// ist der Button undurchsichtig oder nicht
+
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					// was passiert wenn man den Button anklickt
+
 					if (button.getText().equals(details)) {
-						DetailsFenster frame = new DetailsFenster(welcherAuftrag(auftraegeTbl.getEditingRow()));
-						frame.setVisible(true);
-						auftraegeAktualisieren();
+						// wird der deteilsButton gedrückt?
+
+						Auftrag auftrag = welcherAuftrag(auftraegeTbl.getEditingRow());
+						// welcher Auftrag wird in der Zeile des geklickten Buttons angezeigt
+
+						if (auftrag != null) {
+							// es existiert ein Auftrag in der Zeile
+
+							DetailsFenster frame = new DetailsFenster(auftrag);
+							frame.setVisible(true);
+							// DetailsFenster wird geöffnet und der angezeigte Auftrag wird ihm mitgegeben
+
+							auftraegeAktualisieren();
+							// Tabelle wird neu geladen, damit der Button wieder erscheint
+						}
 
 					} else {
-						AuftraegeListeFenster frame = new AuftraegeListeFenster(
-								welcherMonteur(monteureTbl.getEditingRow()));
+						Mitarbeiter monteur = welcherMonteur(monteureTbl.getEditingRow());
+						if (summeAuftraege(monteur).equals("0")) {
+							// ist der der Monteur für 0 Aufträge zuständig?
+
+							JOptionPane nichtZugewiesen = new JOptionPane();
+							nichtZugewiesen.showMessageDialog(null, "keine Aufträge zugewiesen");
+							// Monteur ist für keinen Auftrag zuständig -> Warnung
+						}
+
+						// Monteur existiert und ist für mindestens einen Auftrag zuständig
+
+						AuftraegeListeFenster frame = new AuftraegeListeFenster(monteur);
 						frame.setVisible(true);
+						// AuftraegeListeFenster und der Monteur
+
 						monteureAktualisieren();
+						// Tabelle wird neu geladen, damit der Button wieder erscheint
 					}
-
 				}
-
 			});
 		}
 
 		@Override
 		public Object getCellEditorValue() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
 				int column) {
+			// Button wird nach klick wieder beschriftet
+
 			button.setText(details);
-			if (table.getRowCount() == monteureTbl.getRowCount()
-					&& table.getValueAt(row, 1).equals(monteureTbl.getValueAt(row, 1))) {
+			if (table == monteureTbl) {
+				// die übergebene Tabelle ist die MonteurTabelle
+
 				button.setText("Aufträge anzeigen [" + summeAuftraege(welcherMonteur(row)) + "]");
+				// Text im Button wird festgelegt und anzahl der Aufräge für die der Monteur
+				// zuständig ist wird gezählt
 			}
 			return button;
 		}
+	}
+
+	/**
+	 * funktionale Hilfsmethoden.==================================================
+	 */
+
+	private String summeAuftraege(Mitarbeiter monteur) {
+		// zählt die Aufträge für die der Monteur Zuständig ist
+
+		String summe;
+		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
+			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
+					.equals(monteur.getMitarbeiterNummer())) {
+				// Zuständiger Monteur = Monteur in der MonteurListe?
+
+				summeAuftraege = summeAuftraege + 1;
+			}
+		}
+		summe = "" + summeAuftraege;
+		summeAuftraege = 0;
+		// SummeAuftraege wird zurückgesetzt
+
+		return summe;
 	}
 
 	private Auftrag welcherAuftrag(int editingRow) {
@@ -481,10 +620,6 @@ public class DisponentFenster extends JFrame {
 		}
 		return null;
 	}
-
-	/**
-	 * Tabelle in Array Einlesen
-	 */
 
 	private void monteureInArrayEinlesen() {
 
@@ -522,8 +657,9 @@ public class DisponentFenster extends JFrame {
 								// überschrieben und bekommt den neuen Monteur zugewiesen (dies geschieht mit
 								// dem Setter)
 
-								db.setZustaendig(auftrag, monteur); // auftrag bekommt neuen Monteur zugewießen in der Datenbank
-								
+								db.setZustaendig(auftrag, monteur); // auftrag bekommt neuen Monteur zugewießen in der
+																	// Datenbank
+
 							}
 							int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream()
 									.filter((k) -> k.isVerfuegbarkeit()).count();
@@ -541,10 +677,9 @@ public class DisponentFenster extends JFrame {
 								// Anmerkung: Diese Methode ist auch nochmal als eigene Methode vorzufinden,
 								// allerdings hat der Disponent hier die Möglichkeit, einen Auftrag, welcher
 								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
-								// Auftragsstatus wird dann wieder geändert.							
-								
-								db.setStatus(auftrag, "disponiert"); //Verändert den Status in der Datenbank 
-								
+								// Auftragsstatus wird dann wieder geändert.
+
+								db.setStatus(auftrag, "disponiert"); // Verändert den Status in der Datenbank
 
 							} else if (verfuegbareKomponenten != 5) {
 								auftrag.setStatus("Teile fehlen");
@@ -552,9 +687,9 @@ public class DisponentFenster extends JFrame {
 								// mind. ein Teil nicht verfügbar ist und somit wird der Auftragsstatus auf
 								// "Teile fehlen" gesetzt.
 
-								db.setStatus(auftrag, "Teile fehlen"); //Verändert den Status in der Datenbank 
+								db.setStatus(auftrag, "Teile fehlen"); // Verändert den Status in der Datenbank
 							}
-						} 
+						}
 					}
 					;
 				}
@@ -612,11 +747,12 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
-	public int indexWochentag = 0;
+	private void datumComboBox() {
+		// ComboBox um das Datum auwählen zu können
 
-	private void datumComboBox() { // ComboBox um das Datum auwählen zu können
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
+		// EEEE steht für den Wochentag
 
-		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht für den Wochentag
 		Calendar c = Calendar.getInstance();
 
 		Date datum = new Date();
@@ -655,13 +791,21 @@ public class DisponentFenster extends JFrame {
 		DatumCBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem(); // liest Datum als String aus
-				String[] ausgewaelterWochentag = ausgewaeltesDatum.split(","); // wochentag und datum wird getrennt
+				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem();
+				// liest Datum als String aus
 
-				String s = ausgewaelterWochentag[0]; // nur der wochentag wird in s gespeichert
+				String[] ausgewaelterWochentag = ausgewaeltesDatum.split(",");
+				// wochentag und datum wird getrennt
 
-				switch (s) { // index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
-								// können
+				String s = ausgewaelterWochentag[0];
+				// nur der wochentag wird in s gespeichert
+
+				switch (s) {
+				/*
+				 * index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
+				 * können
+				 */
+
 				case "Montag":
 					indexWochentag = 0;
 					break;
@@ -692,9 +836,11 @@ public class DisponentFenster extends JFrame {
 
 	}
 
-	private String datumAlsStringBekommen(Date date) { // gibt heutiges Datum zurück
+	private String datumAlsStringBekommen(Date date) {
+		// gibt heutiges Datum zurück
 
-		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // EEEE steht für den Wochentag
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
+		// EEEE steht für den Wochentag
 		return f.format(date);
 	}
 
