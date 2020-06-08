@@ -60,6 +60,7 @@ public class LoginFenster extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setIconImage(image);
+		setTitle("Login");
 
 		JLabel titelLabel = new JLabel("L O G I N ");
 		titelLabel.setFont(new Font("Verdana", Font.BOLD | Font.ITALIC, 18));
@@ -108,6 +109,7 @@ public class LoginFenster extends JFrame {
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						disponent.setVisible(true);
 						disponent.setIconImage(image);
+						disponent.setTitle("Inventive Assembly");
 						dispose();
 						funktion = true;
 					}
@@ -119,6 +121,7 @@ public class LoginFenster extends JFrame {
 						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						monteur.setVisible(true);
 						monteur.setIconImage(image);
+						monteur.setTitle("Inventive Assembly");
 						dispose();
 						funktion = true;
 					}
