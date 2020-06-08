@@ -709,7 +709,31 @@ public class DisponentFenster extends JFrame {
 								// "Teile fehlen" gesetzt.
 
 								db.setStatus(auftrag, "Teile fehlen"); // Verändert den Status in der Datenbank
+
 							}
+							if (auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
+								auftrag.setStatus("nicht zugewiesen");
+								// wenn kein Monteur einem Auftrag zugewiesen ist, wird der Status auf nicht
+								// zugewiesen gestellt. Anmerkung: Diese Methode ist auch nochmal als eigene
+								// Methode vorzufinden,
+								// allerdings hat der Disponent hier die Möglichkeit, einen Auftrag, welcher
+								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
+								// Auftragsstatus wird dann wieder geändert.
+
+								try {
+									ResultSet rs;
+									Statement stmt = db.getVerbindung().createStatement();
+
+									stmt.executeUpdate(
+											"UPDATE `auftrag` SET `Status` = 'nicht zugewiesen' WHERE (`AuftragsNummer` = '"
+													+ auftrag.getAuftragsNummer() + "');");
+									// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
+
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+
 						}
 					}
 					;
@@ -721,13 +745,15 @@ public class DisponentFenster extends JFrame {
 
 	private void statusAktualisieren() {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
+
 			int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
 					.count();
 			// der gerade geänderte Auftrag wird nun auch nochmal auf seinen Status
 			// überprüft. Hierfür werden die verfügbaren Komponenten gezählt (mittels eines
 			// Streams)
 
-			if (verfuegbareKomponenten == 5 && !auftrag.getStatus().equals("im Lager")) {
+			if (verfuegbareKomponenten == 5 && !auftrag.getStatus().equals("im Lager")
+					&& !auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				auftrag.setStatus("disponiert");
 				// wenn die Anzahl der verfügbaren Komponenten genau 5 beträgt (und der Auftrag
 				// nicht "im Lager" ist), sind alle
@@ -747,7 +773,8 @@ public class DisponentFenster extends JFrame {
 					e.printStackTrace();
 				}
 
-			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")) {
+			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")
+					&& !auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				auftrag.setStatus("Teile fehlen");
 				// wenn die Anzahl der Teile kleiner als 5 ist (und der Auftrag nicht "im Lager"
 				// ist, heißt das im Umkehrschluss, dass mind. ein Teil nicht verfügbar ist und
@@ -758,6 +785,23 @@ public class DisponentFenster extends JFrame {
 					Statement stmt = db.getVerbindung().createStatement();
 
 					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
+							+ auftrag.getAuftragsNummer() + "');");
+					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			} else if (auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
+				auftrag.setStatus("nicht zugewiesen");
+				// wenn kein Monteur einem Auftrag zugewiesen ist, wird der Status auf nicht
+				// zugewiesen gestellt
+
+				try {
+					ResultSet rs;
+					Statement stmt = db.getVerbindung().createStatement();
+
+					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'nicht zugewiesen' WHERE (`AuftragsNummer` = '"
 							+ auftrag.getAuftragsNummer() + "');");
 					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
 

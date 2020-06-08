@@ -317,7 +317,6 @@ public class datenbankVerbindung {
 	}
 
 	public void setStatus(Auftrag auftrag, String status) {
-		// TODO Auto-generated method stub
 		
 		try {
 			
