@@ -332,16 +332,25 @@ public class DisponentFenster extends JFrame {
 			// Auftraggeber
 
 			if (db.getAuftragsListe().get(i).getZustaendig() != null
-					&& db.getAuftragsListe().get(i).getZustaendig() != null) {
+					&& db.getAuftragsListe().get(i).getZustaendig() != null
+					&& !db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				// ist ein Monteur zuständug?
 
-				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + " "
+				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + ", "
 						+ db.getAuftragsListe().get(i).getZustaendig().getVorname();
-				// MitarbeiterName (Name Vorname)
+				// MitarbeiterName (Name, Vorname)
 
 				auftraege[i][6] = db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer();
 				// MitarbeiterNummer
+
+			} else if (db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer().equals("0000")) {
+				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + " "
+						+ db.getAuftragsListe().get(i).getZustaendig().getVorname();
+				// "nicht zugewiesen"
 			}
+			auftraege[i][6] = db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer();
+			// MitarbeiterNummer
+
 		}
 		return auftraege;
 	}
@@ -473,12 +482,21 @@ public class DisponentFenster extends JFrame {
 		// zugewiesenen Monteur auslesen und in Datenbank zuweisung ändern
 
 		monteureCombobox.removeAllItems();
-		// monteureCombobox wird geleert vor befüllung
+		// monteureCombobox wird geleert vor Befüllung
 
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			monteureCombobox
-					.addItem(db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname());
-			// Name Vorname
+		
+			if (db.getMonteurListe().get(i).getMitarbeiterNummer().equals("0000")) {
+				monteureCombobox.addItem(
+						db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname());
+				// wenn kein Monteur dem Auftrag zugewiesen ist, wird die Combobox an dieser
+				// Stelle mit "nicht (Nachname) zugewiesen (Vorname)" befüllt
+				
+			} else {
+				monteureCombobox.addItem(
+						db.getMonteurListe().get(i).getName() + ", " + db.getMonteurListe().get(i).getVorname());
+				// Name, Vorname
+			}
 		}
 		Collections.sort(db.getMonteurListe(), new Comparator<Mitarbeiter>() {
 			// sortiert die monteureCombobox
@@ -656,8 +674,19 @@ public class DisponentFenster extends JFrame {
 					// der in der Combobox ausgewählte Monteur wird in einen String umgewandelt und
 					// die Combobox somit eliminiert
 
-					String[] namentrennung = ausgewaehlterMonteur.split(" ");
+					String[] namentrennung;
 					// Trennung in Vor- [1] und Nachname [0] des Monteurs
+
+					if (auftraegeTbl.getValueAt(i, 5).equals("nicht zugewiesen")) {
+						namentrennung = ausgewaehlterMonteur.split(" ");
+						// falls der Auftrag "nicht" zugewiesen ist, muss ein anderes Splitverfahren
+						// verwendet werden
+
+					} else {
+						namentrennung = ausgewaehlterMonteur.split(", ");
+						// Trennung in Vor- [1] und Nachname [0] des Monteurs
+
+					}
 
 					if (!namentrennung[0].equals(auftrag.getZustaendig().getName())) {
 						// vergleicht den zuständigen Monteur (anhand des Nachnamens) aus dem Auftrag
@@ -719,7 +748,7 @@ public class DisponentFenster extends JFrame {
 								// allerdings hat der Disponent hier die Möglichkeit, einen Auftrag, welcher
 								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
 								// Auftragsstatus wird dann wieder geändert.
-								
+
 								db.setStatus(auftrag, "nicht zugewiesen"); // Verändert den Status in der Datenbank
 							}
 
