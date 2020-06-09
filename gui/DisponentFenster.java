@@ -270,7 +270,6 @@ public class DisponentFenster extends JFrame {
 	private void datumSortieren() {
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) auftraegeTbl.getModel());
 		auftraegeTbl.setRowSorter(sorter);
-
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); // 
 		 
 		int columnIndexToSort = 4;
@@ -286,8 +285,7 @@ public class DisponentFenster extends JFrame {
 					throw new ClassCastException();
 				String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0]; // Datum wird zusammengesetzt
 				String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
-
-		sortKeys.add(new RowSorter.SortKey(columnIndexToSort1, SortOrder.ASCENDING));
+				
 				return datumZusammengesetzt1.compareTo(datumZusammengesetzt2); // Ordnen der Daten über CompareTo-Methode
 		    
 		}));
