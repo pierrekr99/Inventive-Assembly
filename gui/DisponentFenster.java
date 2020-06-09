@@ -220,23 +220,23 @@ public class DisponentFenster extends JFrame {
 		
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) auftraegeTbl.getModel());
 		auftraegeTbl.setRowSorter(sorter);
-		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
+		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); // 
 		 
 		int columnIndexToSort = 4;
-		sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING)); // beschreibt die Sortierreihenfolge in einer Spalte über ColumnIndex
 		
 		int columnIndexToSort1 = 3;
-		sortKeys.add(new RowSorter.SortKey(columnIndexToSort1, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSort1, SortOrder.ASCENDING)); // beschreibt die Sortierreihenfolge in einer Spalte über ColumnIndex
 		 
-		sorter.setComparator(columnIndexToSort, (( String datum1, String datum2) -> {
-				String[] datumGetrennt1 = datum1.split("\\.");
+		sorter.setComparator(columnIndexToSort, (( String datum1, String datum2) -> { //Erzeugen eines Comparators,der ausgewählte Spalte sortiert
+				String[] datumGetrennt1 = datum1.split("\\."); // Datum-String wird in 3 Teile geteilt 
 				String[] datumGetrennt2 = datum2.split("\\.");
-				if (datumGetrennt1.length != datumGetrennt2.length)
+				if (datumGetrennt1.length != datumGetrennt2.length) // Daten werden miteinander verglichen, ob sie die Selbe Länge besitzen
 					throw new ClassCastException();
-				String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
+				String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0]; // Datum wird zusammengesetzt
 				String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
 
-				return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
+				return datumZusammengesetzt1.compareTo(datumZusammengesetzt2); // Ordnen der Daten über CompareTo-Methode
 		    
 		}));
 		

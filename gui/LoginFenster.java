@@ -103,15 +103,15 @@ public class LoginFenster extends JFrame {
 				String id = tf_MitarbeiterID.getText();
 				mitarbeiternummer = tf_MitarbeiterID.getText();
 				
-				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
-					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-						DisponentFenster disponent = new DisponentFenster();
-						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
-						disponent.setVisible(true);
-						disponent.setIconImage(image);
-						disponent.setTitle("Inventive Assembly");
-						dispose();
-						funktion = true;
+				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) { // Disponentenliste durchlaufen
+					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) { //vergleich der eingegebenen Daten mit den Daten aus der Disponentenliste
+						DisponentFenster disponent = new DisponentFenster(); // wenn ein Objekt gefunden wurde, dann Disponentenfenster erzeugen
+						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH); //
+						disponent.setVisible(true); // Fenster anzeigen
+						disponent.setIconImage(image); //Icon in der Taskleiste
+						disponent.setTitle("Inventive Assembly"); // Titel setzen
+						dispose(); //Login verschwindet
+						funktion = true; // LoginVariable wird true gesetzt
 					}
 				}
 				
@@ -126,7 +126,7 @@ public class LoginFenster extends JFrame {
 						funktion = true;
 					}
 				}
-				if(!funktion) {
+				if(!funktion) { // wenn funktion-Variable false ist erscheint eine Fehlermeldung
 					JOptionPane.showMessageDialog(null, "Anmeldedaten überprüfen!");
 				}
 				
