@@ -159,7 +159,7 @@ public class DisponentFenster extends JFrame {
 				 */
 				
 				datumSortieren(); //Datum kann nun wieder sortiert werden
-
+				auftraegeSortieren();
 			}
 		});
 
@@ -222,7 +222,7 @@ public class DisponentFenster extends JFrame {
 		 */
 
 		datumSortieren();
-
+		auftraegeSortieren();
 		monteureCombobox();
 		// Befüllt die monteureCombobox
 
@@ -266,7 +266,20 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * GUI-Hilfsmethoden.==================================================
 	 */
-
+	
+	public void auftraegeSortieren() {
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) auftraegeTbl.getModel());
+		auftraegeTbl.setRowSorter(sorter);
+		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); // 
+		 
+		int columnIndexToSort = 1;
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING)); // beschreibt die Sortierreihenfolge in einer Spalte über ColumnIndex	
+		sorter.setComparator(columnIndexToSort, (( String auftrag1, String auftrag2 ) -> {
+			return auftrag1.compareTo(auftrag2);
+		}));
+	}
+	
+	
 	private void datumSortieren() {
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) auftraegeTbl.getModel());
 		auftraegeTbl.setRowSorter(sorter);
@@ -279,8 +292,8 @@ public class DisponentFenster extends JFrame {
 		sortKeys.add(new RowSorter.SortKey(columnIndexToSort1, SortOrder.ASCENDING)); // beschreibt die Sortierreihenfolge in einer Spalte über ColumnIndex
 		 
 		sorter.setComparator(columnIndexToSort, (( String datum1, String datum2) -> { //Erzeugen eines Comparators,der ausgewählte Spalte sortiert
-				String[] datumGetrennt1 = datum1.split("\\."); // Datum-String wird in 3 Teile geteilt 
-				String[] datumGetrennt2 = datum2.split("\\.");
+			String[] datumGetrennt1 = datum1.split("\\."); // Datum-String wird in 3 Teile geteilt 
+			String[] datumGetrennt2 = datum2.split("\\.");
 				if (datumGetrennt1.length != datumGetrennt2.length) // Daten werden miteinander verglichen, ob sie die Selbe Länge besitzen
 					throw new ClassCastException();
 				String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0]; // Datum wird zusammengesetzt
