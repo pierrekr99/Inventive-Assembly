@@ -117,12 +117,12 @@ public class LoginFenster extends JFrame {
 				
 				for(Mitarbeiter mitarbeiter : db.getMonteurListe()) {
 					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-						MonteurFenster monteur = new MonteurFenster();
+						MonteurFenster monteur = new MonteurFenster(); // Monteurfenster erzeugen
 						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
-						monteur.setVisible(true);
+						monteur.setVisible(true); // Monteurfenster wird angezeigt
 						monteur.setIconImage(image);
 						monteur.setTitle("Inventive Assembly");
-						dispose();
+						dispose(); // Login verschwindet
 						funktion = true;
 					}
 				}
