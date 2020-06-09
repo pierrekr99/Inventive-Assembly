@@ -64,7 +64,7 @@ public class datenbankVerbindung {
 			test.add("Strich");
 		}
 		
-		monteurListe.add(new Mitarbeiter("Monteur", "nicht zugewiesen", "", "0000", "123", test));
+		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", test));
 		auftraggeberEinlesen();
 		disponentEinlesen();
 		komponenteEinlesen();
@@ -159,7 +159,7 @@ public class datenbankVerbindung {
 				if(indexmitarbeiter == -1) {
 									
 					for (Mitarbeiter monteur : monteurListe) {
-						if(monteur.getName().equals("nicht zugewiesen")) {
+						if(monteur.getName().equals("nicht")) {
 							m = monteur;
 						}
 						else {
@@ -167,14 +167,14 @@ public class datenbankVerbindung {
 						}
 					}
 					
-					 System.out.println("Kein Monteur konnte dem Auftrag zugewießen werden"); 
+					 System.out.println("Kein Monteur konnte dem Auftrag zugewiesen werden"); 
 				}
 				else {
 					 m = monteurListe.get(indexmitarbeiter);
 				}
 				
 				if(indexAuftraggeber == -1) {
-					 a = null; // Wenn kein auftraggeber dem Auftrag zugewießen ist oder keiner gefunden wurde
+					 a = null; // Wenn kein auftraggeber dem Auftrag zugewiesen ist oder keiner gefunden wurde
 				}
 				else {
 					 a = auftraggeberListe.get(indexAuftraggeber);
@@ -317,7 +317,6 @@ public class datenbankVerbindung {
 	}
 
 	public void setStatus(Auftrag auftrag, String status) {
-		// TODO Auto-generated method stub
 		
 		try {
 			

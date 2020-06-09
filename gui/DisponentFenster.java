@@ -101,14 +101,14 @@ public class DisponentFenster extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tabbedPane.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				
-				if(tabbedPane.getSelectedComponent() == auftraegeSp) {
+			public void stateChanged(ChangeEvent e) {
+
+				if (tabbedPane.getSelectedComponent() == auftraegeSp) {
 					DatumCBox.setVisible(false);
-				}else {
+				} else {
 					DatumCBox.setVisible(true);
 				}
-				
+
 			}
 		});
 
@@ -156,75 +156,23 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 
-//		gebeDatumAus();
+		datumBefuellen();
 		// Befüllt die datumComboBox
-
-		DatumCBox = new JComboBox(gebeDatumAus());
-		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		DatumCBox.setSelectedIndex(0);
-
-		DatumCBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem();
-				// liest Datum als String aus
-
-				String[] ausgewaelterWochentag = ausgewaeltesDatum.split(",");
-				// wochentag und datum wird getrennt
-
-				String s = ausgewaelterWochentag[0];
-				// nur der wochentag wird in s gespeichert
-
-				switch (s) {
-				/*
-				 * index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
-				 * können
-				 */
-
-				case "Montag":
-					indexWochentag = 0;
-					break;
-				case "Dienstag":
-					indexWochentag = 1;
-					break;
-				case "Mittwoch":
-					indexWochentag = 2;
-					break;
-				case "Donnerstag":
-					indexWochentag = 3;
-					break;
-				case "Freitag":
-					indexWochentag = 4;
-					break;
-				case "Samstag":
-					indexWochentag = 5;
-					break;
-				case "Sonntag":
-					indexWochentag = 6;
-					break;
-				default:
-					indexWochentag = 6;
-					break;
-				}
-			}
-		});
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap().addGroup(gl_contentPane
-						.createParallelGroup(
-								Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
-								.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(18).addComponent(dbAktualisierenKnopf).addGap(18).addComponent(logoutKnopf))
-						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)).addContainerGap()));
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
+										.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(18).addComponent(dbAktualisierenKnopf).addGap(18)
+										.addComponent(logoutKnopf))
+								.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
+						.addContainerGap()));
 		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
 				.createSequentialGroup().addContainerGap()
 				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -384,16 +332,25 @@ public class DisponentFenster extends JFrame {
 			// Auftraggeber
 
 			if (db.getAuftragsListe().get(i).getZustaendig() != null
-					&& db.getAuftragsListe().get(i).getZustaendig() != null) {
+					&& db.getAuftragsListe().get(i).getZustaendig() != null
+					&& !db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				// ist ein Monteur zuständug?
 
-				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + " "
+				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + ", "
 						+ db.getAuftragsListe().get(i).getZustaendig().getVorname();
-				// MitarbeiterName (Name Vorname)
+				// MitarbeiterName (Name, Vorname)
 
 				auftraege[i][6] = db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer();
 				// MitarbeiterNummer
+
+			} else if (db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer().equals("0000")) {
+				auftraege[i][5] = db.getAuftragsListe().get(i).getZustaendig().getName() + " "
+						+ db.getAuftragsListe().get(i).getZustaendig().getVorname();
+				// "nicht zugewiesen"
 			}
+			auftraege[i][6] = db.getAuftragsListe().get(i).getZustaendig().getMitarbeiterNummer();
+			// MitarbeiterNummer
+
 		}
 		return auftraege;
 	}
@@ -401,33 +358,34 @@ public class DisponentFenster extends JFrame {
 	private Object[][] monteure() {
 		// Erstellt Inhalt zur befüllung der monteureTabelle
 
-		zeilenMonteure = db.getMonteurListe().size();
+		zeilenMonteure = db.getMonteurListe().size() - 1;
 		// größe der Tabelle wird ermittelt
 
 		Object[][] monteure = new Object[zeilenMonteure][4];
 		// dieses Array wird die Tabelle befüllen
 
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			monteure[i][0] = db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname();
-			// MitarbeiterName (Name Vorname)
+			if (!db.getMonteurListe().get(i).getMitarbeiterNummer().equals("0000")) {
+				monteure[i][0] = db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname();
+				// MitarbeiterName (Name Vorname)
 
-			monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();
-			// MitarbeiterNummer
+				monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();
+				// MitarbeiterNummer
 
-			if (indexWochentag <= 4) {
-				// für Montag bis Freitag
+				if (indexWochentag <= 4) {
+					// für Montag bis Freitag
 
-				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(indexWochentag);
-				// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
+					monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(indexWochentag);
+					// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
 
-			} else {
-				// Samstag und Sonntag wird die komplette Liste angezeigt
-				monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
+				} else {
+					// Samstag und Sonntag wird die komplette Liste angezeigt
+					monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
+				}
+
+				monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";
+				// Summe der Aufträge
 			}
-
-			monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";
-			// Summe der Aufträge
-
 		}
 		return monteure;
 	}
@@ -524,12 +482,21 @@ public class DisponentFenster extends JFrame {
 		// zugewiesenen Monteur auslesen und in Datenbank zuweisung ändern
 
 		monteureCombobox.removeAllItems();
-		// monteureCombobox wird geleert vor befüllung
+		// monteureCombobox wird geleert vor Befüllung
 
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			monteureCombobox
-					.addItem(db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname());
-			// Name Vorname
+
+			if (db.getMonteurListe().get(i).getMitarbeiterNummer().equals("0000")) {
+				monteureCombobox.addItem(
+						db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname());
+				// wenn kein Monteur dem Auftrag zugewiesen ist, wird die Combobox an dieser
+				// Stelle mit "nicht (Nachname) zugewiesen (Vorname)" befüllt
+
+			} else {
+				monteureCombobox.addItem(
+						db.getMonteurListe().get(i).getName() + ", " + db.getMonteurListe().get(i).getVorname());
+				// Name, Vorname
+			}
 		}
 		Collections.sort(db.getMonteurListe(), new Comparator<Mitarbeiter>() {
 			// sortiert die monteureCombobox
@@ -610,6 +577,9 @@ public class DisponentFenster extends JFrame {
 							JOptionPane nichtZugewiesen = new JOptionPane();
 							nichtZugewiesen.showMessageDialog(null, "keine Aufträge zugewiesen");
 							// Monteur ist für keinen Auftrag zuständig -> Warnung
+
+							return;
+							// Button wird vorzeitig beendet
 						}
 
 						// Monteur existiert und ist für mindestens einen Auftrag zuständig
@@ -656,9 +626,13 @@ public class DisponentFenster extends JFrame {
 
 		String summe;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
-			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
-					.equals(monteur.getMitarbeiterNummer())) {
+			if (monteur != null
+					&& db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
+							.equals(monteur.getMitarbeiterNummer())
+					&& !db.getAuftragsListe().get(j).getStatus().equals("im Lager")) {
 				// Zuständiger Monteur = Monteur in der MonteurListe?
+				// Aufträge, welche bereits abgeschlossen/ im Lager sind, zählen nicht mehr in
+				// die Auftragssumme des einzelnen Monteurs
 
 				summeAuftraege = summeAuftraege + 1;
 			}
@@ -704,8 +678,19 @@ public class DisponentFenster extends JFrame {
 					// der in der Combobox ausgewählte Monteur wird in einen String umgewandelt und
 					// die Combobox somit eliminiert
 
-					String[] namentrennung = ausgewaehlterMonteur.split(" ");
+					String[] namentrennung;
 					// Trennung in Vor- [1] und Nachname [0] des Monteurs
+
+					if (auftraegeTbl.getValueAt(i, 5).equals("nicht zugewiesen")) {
+						namentrennung = ausgewaehlterMonteur.split(" ");
+						// falls der Auftrag "nicht" zugewiesen ist, muss ein anderes Splitverfahren
+						// verwendet werden
+
+					} else {
+						namentrennung = ausgewaehlterMonteur.split(", ");
+						// Trennung in Vor- [1] und Nachname [0] des Monteurs
+
+					}
 
 					if (!namentrennung[0].equals(auftrag.getZustaendig().getName())) {
 						// vergleicht den zuständigen Monteur (anhand des Nachnamens) aus dem Auftrag
@@ -757,7 +742,20 @@ public class DisponentFenster extends JFrame {
 								// "Teile fehlen" gesetzt.
 
 								db.setStatus(auftrag, "Teile fehlen"); // Verändert den Status in der Datenbank
+
 							}
+							if (auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
+								auftrag.setStatus("nicht zugewiesen");
+								// wenn kein Monteur einem Auftrag zugewiesen ist, wird der Status auf nicht
+								// zugewiesen gestellt. Anmerkung: Diese Methode ist auch nochmal als eigene
+								// Methode vorzufinden,
+								// allerdings hat der Disponent hier die Möglichkeit, einen Auftrag, welcher
+								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
+								// Auftragsstatus wird dann wieder geändert.
+
+								db.setStatus(auftrag, "nicht zugewiesen"); // Verändert den Status in der Datenbank
+							}
+
 						}
 					}
 					;
@@ -769,13 +767,15 @@ public class DisponentFenster extends JFrame {
 
 	private void statusAktualisieren() {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
+
 			int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
 					.count();
 			// der gerade geänderte Auftrag wird nun auch nochmal auf seinen Status
 			// überprüft. Hierfür werden die verfügbaren Komponenten gezählt (mittels eines
 			// Streams)
 
-			if (verfuegbareKomponenten == 5 && !auftrag.getStatus().equals("im Lager")) {
+			if (verfuegbareKomponenten == 5 && !auftrag.getStatus().equals("im Lager")
+					&& !auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				auftrag.setStatus("disponiert");
 				// wenn die Anzahl der verfügbaren Komponenten genau 5 beträgt (und der Auftrag
 				// nicht "im Lager" ist), sind alle
@@ -783,40 +783,28 @@ public class DisponentFenster extends JFrame {
 				// db.getAuftragsliste() auf "disponiert" gesetzt (falls er noch auf "Teile
 				// fehlen" gesetzt ist)
 
-				try {
-					ResultSet rs;
-					Statement stmt = db.getVerbindung().createStatement();
+				db.setStatus(auftrag, "disponiert"); // Verändert den Status in der Datenbank
 
-					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'disponiert' WHERE (`AuftragsNummer` = '"
-							+ auftrag.getAuftragsNummer() + "');");
-					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")) {
+			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")
+					&& !auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				auftrag.setStatus("Teile fehlen");
 				// wenn die Anzahl der Teile kleiner als 5 ist (und der Auftrag nicht "im Lager"
 				// ist, heißt das im Umkehrschluss, dass mind. ein Teil nicht verfügbar ist und
 				// somit wird der Auftragsstatus auf "Teile fehlen" gesetzt.
 
-				try {
-					ResultSet rs;
-					Statement stmt = db.getVerbindung().createStatement();
+				db.setStatus(auftrag, "Teile fehlen"); // Verändert den Status in der Datenbank
 
-					stmt.executeUpdate("UPDATE `auftrag` SET `Status` = 'Teile fehlen' WHERE (`AuftragsNummer` = '"
-							+ auftrag.getAuftragsNummer() + "');");
-					// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
+			} else if (auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
+				auftrag.setStatus("nicht zugewiesen");
+				// wenn kein Monteur einem Auftrag zugewiesen ist, wird der Status auf nicht
+				// zugewiesen gestellt
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				db.setStatus(auftrag, "nicht zugewiesen"); // Verändert den Status in der Datenbank
 			}
 		}
 	}
 
-	private String[] gebeDatumAus() {
+	private void datumBefuellen() {
 		// ComboBox um das Datum auwählen zu können
 
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
@@ -854,7 +842,58 @@ public class DisponentFenster extends JFrame {
 
 		String[] Datum = { tag1, tag2, tag3, tag4, tag5 };
 
-		return Datum;
+		DatumCBox = new JComboBox(Datum);
+		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		DatumCBox.setSelectedIndex(0);
+
+		DatumCBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem();
+				// liest Datum als String aus
+
+				String[] ausgewaelterWochentag = ausgewaeltesDatum.split(",");
+				// wochentag und datum wird getrennt
+
+				String s = ausgewaelterWochentag[0];
+				// nur der wochentag wird in s gespeichert
+
+				switch (s) {
+				/*
+				 * index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
+				 * können
+				 */
+
+				case "Montag":
+					indexWochentag = 0;
+					break;
+				case "Dienstag":
+					indexWochentag = 1;
+					break;
+				case "Mittwoch":
+					indexWochentag = 2;
+					break;
+				case "Donnerstag":
+					indexWochentag = 3;
+					break;
+				case "Freitag":
+					indexWochentag = 4;
+					break;
+				case "Samstag":
+					indexWochentag = 5;
+					break;
+				case "Sonntag":
+					indexWochentag = 6;
+					break;
+				default:
+					indexWochentag = 6;
+					break;
+				}
+
+				monteureAktualisieren();
+
+			}
+		});
 
 	}
 

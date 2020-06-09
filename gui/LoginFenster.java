@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -58,6 +60,7 @@ public class LoginFenster extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setIconImage(image);
+		setTitle("Login");
 
 		JLabel titelLabel = new JLabel("L O G I N ");
 		titelLabel.setFont(new Font("Verdana", Font.BOLD | Font.ITALIC, 18));
@@ -85,6 +88,7 @@ public class LoginFenster extends JFrame {
 		tf_MitarbeiterID.setBounds(330, 138, 144, 25);
 		panel.add(tf_MitarbeiterID);
 		tf_MitarbeiterID.setColumns(10);
+		
 
 		tf_password = new JPasswordField();
 		tf_password.setToolTipText("Hier Passwort eingeben...");
@@ -93,59 +97,6 @@ public class LoginFenster extends JFrame {
 		panel.add(tf_password);		
 		
 		JButton bt_Login = new JButton("Login");
-		
-//		bt_Login.addKeyListener(new KeyListener() {
-//		    // listen to keys
-//		    public void keyPressed(KeyEvent e){
-//		        // find ENTER key press
-//		        if(e.getKeyCode() == KeyEvent.VK_ENTER){
-//		            
-//		        	
-//					boolean funktion = false;
-//					String id = tf_MitarbeiterID.getText();
-//					mitarbeiternummer = tf_MitarbeiterID.getText();
-//					
-//					for (Mitarbeiter mitarbeiter : db.getDisponentListe()) {
-//						if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-//							DisponentFenster disponent = new DisponentFenster();
-//							disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//							disponent.setVisible(true);
-//							disponent.setIconImage(image);
-//							dispose();
-//							funktion = true;
-//						}
-//					}
-//					
-//					for(Mitarbeiter mitarbeiter : db.getMonteurListe()) {
-//						if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
-//							MonteurFenster monteur = new MonteurFenster();
-//							monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//							monteur.setVisible(true);
-//							monteur.setIconImage(image);
-//							dispose();
-//							funktion = true;
-//						}
-//					}
-//					if(!funktion) {
-//						JOptionPane.showMessageDialog(null, "Anmeldedaten überprüfen!");
-//					}
-//		        }
-//		    }
-//
-//			@Override
-//			public void keyReleased(KeyEvent arg0) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-////		}
-//	});
-		
 		bt_Login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean funktion = false;
@@ -158,6 +109,7 @@ public class LoginFenster extends JFrame {
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						disponent.setVisible(true);
 						disponent.setIconImage(image);
+						disponent.setTitle("Inventive Assembly");
 						dispose();
 						funktion = true;
 					}
@@ -169,6 +121,7 @@ public class LoginFenster extends JFrame {
 						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						monteur.setVisible(true);
 						monteur.setIconImage(image);
+						monteur.setTitle("Inventive Assembly");
 						dispose();
 						funktion = true;
 					}
@@ -179,6 +132,30 @@ public class LoginFenster extends JFrame {
 				
 			}
 		});
+		
+		tf_MitarbeiterID.addKeyListener(new KeyAdapter() { // LoginButton mit Enter auslösen
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){ // LoginButton mit Enter auslösen
+	               
+	            	bt_Login.doClick();
+	            	
+	            }
+	        }
+
+	    });
+		
+		tf_password.addKeyListener(new KeyAdapter() { 
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               
+	            	bt_Login.doClick();
+	            	
+	            }
+	        }
+
+	    });
 		
 		
 		bt_Login.setFont(new Font("Verdana", Font.ITALIC, 11));

@@ -112,18 +112,17 @@ public class AuftraegeListeFenster extends JFrame {
 	private Object[][] tabelle(Mitarbeiter monteur) {
 		int zeile = 0;
 
-		for (int i = 0; i < db.getMonteurListe().size(); i++) {
-			// Wie größ soll die tabelle für diesen Monteur werden
-			if (richtigerMonteur(i)) {
-				zeilenTabelle = summeAuftraege(monteur);
-			}
-		}
+		// Wie groß soll die tabelle für diesen Monteur werden
+		zeilenTabelle = summeAuftraege(monteur);
 
 		Object[][] auftraege = new Object[zeilenTabelle][6];
 		// dieses Array befüllt die Tabelle
 
 		for (int i = 0; i < db.getAuftragsListe().size(); i++) {
-			if (richtigerMonteur(i)) {
+			if (richtigerAuftrag(i) && !db.getAuftragsListe().get(i).getStatus().equals("im Lager")) {
+				// die dem Monteur zugewiesenen Aufträge werden herausgesucht, allerdings zählen
+				// hierzu nicht mehr die Aufträge, die bereits im Lager sind
+
 				auftraege[zeile][0] = "Details";
 				auftraege[zeile][1] = db.getAuftragsListe().get(i).getAuftragsNummer();
 				// AuftragsNummer
@@ -238,7 +237,7 @@ public class AuftraegeListeFenster extends JFrame {
 	/**
 	 * funktionale Hilfsmethoden.
 	 */
-	private boolean richtigerMonteur(int i) {
+	private boolean richtigerAuftrag(int i) {
 		/*
 		 * überprüft ob der Monteur der gleiche ist wie der in der AuftragsListe an der
 		 * Stelle i
@@ -252,9 +251,12 @@ public class AuftraegeListeFenster extends JFrame {
 
 		int summe = 0;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
-			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
-					.equals(monteur.getMitarbeiterNummer())) {
+			if (db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer().equals(
+					monteur.getMitarbeiterNummer()) && !db.getAuftragsListe().get(j).getStatus().equals("im Lager")) {
 				// Zuständiger Monteur = Monteur in der MonteurListe?
+				// Aufträge, welche bereits abgeschlossen/ im Lager sind, zählen nicht mehr in
+				// die Auftragssumme des einzelnen Monteurs
+
 
 				summe++;
 			}

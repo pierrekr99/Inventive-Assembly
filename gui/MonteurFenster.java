@@ -89,7 +89,7 @@ public class MonteurFenster extends JFrame {
 		setBounds(0, 0, 700, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// fenster schlieﬂen bei x
 		GridBagLayout gridBagLayout = new GridBagLayout();// layout von hier...
-		gridBagLayout.columnWidths = new int[] {0, 0};//
+		gridBagLayout.columnWidths = new int[] { 0, 0 };//
 		gridBagLayout.rowHeights = new int[] { 362, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, Double.MIN_VALUE };//
 		gridBagLayout.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };//
@@ -111,8 +111,6 @@ public class MonteurFenster extends JFrame {
 		suchFeld.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
 		suchFeld.setText("search");// Suchfeld name
 		suchFeld.setColumns(10);
-
-		
 
 		JButton logoutKnopf = new JButton("Logout");// logout button erstellen
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
@@ -151,7 +149,7 @@ public class MonteurFenster extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		
+
 		JLabel lbl_eingeloggterMonteur = new JLabel("Nachname Vorname");
 		String mitarbeiternummer = LoginFenster.getMitarbeiternummer();
 		for (Mitarbeiter monteur : db.getMonteurListe()) {
@@ -162,35 +160,27 @@ public class MonteurFenster extends JFrame {
 		lbl_eingeloggterMonteur.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
-		gl_auftraegeTab.setHorizontalGroup(
-			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+		gl_auftraegeTab.setHorizontalGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap().addGroup(gl_auftraegeTab
+						.createParallelGroup(Alignment.TRAILING)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
-							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
-							.addComponent(dbAktualisierenKnopf)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(logoutKnopf)))
-					.addContainerGap())
-		);
-		gl_auftraegeTab.setVerticalGroup(
-			gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
-						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-						.addComponent(logoutKnopf)
-						.addComponent(dbAktualisierenKnopf)
-						.addComponent(lbl_eingeloggterMonteur))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-					.addContainerGap())
-		);
+								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+								.addComponent(dbAktualisierenKnopf).addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(logoutKnopf)))
+						.addContainerGap()));
+		gl_auftraegeTab.setVerticalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap()
+						.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
+								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf)
+								.addComponent(lbl_eingeloggterMonteur))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE).addContainerGap()));
 
 		/**
 		 * ***********************************************************************************************
@@ -319,11 +309,10 @@ public class MonteurFenster extends JFrame {
 		statusSpalte.setCellEditor(new DefaultCellEditor(auswahlBoxStatus));// Combobox jetzt anklickbar
 	}
 
-	
-
-	/** *****************************************************************************
-	  Hilfsmethoden: Status‰nderungen werden in die Datenbank eingetragen
-	 ******************************************************************************* **/
+	/**
+	 * *****************************************************************************
+	 * Hilfsmethoden: Status‰nderungen werden in die Datenbank eingetragen
+	 **/
 
 	private void tabelleInArrayEinlesen() {
 		for (int i = 0; i < zeilen; i++) {
@@ -346,11 +335,19 @@ public class MonteurFenster extends JFrame {
 						auftrag.setStatus(status);
 						// wenn ein Unterschied festgestellt wird, wird der Auftragsstatus aus der
 						// ArrayList mit dem Status aus der Tabelle ¸berschrieben
-						
-						db.setStatus(auftrag, status); // nimmt ƒnderung in der DB vor
-						
-				
 
+						db.setStatus(auftrag, status); // nimmt ƒnderung in der DB vor
+
+						if (auftrag.getStatus().equals("nicht zugewiesen")) {
+							for (Mitarbeiter monteur : db.getMonteurListe()) {
+								if (monteur.getMitarbeiterNummer().equals("0000")) {
+									auftrag.setZustaendig(monteur);
+									// wenn der Auftrag "nicht zugewiesen" ist, wird auch der jeweilige Monteur ggf.
+									// von diesem Auftrag entfernt
+									db.setZustaendig(auftrag, monteur); //nimmt ƒnderungen in der DB vor
+								}
+							}
+						}
 					}
 				}
 			}
