@@ -32,6 +32,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -41,6 +43,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableRowSorter;
 
 import Datenbank.datenbankVerbindung;
 import objekte.Auftrag;
@@ -208,48 +211,83 @@ public class DisponentFenster extends JFrame {
 		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
 		auftraegeTbl.setAutoCreateRowSorter(true);
+		
+		
 		/*
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
+		
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) auftraegeTbl.getModel());
+		auftraegeTbl.setRowSorter(sorter);
+		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
+		 
+		int columnIndexToSort = 4;
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+		
+		int columnIndexToSort1 = 3;
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSort1, SortOrder.ASCENDING));
+		 
+		sorter.setComparator(columnIndexToSort, (( String datum1, String datum2) -> {
+				String[] datumGetrennt1 = datum1.split("\\.");
+				String[] datumGetrennt2 = datum2.split("\\.");
+				if (datumGetrennt1.length != datumGetrennt2.length)
+					throw new ClassCastException();
+				String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
+				String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
 
-		monteureCombobox();
-		// Befüllt die monteureCombobox
+				return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
+		    
+		}));
+		
+		sorter.setComparator(columnIndexToSort1, (( String datum1, String datum2) -> {
+			String[] datumGetrennt1 = datum1.split("\\.");
+			String[] datumGetrennt2 = datum2.split("\\.");
+			if (datumGetrennt1.length != datumGetrennt2.length)
+				throw new ClassCastException();
+			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
+			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
 
-		/**
-		 * Monteure Reiter.==================================================
-		 */
-		JScrollPane monteureSp = new JScrollPane();
-		tabbedPane.addTab("Monteure", null, monteureSp, null);
+			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
+	    
+	}));
 
-		monteureTbl = new JTable();
-		monteureSp.setViewportView(monteureTbl);
-		monteureTbl.setCellSelectionEnabled(true);
-		// Einzelne Zellen können ausgewählt werden
+	sorter.setSortKeys(sortKeys);sorter.sort();
 
-		monteureTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		// Schriftart und -größe in der Tabelle
+	monteureCombobox();
+	// Befüllt die monteureCombobox
 
-		monteureTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
-		// Schriftart und -größe in der Kopfzeile der Tabelle
+	/**
+	 * Monteure Reiter.==================================================
+	 */
+	JScrollPane monteureSp = new JScrollPane();tabbedPane.addTab("Monteure",null,monteureSp,null);
 
-		monteureAktualisieren();
-		// Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
+	monteureTbl=new JTable();monteureSp.setViewportView(monteureTbl);monteureTbl.setCellSelectionEnabled(true);
+	// Einzelne Zellen können ausgewählt werden
 
-		monteureTblFormat();
-		// Monteure Tabelle wird formatiert
+	monteureTbl.setFont(new Font("Tahoma",Font.PLAIN,18));
+	// Schriftart und -größe in der Tabelle
 
-		auftraegeTblFormat();
-		// Aufträge Tabelle wird formatiert
+	monteureTbl.getTableHeader().setFont(new Font("Tahoma",Font.PLAIN,22));
+	// Schriftart und -größe in der Kopfzeile der Tabelle
 
-		monteureTbl.setAutoCreateRowSorter(true);
-		/*
-		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure
-		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
-		 */
+	monteureAktualisieren();
+	// Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
 
-		contentPane.setLayout(gl_contentPane);
-		// Group-Layout im contentPane wird festgelegt
+	monteureTblFormat();
+	// Monteure Tabelle wird formatiert
+
+	auftraegeTblFormat();
+	// Aufträge Tabelle wird formatiert
+
+	monteureTbl.setAutoCreateRowSorter(true);
+	/*
+	 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure
+	 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
+	 */
+
+	contentPane.setLayout(gl_contentPane);
+	// Group-Layout im contentPane wird festgelegt
 
 	}
 
