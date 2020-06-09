@@ -143,7 +143,7 @@ public class DisponentFenster extends JFrame {
 				 * die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
 				 * ggf. ein neuer Monteur zugewiesen (stimmt dann wieder mit der Tabelle ein)
 				 */
-
+				
 				auftraegeAktualisieren();
 				/*
 				 * Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch des
@@ -155,6 +155,8 @@ public class DisponentFenster extends JFrame {
 				 * Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
 				 * passt sich an die neuen Zahlen an
 				 */
+				
+				datumSortieren(); //Datum kann nun wieder sortiert werden
 
 			}
 		});
@@ -211,36 +213,70 @@ public class DisponentFenster extends JFrame {
 		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
 		auftraegeTbl.setAutoCreateRowSorter(true);
-		
-		
+
 		/*
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
-		
+
+		datumSortieren();
+
+		monteureCombobox();
+		// Befüllt die monteureCombobox
+
+		/**
+		 * Monteure Reiter.==================================================
+		 */
+		JScrollPane monteureSp = new JScrollPane();
+		tabbedPane.addTab("Monteure", null, monteureSp, null);
+
+		monteureTbl = new JTable();
+		monteureSp.setViewportView(monteureTbl);
+		monteureTbl.setCellSelectionEnabled(true);
+		// Einzelne Zellen können ausgewählt werden
+
+		monteureTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		// Schriftart und -größe in der Tabelle
+
+		monteureTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		// Schriftart und -größe in der Kopfzeile der Tabelle
+
+		monteureAktualisieren();
+		// Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
+
+		monteureTblFormat();
+		// Monteure Tabelle wird formatiert
+
+		auftraegeTblFormat();
+		// Aufträge Tabelle wird formatiert
+
+		monteureTbl.setAutoCreateRowSorter(true);
+		/*
+		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure
+		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
+		 */
+
+		contentPane.setLayout(gl_contentPane);
+		// Group-Layout im contentPane wird festgelegt
+
+	}
+
+	/**
+	 * GUI-Hilfsmethoden.==================================================
+	 */
+
+	private void datumSortieren() {
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) auftraegeTbl.getModel());
 		auftraegeTbl.setRowSorter(sorter);
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
-		 
+
 		int columnIndexToSort = 4;
 		sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
-		
+
 		int columnIndexToSort1 = 3;
 		sortKeys.add(new RowSorter.SortKey(columnIndexToSort1, SortOrder.ASCENDING));
-		 
-		sorter.setComparator(columnIndexToSort, (( String datum1, String datum2) -> {
-				String[] datumGetrennt1 = datum1.split("\\.");
-				String[] datumGetrennt2 = datum2.split("\\.");
-				if (datumGetrennt1.length != datumGetrennt2.length)
-					throw new ClassCastException();
-				String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
-				String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
 
-				return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
-		    
-		}));
-		
-		sorter.setComparator(columnIndexToSort1, (( String datum1, String datum2) -> {
+		sorter.setComparator(columnIndexToSort, ((String datum1, String datum2) -> {
 			String[] datumGetrennt1 = datum1.split("\\.");
 			String[] datumGetrennt2 = datum2.split("\\.");
 			if (datumGetrennt1.length != datumGetrennt2.length)
@@ -249,51 +285,25 @@ public class DisponentFenster extends JFrame {
 			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
 
 			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
-	    
-	}));
 
-	sorter.setSortKeys(sortKeys);sorter.sort();
+		}));
 
-	monteureCombobox();
-	// Befüllt die monteureCombobox
+		sorter.setComparator(columnIndexToSort1, ((String datum1, String datum2) -> {
+			String[] datumGetrennt1 = datum1.split("\\.");
+			String[] datumGetrennt2 = datum2.split("\\.");
+			if (datumGetrennt1.length != datumGetrennt2.length)
+				throw new ClassCastException();
+			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
+			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
 
-	/**
-	 * Monteure Reiter.==================================================
-	 */
-	JScrollPane monteureSp = new JScrollPane();tabbedPane.addTab("Monteure",null,monteureSp,null);
+			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
 
-	monteureTbl=new JTable();monteureSp.setViewportView(monteureTbl);monteureTbl.setCellSelectionEnabled(true);
-	// Einzelne Zellen können ausgewählt werden
+		}));
 
-	monteureTbl.setFont(new Font("Tahoma",Font.PLAIN,18));
-	// Schriftart und -größe in der Tabelle
-
-	monteureTbl.getTableHeader().setFont(new Font("Tahoma",Font.PLAIN,22));
-	// Schriftart und -größe in der Kopfzeile der Tabelle
-
-	monteureAktualisieren();
-	// Erstellen/aktualisieren der Monteurtabelle -> mehr Details in der Methode
-
-	monteureTblFormat();
-	// Monteure Tabelle wird formatiert
-
-	auftraegeTblFormat();
-	// Aufträge Tabelle wird formatiert
-
-	monteureTbl.setAutoCreateRowSorter(true);
-	/*
-	 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure
-	 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
-	 */
-
-	contentPane.setLayout(gl_contentPane);
-	// Group-Layout im contentPane wird festgelegt
-
+		sorter.setSortKeys(sortKeys);
+		sorter.sort();
 	}
 
-	/**
-	 * GUI-Hilfsmethoden.==================================================
-	 */
 	private void auftraegeAktualisieren() {
 
 		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
@@ -303,13 +313,15 @@ public class DisponentFenster extends JFrame {
 			boolean[] columnEditables = new boolean[] { true, false, false, false, false, true, false, false };
 			// welche spalten lassen sich ändern
 		});
-
+		
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
 		// ButtonRenderer wird in Spalte 0 ausgeführt
 
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
 		// ButtonEditorwird in Spalte 0 ausgeführt
 
+		
+		
 		auftraegeTblFormat();
 		// Tabelle wird formatiert
 
