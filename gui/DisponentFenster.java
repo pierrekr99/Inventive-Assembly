@@ -144,6 +144,8 @@ public class DisponentFenster extends JFrame {
 				 * ggf. ein neuer Monteur zugewiesen (stimmt dann wieder mit der Tabelle ein)
 				 */
 				
+				db.einlesen();
+				
 				auftraegeAktualisieren();
 				/*
 				 * Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch des
