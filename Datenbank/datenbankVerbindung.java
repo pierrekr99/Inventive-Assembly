@@ -53,13 +53,13 @@ public class datenbankVerbindung {
 	public datenbankVerbindung() {
 		verbinden();
 
-		ArrayList<String> test = new ArrayList<String>();
+//		ArrayList<String> test = new ArrayList<String>();
 
-		for (int i = 0; i < 5; i++) {
-			test.add("Strich");
-		}
+//		for (int i = 0; i < 5; i++) {
+//			test.add("Strich");
+//		}
 
-		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", test));
+		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null));
 		auftraggeberEinlesen();
 		disponentEinlesen();
 		komponenteEinlesen();
@@ -105,11 +105,12 @@ public class datenbankVerbindung {
 		disponentListe.clear();
 		komponentenListe.clear();
 		monteurListe.clear();
-		ArrayList<String> test = new ArrayList<String>();
-		for (int i = 0; i < 5; i++) {
-			test.add("-");
-		}
-		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", test));
+		
+//		ArrayList<String> test = new ArrayList<String>();
+//		for (int i = 0; i < 5; i++) {
+//			test.add("-");
+//		}
+		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null));
 		auftraggeberEinlesen();
 		disponentEinlesen();
 		komponenteEinlesen();
