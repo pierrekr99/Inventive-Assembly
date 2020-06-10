@@ -310,6 +310,10 @@ public class DisponentFenster extends JFrame {
 	 */
 
 	private void sortieren(JTable table) {
+		// ein neuer RowSorter wird erstellt, durch Anklicken des TableHeaders wird
+				// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
+				// bzw. einen Comparator sortiert werden
+		
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table.getModel());
 		table.setRowSorter(sorter);
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); //

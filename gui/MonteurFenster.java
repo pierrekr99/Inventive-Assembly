@@ -34,15 +34,19 @@ import javax.swing.SwingConstants;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
+import javax.swing.RowSorter;
+
 import java.awt.Font;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableRowSorter;
 
 import Datenbank.datenbankVerbindung;
 import gui.AuftraegeListeFenster.JButtonEditor;
@@ -109,7 +113,7 @@ public class MonteurFenster extends JFrame {
 
 		suchFeld = new JTextField(); // Suchfeld erstellen
 		suchFeld.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
-		suchFeld.setText("search");// Suchfeld name
+		suchFeld.setText("Suche");// Suchfeld name
 		suchFeld.setColumns(10);
 
 		JButton logoutKnopf = new JButton("Logout");// logout button erstellen
@@ -192,9 +196,9 @@ public class MonteurFenster extends JFrame {
 		auftraegeAktualisieren(); // Tabelle einlesen mit Hilfsmethode
 
 		auftraegeMonteurTBL.setRowHeight(50); // Zeilen höhe
-		auftraegeMonteurTBL.setAutoCreateRowSorter(true); // durch Anklicken der Kopfzeile (in der jeweiligen Spalte)
-															// werden die Aufträge nach diesem Attribut
-															// in der natürlichen Ordnung und umgekehrt sortiert
+		sortierenMonteurTbl(); // durch Anklicken der Kopfzeile (in der jeweiligen Spalte)
+								// werden die Aufträge nach diesem Attribut
+								// in der natürlichen Ordnung und umgekehrt sortiert
 
 		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));// Formatierung der Schrift in der Tabelle
 		scrollPane.setViewportView(auftraegeMonteurTBL);
@@ -208,13 +212,77 @@ public class MonteurFenster extends JFrame {
 	 ***********************************************************************************************************
 	 */
 
+	private void sortierenMonteurTbl() {
+		// ein neuer RowSorter wird erstellt, durch Anklicken des TableHeaders wird
+		// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
+		// bzw. einen Comparator sortiert werden
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(
+				(DefaultTableModel) auftraegeMonteurTBL.getModel());
+		auftraegeMonteurTBL.setRowSorter(sorter);
+		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); //
+
+		int columnIndexForAuftragsNummer = 1;
+		sortKeys.add(new RowSorter.SortKey(columnIndexForAuftragsNummer, SortOrder.ASCENDING));
+
+		int columnIndexForStatus = 2;
+		sortKeys.add(new RowSorter.SortKey(columnIndexForStatus, SortOrder.ASCENDING));
+
+		int columnIndexToSortDatum = 4;
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSortDatum, SortOrder.ASCENDING)); // beschreibt die
+																							// Sortierreihenfolge in
+																							// einer
+																							// Spalte über ColumnIndex
+
+		int columnIndexToSortDatum1 = 3;
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSortDatum1, SortOrder.ASCENDING)); // beschreibt die
+																							// Sortierreihenfolge in
+																							// einer
+																							// Spalte über ColumnIndex
+
+		int columnIndexForKundenNummer = 5;
+		sortKeys.add(new RowSorter.SortKey(columnIndexForKundenNummer, SortOrder.ASCENDING));
+
+		sorter.setComparator(columnIndexToSortDatum, ((String datum1, String datum2) -> { // Erzeugen eines
+																							// Comparators,der
+																							// ausgewählte Spalte
+																							// sortiert
+			String[] datumGetrennt1 = datum1.split("\\."); // Datum-String wird in 3 Teile geteilt
+			String[] datumGetrennt2 = datum2.split("\\.");
+			if (datumGetrennt1.length != datumGetrennt2.length) // Daten werden miteinander verglichen, ob sie die Selbe
+																// Länge besitzen
+				throw new ClassCastException();
+			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0]; // Datum wird
+																										// zusammengesetzt
+			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
+
+			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2); // Ordnen der Daten über CompareTo-Methode
+
+		}));
+
+		sorter.setComparator(columnIndexToSortDatum1, ((String datum1, String datum2) -> {
+			String[] datumGetrennt1 = datum1.split("\\.");
+			String[] datumGetrennt2 = datum2.split("\\.");
+			if (datumGetrennt1.length != datumGetrennt2.length)
+				throw new ClassCastException();
+			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
+			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
+
+			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
+
+		}));
+
+		sorter.setSortKeys(sortKeys);
+		sorter.sort();
+	}
+
 	private void auftraegeAktualisieren() {
 		auftraegeMonteurTBL.setModel(new DefaultTableModel(// Befüllung der Tabelle
 				auftraege(), // Methode wird aufgerufen und liest jetzt die Tabelle ein
 
 //				,
-				new String[] { "", "Auftragsnummer", "Status", "Erstellungsdatum", "Frist", "Auftraggeber"// welche spaltennamen
-																								// gibt es
+				new String[] { "", "Auftragsnummer", "Status", "Erstellungsdatum", "Frist", "Auftraggeber"// welche
+																											// spaltennamen
+				// gibt es
 				}) {
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
 					true, false, true, false, false, false };
@@ -293,7 +361,8 @@ public class MonteurFenster extends JFrame {
 	 * Funktionalität***************************
 	 * ***************************************************************************************************
 	 */
-	 static void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { // wird auch in anderer Klasse gebraucht
+	static void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { // wird auch in anderer Klasse
+																					// gebraucht
 
 		combobox.removeAllItems();// erstmal alle rauslöschen
 
@@ -305,7 +374,7 @@ public class MonteurFenster extends JFrame {
 		combobox.addItem("nicht zugewiesen");
 
 		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);// in welche Spalte soll die
-																						// Combobox
+																			// Combobox
 		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));// Combobox jetzt anklickbar
 	}
 
@@ -344,7 +413,7 @@ public class MonteurFenster extends JFrame {
 									auftrag.setZustaendig(monteur);
 									// wenn der Auftrag "nicht zugewiesen" ist, wird auch der jeweilige Monteur ggf.
 									// von diesem Auftrag entfernt
-									db.setZustaendig(auftrag, monteur); //nimmt Änderungen in der DB vor
+									db.setZustaendig(auftrag, monteur); // nimmt Änderungen in der DB vor
 								}
 							}
 						}
