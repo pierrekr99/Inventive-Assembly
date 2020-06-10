@@ -293,7 +293,7 @@ public class MonteurFenster extends JFrame {
 	 * Funktionalität***************************
 	 * ***************************************************************************************************
 	 */
-	 static void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
+	 static void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { // wird auch in anderer Klasse gebraucht
 
 		combobox.removeAllItems();// erstmal alle rauslöschen
 
