@@ -144,13 +144,14 @@ public class DisponentFenster extends JFrame {
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				statusAktualisieren(auftragsListe);
-				statusAktualisieren(archivListe);
+				statusAktualisieren();
+
 				/*
 				 * Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile
 				 * werden überprüft) und ggf. überschrieben
 				 */
 
+				archivInDBAktualisieren();
 				monteureInArrayEinlesen();
 				/*
 				 * die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
@@ -446,6 +447,7 @@ public class DisponentFenster extends JFrame {
 	public Object[][] auftraege() {
 		// Erstellt Inhalt zur befüllung der auftraegeTabelle
 		arrayListebefüllen(auftragsListe);
+		// befüllen der ArrayList mit den passenden Aufträgen
 
 		zeilen = auftragsListe.size();
 		// größe der Tabelle wird ermittelt
@@ -505,6 +507,7 @@ public class DisponentFenster extends JFrame {
 		// Erstellt Inhalt zur befüllung der auftraegeTabelle
 
 		arrayListebefüllen(archivListe);
+		// befüllen der ArrayList mit den passenden Aufträgen
 
 		zeilenArchiv = archivListe.size();
 		// größe der Tabelle wird ermittelt
@@ -962,7 +965,7 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
-	private void statusAktualisieren(ArrayList<Auftrag> auftragsListe) {
+	private void statusAktualisieren() {
 		for (Auftrag auftrag : auftragsListe) {
 
 			int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
@@ -997,6 +1000,26 @@ public class DisponentFenster extends JFrame {
 				// zugewiesen gestellt
 
 				db.setStatus(auftrag, "nicht zugewiesen"); // Verändert den Status in der Datenbank
+			}
+		}
+	}
+
+	private void archivInDBAktualisieren() {
+		for (int i = 0; i < archivListe.size(); i++) {
+			for (Auftrag auftrag : archivListe) {
+				// die Aufträge in der Tabelle werden mit dem Aufträgen in der Archivliste
+				// verglichen
+
+				if (archivTbl.getValueAt(i, 1).equals(auftrag.getAuftragsNummer())) {
+					if (!archivTbl.getValueAt(i, 2).equals(auftrag.getStatus())) {
+
+						auftrag.setStatus(archivTbl.getValueAt(i, 2).toString());
+					
+						db.setStatus(auftrag, auftrag.getStatus());
+						// wenn der selbe Auftrag in der Tabelle einen anderen Status als "im Lager"
+						// hat, wird der Status überschrieben und aktualisiert (in der DB)
+					}
+				}
 			}
 		}
 	}
@@ -1109,8 +1132,9 @@ public class DisponentFenster extends JFrame {
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
 
 			String dateString = dateFormatter.format(date);
-			System.out.println("ds" + dateString);
 			grenze = new SimpleDateFormat("dd.MM.yyyy").parse(dateString).toInstant();
+			// das heutige Datum wird in einen String gewandelt und dann in ein
+			// Instant-Datum
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1119,26 +1143,32 @@ public class DisponentFenster extends JFrame {
 
 	private void arrayListebefüllen(ArrayList<Auftrag> liste) {
 
-		liste.clear();
-	
+		liste.clear(); // übergebene Liste wird gelöscht und anschließend neu befüllt
 
 		Instant auftragsFrist = null;
-		Instant grenze = getGrenze();
+		Instant grenze = getGrenze(); // heutiges Datum
 
 		for (Auftrag auftrag : db.getAuftragsListe()) {
 
 			try {
 				auftragsFrist = new SimpleDateFormat("dd.MM.yyyy").parse(auftrag.getFrist()).toInstant();
+				// es wird versucht, die Auftragsfrist in ein Instant-Datum zu konvertieren
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (auftragsFrist.isBefore(grenze) && auftrag.getStatus().equals("im Lager") && liste == archivListe) {
+			// Kriterien zur Listenbefüllung
+
+			if (auftrag.getStatus().equals("im Lager") && liste == archivListe) {
 				archivListe.add(auftrag);
+				// wenn der Auftrag "im Lager" ist, dann wird er der Archivliste zugewiesen
+				// (wenn diese auch als Parameter übergeben wurde)
 			}
 			if (((auftragsFrist.isBefore(grenze) && !auftrag.getStatus().equals("im Lager")
-					|| auftragsFrist.isAfter(grenze))) && liste == auftragsListe) {
+					|| (auftragsFrist.isAfter(grenze) && !auftrag.getStatus().equals("im Lager"))))
+					&& liste == auftragsListe) {
 				auftragsListe.add(auftrag);
+				// wenn der Auftrag noch nicht im Lager ist und die Auftragsliste als Parameter
+				// übergeben wurde, dann wird der Auftrag der dieser hinzugefügt
 			}
 		}
 
