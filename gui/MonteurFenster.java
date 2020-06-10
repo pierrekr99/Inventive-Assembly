@@ -134,7 +134,7 @@ public class MonteurFenster extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				tabelleInArrayEinlesen(); // Hilfsmethoden werden ausgeführt
 				auftraegeAktualisieren();
-				auswahlBoxStatus();
+				auswahlBoxStatus(auftraegeMonteurTBL, auswahlBoxStatus, 2);
 
 			}
 		});
@@ -226,7 +226,7 @@ public class MonteurFenster extends JFrame {
 		});
 		auftraegeMonteurTBL.getTableHeader().setReorderingAllowed(false);// Tabellenspalten lassen sich nicht
 																			// verschieben
-		auswahlBoxStatus(); // Combobox in Spalte Status erstellt
+		auswahlBoxStatus(auftraegeMonteurTBL, auswahlBoxStatus, 2); // Combobox in Spalte Status erstellt
 		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0))
 				.setCellRenderer(new JButtonRenderer("auftraegeMonteurTBL"));
 		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());// Button
@@ -293,20 +293,20 @@ public class MonteurFenster extends JFrame {
 	 * Funktionalität***************************
 	 * ***************************************************************************************************
 	 */
-	private void auswahlBoxStatus() {
+	 static void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
 
-		auswahlBoxStatus.removeAllItems();// erstmal alle rauslöschen
+		combobox.removeAllItems();// erstmal alle rauslöschen
 
 		// auswahlmöglichkeiten
 
-		auswahlBoxStatus.addItem("Teile fehlen");
-		auswahlBoxStatus.addItem("disponiert");
-		auswahlBoxStatus.addItem("im Lager");
-		auswahlBoxStatus.addItem("nicht zugewiesen");
+		combobox.addItem("Teile fehlen");
+		combobox.addItem("disponiert");
+		combobox.addItem("im Lager");
+		combobox.addItem("nicht zugewiesen");
 
-		TableColumn statusSpalte = auftraegeMonteurTBL.getColumnModel().getColumn(2);// in welche Spalte soll die
+		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);// in welche Spalte soll die
 																						// Combobox
-		statusSpalte.setCellEditor(new DefaultCellEditor(auswahlBoxStatus));// Combobox jetzt anklickbar
+		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));// Combobox jetzt anklickbar
 	}
 
 	/**
