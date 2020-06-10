@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -143,7 +144,8 @@ public class DisponentFenster extends JFrame {
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				statusAktualisieren();
+				statusAktualisieren(auftragsListe);
+				statusAktualisieren(archivListe);
 				/*
 				 * Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile
 				 * werden überprüft) und ggf. überschrieben
@@ -229,7 +231,6 @@ public class DisponentFenster extends JFrame {
 		auftraegeAktualisieren();
 		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
-
 		/*
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
@@ -290,8 +291,7 @@ public class DisponentFenster extends JFrame {
 		monteureTblFormat();
 		// Monteure Tabelle wird formatiert
 
-		auftraegeTblFormat();
-		// Aufträge Tabelle wird formatiert
+// ?????????????????????????
 
 		monteureTbl.setAutoCreateRowSorter(true);
 		/*
@@ -372,7 +372,6 @@ public class DisponentFenster extends JFrame {
 		sorter.sort();
 	}
 
-
 	private void auftraegeAktualisieren() {
 
 		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
@@ -389,10 +388,11 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
 		// ButtonEditorwird in Spalte 0 ausgeführt
 
-		auftraegeTblFormat();
+		tblFormat(auftraegeTbl);
 		// Tabelle wird formatiert
 
-		sortieren(auftraegeTbl); //die einzelnen Spalten können durch Anklicken nach der natürlichen Ordnung sortiert werden
+		sortieren(auftraegeTbl); // die einzelnen Spalten können durch Anklicken nach der natürlichen Ordnung
+									// sortiert werden
 
 		monteureCombobox(auftraegeTbl);
 		// monteureCombobox wird konfiguriert (muss bei jeder Aktualisierung geschehen)
@@ -414,10 +414,11 @@ public class DisponentFenster extends JFrame {
 //		archivTbl.getColumn(archivTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
 		// ButtonEditorwird in Spalte 0 ausgeführt
 
-		archivTblFormat();
+		tblFormat(archivTbl);
 		// Tabelle wird formatiert
-		
-		sortieren(archivTbl); //die einzelnen Spalten können durch Anklicken nach der natürlichen Ordnung sortiert werden
+
+		sortieren(archivTbl); // die einzelnen Spalten können durch Anklicken nach der natürlichen Ordnung
+								// sortiert werden
 
 		MonteurFenster.auswahlBoxStatus(archivTbl, auswahlBoxStatus, 2);
 	}
@@ -444,34 +445,10 @@ public class DisponentFenster extends JFrame {
 
 	public Object[][] auftraege() {
 		// Erstellt Inhalt zur befüllung der auftraegeTabelle
+		arrayListebefüllen(auftragsListe);
 
-		try {
-
-			auftragsListe.clear();
-			Date date = java.util.Calendar.getInstance().getTime();
-			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
-
-			String dateString = dateFormatter.format(date);
-			System.out.println("ds" + dateString);
-			Instant grenze = new SimpleDateFormat("dd.MM.yyyy").parse(dateString).toInstant();
-			System.out.println("grenze" + grenze);
-
-			for (Auftrag auftrag : db.getAuftragsListe()) {
-				Instant auftragsfrist = new SimpleDateFormat("dd.MM.yyyy").parse(auftrag.getFrist()).toInstant();
-
-				if ((auftragsfrist.isBefore(grenze) && !auftrag.getStatus().equals("im Lager"))
-						|| auftragsfrist.isAfter(grenze)) {
-					auftragsListe.add(auftrag);
-				}
-
-			}
-
-			zeilen = auftragsListe.size();
-			// größe der Tabelle wird ermittelt
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		zeilen = auftragsListe.size();
+		// größe der Tabelle wird ermittelt
 
 		// größe der Tabelle wird ermittelt
 
@@ -527,37 +504,17 @@ public class DisponentFenster extends JFrame {
 	public Object[][] archiv() {
 		// Erstellt Inhalt zur befüllung der auftraegeTabelle
 
-		try {
-			
-			archivListe.clear();
-			Date date = java.util.Calendar.getInstance().getTime();
-			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
+		arrayListebefüllen(archivListe);
 
-			String dateString = dateFormatter.format(date);
-			System.out.println("ds" + dateString);
-			Instant grenze = new SimpleDateFormat("dd.MM.yyyy").parse(dateString).toInstant();
-			System.out.println("grenze" + grenze);
-
-			for (Auftrag auftrag : db.getAuftragsListe()) {
-				Instant auftragsfrist = new SimpleDateFormat("dd.MM.yyyy").parse(auftrag.getFrist()).toInstant();
-
-				if (auftragsfrist.isBefore(grenze) && auftrag.getStatus().equals("im Lager")) {
-					archivListe.add(auftrag);
-				}
-
-			}
-
-			zeilenArchiv = archivListe.size();
-			// größe der Tabelle wird ermittelt
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		zeilenArchiv = archivListe.size();
+		// größe der Tabelle wird ermittelt
 
 		archiv = new Object[zeilenArchiv][8];
 		// dieses Array wird die Tabelle befüllen
 
-		for (int i = 0; i < archivListe.size(); i++) {
+		for (
+
+				int i = 0; i < archivListe.size(); i++) {
 			archiv[i][0] = details;
 			archiv[i][1] = archivListe.get(i).getAuftragsNummer();
 			// AuftragsNummer
@@ -630,61 +587,52 @@ public class DisponentFenster extends JFrame {
 		return monteure;
 	}
 
-	private void auftraegeTblFormat() {
+	private void tblFormat(JTable table) {
 		// Details
-		auftraegeTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
-		auftraegeTbl.getColumnModel().getColumn(0).setMinWidth(150);
-		auftraegeTbl.getColumnModel().getColumn(0).setMaxWidth(150);
+		table.getColumnModel().getColumn(0).setPreferredWidth(150);
+		table.getColumnModel().getColumn(0).setMinWidth(150);
+		table.getColumnModel().getColumn(0).setMaxWidth(150);
 
 		// Auftragsnummer
-		auftraegeTbl.getColumnModel().getColumn(1).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(1).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(1).setMaxWidth(250);
+		table.getColumnModel().getColumn(1).setPreferredWidth(100);
+		table.getColumnModel().getColumn(1).setMinWidth(100);
+		table.getColumnModel().getColumn(1).setMaxWidth(250);
 
 		// Status
-		auftraegeTbl.getColumnModel().getColumn(2).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(2).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(2).setMaxWidth(200);
+		table.getColumnModel().getColumn(2).setPreferredWidth(100);
+		table.getColumnModel().getColumn(2).setMinWidth(100);
+		table.getColumnModel().getColumn(2).setMaxWidth(200);
 
 		// Erstellungsdatum
-		auftraegeTbl.getColumnModel().getColumn(3).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(3).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(3).setMaxWidth(250);
+		table.getColumnModel().getColumn(3).setPreferredWidth(100);
+		table.getColumnModel().getColumn(3).setMinWidth(100);
+		table.getColumnModel().getColumn(3).setMaxWidth(250);
 
 		// Frist
-		auftraegeTbl.getColumnModel().getColumn(4).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(4).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(4).setMaxWidth(250);
+		table.getColumnModel().getColumn(4).setPreferredWidth(100);
+		table.getColumnModel().getColumn(4).setMinWidth(100);
+		table.getColumnModel().getColumn(4).setMaxWidth(250);
 
 		// MonteurName
-		auftraegeTbl.getColumnModel().getColumn(5).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(5).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(5).setMaxWidth(500);
+		table.getColumnModel().getColumn(5).setPreferredWidth(100);
+		table.getColumnModel().getColumn(5).setMinWidth(100);
+		table.getColumnModel().getColumn(5).setMaxWidth(500);
 
 		// MonteurNummer
-		auftraegeTbl.getColumnModel().getColumn(6).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(6).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(6).setMaxWidth(200);
+		table.getColumnModel().getColumn(6).setPreferredWidth(100);
+		table.getColumnModel().getColumn(6).setMinWidth(100);
+		table.getColumnModel().getColumn(6).setMaxWidth(200);
 
 		// Aufraggeber
-		auftraegeTbl.getColumnModel().getColumn(7).setPreferredWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(7).setMinWidth(100);
-		auftraegeTbl.getColumnModel().getColumn(7).setMaxWidth(200);
+		table.getColumnModel().getColumn(7).setPreferredWidth(100);
+		table.getColumnModel().getColumn(7).setMinWidth(100);
+		table.getColumnModel().getColumn(7).setMaxWidth(200);
 
 		// Zeilenhöhe
-		auftraegeTbl.setRowHeight(50);
+		table.setRowHeight(50);
 
 		// Nur lesen nicht schreiben
-		auftraegeTbl.getTableHeader().setReorderingAllowed(false);
-	}
-
-	private void archivTblFormat() {
-
-		// Zeilenhöhe
-		archivTbl.setRowHeight(50);
-
-		// Nur lesen nicht schreiben
-		archivTbl.getTableHeader().setReorderingAllowed(false);
+		table.getTableHeader().setReorderingAllowed(false);
 	}
 
 	private void monteureTblFormat() {
@@ -1014,8 +962,8 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
-	private void statusAktualisieren() {
-		for (Auftrag auftrag : db.getAuftragsListe()) {
+	private void statusAktualisieren(ArrayList<Auftrag> auftragsListe) {
+		for (Auftrag auftrag : auftragsListe) {
 
 			int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
 					.count();
@@ -1152,6 +1100,48 @@ public class DisponentFenster extends JFrame {
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
 		// EEEE steht für den Wochentag
 		return f.format(date);
+	}
+
+	private Instant getGrenze() {
+		Instant grenze = null;
+		try {
+			Date date = java.util.Calendar.getInstance().getTime();
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
+
+			String dateString = dateFormatter.format(date);
+			System.out.println("ds" + dateString);
+			grenze = new SimpleDateFormat("dd.MM.yyyy").parse(dateString).toInstant();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return grenze;
+	}
+
+	private void arrayListebefüllen(ArrayList<Auftrag> liste) {
+
+		liste.clear();
+	
+
+		Instant auftragsFrist = null;
+		Instant grenze = getGrenze();
+
+		for (Auftrag auftrag : db.getAuftragsListe()) {
+
+			try {
+				auftragsFrist = new SimpleDateFormat("dd.MM.yyyy").parse(auftrag.getFrist()).toInstant();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (auftragsFrist.isBefore(grenze) && auftrag.getStatus().equals("im Lager") && liste == archivListe) {
+				archivListe.add(auftrag);
+			}
+			if (((auftragsFrist.isBefore(grenze) && !auftrag.getStatus().equals("im Lager")
+					|| auftragsFrist.isAfter(grenze))) && liste == auftragsListe) {
+				auftragsListe.add(auftrag);
+			}
+		}
+
 	}
 
 }

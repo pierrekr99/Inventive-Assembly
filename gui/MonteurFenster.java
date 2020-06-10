@@ -213,7 +213,7 @@ public class MonteurFenster extends JFrame {
 				auftraege(), // Methode wird aufgerufen und liest jetzt die Tabelle ein
 
 //				,
-				new String[] { "", "Auftragsnummer", "Status", "Datum", "Frist", "Auftraggeber"// welche spaltennamen
+				new String[] { "", "Auftragsnummer", "Status", "Erstellungsdatum", "Frist", "Auftraggeber"// welche spaltennamen
 																								// gibt es
 				}) {
 			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
@@ -280,8 +280,8 @@ public class MonteurFenster extends JFrame {
 			auftraege[i][0] = details;
 			auftraege[i][1] = angepassteAuftragsListe.get(i).getAuftragsNummer();
 			auftraege[i][2] = angepassteAuftragsListe.get(i).getStatus();
-			auftraege[i][3] = angepassteAuftragsListe.get(i).getFrist();
-			auftraege[i][4] = angepassteAuftragsListe.get(i).getErstellungsdatum();
+			auftraege[i][3] = angepassteAuftragsListe.get(i).getErstellungsdatum();
+			auftraege[i][4] = angepassteAuftragsListe.get(i).getFrist();
 			auftraege[i][5] = angepassteAuftragsListe.get(i).getAuftraggeber().getKundenNummer();
 
 		}
