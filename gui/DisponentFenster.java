@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -59,13 +60,18 @@ public class DisponentFenster extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtSuche;
 	private JTable auftraegeTbl;
+	private JTable archivTbl;
 	private JTable monteureTbl;
 	private JScrollPane auftraegeSp;
+	private JScrollPane archivSp;
 	public int indexWochentag = 0;
 
 	Object[][] auftraege;
 	int zeilen = 0;
+	private Object[][] archiv;
+	private int zeilenArchiv = 0;
 	int zeilenMonteure = 0;
+
 	int summeAuftraege = 0;
 	String details = "Details anzeigen";
 	String monteur;
@@ -73,6 +79,8 @@ public class DisponentFenster extends JFrame {
 	JComboBox monteureCombobox = new JComboBox();
 	JComboBox DatumCBox;
 	TableColumn monteureColumn;
+	private ArrayList<Instant> auftragsDaten = new ArrayList<Instant>();
+	private ArrayList<Auftrag> archivListe = new ArrayList<Auftrag>();
 
 	/**
 	 * Launch the application.
@@ -143,9 +151,9 @@ public class DisponentFenster extends JFrame {
 				 * die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
 				 * ggf. ein neuer Monteur zugewiesen (stimmt dann wieder mit der Tabelle ein)
 				 */
-				
+
 				db.einlesen();
-				
+
 				auftraegeAktualisieren();
 				/*
 				 * Tabelle wird graphisch aktualisiert, Mitarbeiternummer wird bei Austausch des
@@ -157,9 +165,9 @@ public class DisponentFenster extends JFrame {
 				 * Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
 				 * passt sich an die neuen Zahlen an
 				 */
-				
-				datumSortieren(); //Datum kann nun wieder sortiert werden
-				auftraegeSortieren();
+
+				sortierenAuftraege(); // sortieren nach Auftragsnummer
+
 			}
 		});
 
@@ -197,6 +205,7 @@ public class DisponentFenster extends JFrame {
 		/**
 		 * Auftraege Reiter.==================================================
 		 */
+
 		auftraegeSp = new JScrollPane();
 		tabbedPane.addTab("Aufträge", null, auftraegeSp, null);
 
@@ -214,17 +223,48 @@ public class DisponentFenster extends JFrame {
 		auftraegeAktualisieren();
 		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
-		auftraegeTbl.setAutoCreateRowSorter(true);
+		sortierenAuftraege();
 
 		/*
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
 
-		datumSortieren();
-		auftraegeSortieren();
+
+
 		monteureCombobox();
 		// Befüllt die monteureCombobox
+
+		/**
+		 * Archiv Reiter.==================================================
+		 */
+
+		archivSp = new JScrollPane();
+		tabbedPane.addTab("Archiv", null, archivSp, null);
+
+		archivTbl = new JTable();
+
+		archivSp.setViewportView(archivTbl);
+		archivTbl.setCellSelectionEnabled(true);
+		// Einzelne Zellen können ausgewählt werden
+
+		archivTbl.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		// Schriftart und -größe in der Tabelle
+
+		archivTbl.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		// Schriftart und -größe in der Kopfzeile der Tabelle
+
+		archivAktualisieren();
+		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
+
+		sortierenArchiv();
+		/*
+		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
+		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
+		 */
+
+		
+
 
 		/**
 		 * Monteure Reiter.==================================================
@@ -266,44 +306,54 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * GUI-Hilfsmethoden.==================================================
 	 */
-	
-	public void auftraegeSortieren() {
+
+
+	private void sortierenAuftraege() {
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) auftraegeTbl.getModel());
 		auftraegeTbl.setRowSorter(sorter);
-		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); // 
-		 
-		int columnIndexToSort = 1;
-		sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING)); // beschreibt die Sortierreihenfolge in einer Spalte über ColumnIndex	
-		sorter.setComparator(columnIndexToSort, (( String auftrag1, String auftrag2 ) -> {
-			return auftrag1.compareTo(auftrag2);
-		}));
-	}
-	
-	
-	private void datumSortieren() {
-		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) auftraegeTbl.getModel());
-		auftraegeTbl.setRowSorter(sorter);
-		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); // 
-		 
-		int columnIndexToSort = 4;
-		sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING)); // beschreibt die Sortierreihenfolge in einer Spalte über ColumnIndex	
+		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); //
 		
-		int columnIndexToSort1 = 3;
-		sortKeys.add(new RowSorter.SortKey(columnIndexToSort1, SortOrder.ASCENDING)); // beschreibt die Sortierreihenfolge in einer Spalte über ColumnIndex
+		int columnIndexForAuftragsNummer = 1;
+		sortKeys.add(new RowSorter.SortKey(columnIndexForAuftragsNummer, SortOrder.ASCENDING));
 		 
-		sorter.setComparator(columnIndexToSort, (( String datum1, String datum2) -> { //Erzeugen eines Comparators,der ausgewählte Spalte sortiert
-			String[] datumGetrennt1 = datum1.split("\\."); // Datum-String wird in 3 Teile geteilt 
+		int columnIndexForStatus = 2;
+		sortKeys.add(new RowSorter.SortKey(columnIndexForStatus, SortOrder.ASCENDING));
+
+		int columnIndexToSortDatum = 4;
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSortDatum, SortOrder.ASCENDING)); // beschreibt die
+																						// Sortierreihenfolge in einer
+																						// Spalte über ColumnIndex
+
+		int columnIndexToSortDatum1 = 3;
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSortDatum1, SortOrder.ASCENDING)); // beschreibt die
+																						// Sortierreihenfolge in einer
+																						// Spalte über ColumnIndex
+		int columnIndexForMonteur = 5;
+		sortKeys.add(new RowSorter.SortKey(columnIndexForMonteur, SortOrder.ASCENDING));
+		 
+		int columnIndexForMitarbeiterNummer = 6;
+		sortKeys.add(new RowSorter.SortKey(columnIndexForMitarbeiterNummer, SortOrder.ASCENDING));
+		
+		int columnIndexForKundenNummer = 7;
+		sortKeys.add(new RowSorter.SortKey(columnIndexForKundenNummer, SortOrder.ASCENDING));
+		 
+
+		sorter.setComparator(columnIndexToSortDatum, ((String datum1, String datum2) -> { // Erzeugen eines Comparators,der
+																						// ausgewählte Spalte sortiert
+			String[] datumGetrennt1 = datum1.split("\\."); // Datum-String wird in 3 Teile geteilt
 			String[] datumGetrennt2 = datum2.split("\\.");
-				if (datumGetrennt1.length != datumGetrennt2.length) // Daten werden miteinander verglichen, ob sie die Selbe Länge besitzen
-					throw new ClassCastException();
-				String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0]; // Datum wird zusammengesetzt
-				String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
-				
-				return datumZusammengesetzt1.compareTo(datumZusammengesetzt2); // Ordnen der Daten über CompareTo-Methode
-		    
+			if (datumGetrennt1.length != datumGetrennt2.length) // Daten werden miteinander verglichen, ob sie die Selbe
+																// Länge besitzen
+				throw new ClassCastException();
+			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0]; // Datum wird
+																										// zusammengesetzt
+			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
+
+			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2); // Ordnen der Daten über CompareTo-Methode
+
 		}));
 
-		sorter.setComparator(columnIndexToSort1, ((String datum1, String datum2) -> {
+		sorter.setComparator(columnIndexToSortDatum1, ((String datum1, String datum2) -> {
 			String[] datumGetrennt1 = datum1.split("\\.");
 			String[] datumGetrennt2 = datum2.split("\\.");
 			if (datumGetrennt1.length != datumGetrennt2.length)
@@ -319,6 +369,67 @@ public class DisponentFenster extends JFrame {
 		sorter.sort();
 	}
 
+	private void sortierenArchiv() {
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) archivTbl.getModel());
+		archivTbl.setRowSorter(sorter);
+		ArrayList<RowSorter.SortKey> sortKeysArchiv = new ArrayList<>(); //
+
+		int columnIndexForAuftragsNummer = 1;
+		sortKeysArchiv.add(new RowSorter.SortKey(columnIndexForAuftragsNummer, SortOrder.ASCENDING));
+		 
+		int columnIndexForStatus = 2;
+		sortKeysArchiv.add(new RowSorter.SortKey(columnIndexForStatus, SortOrder.ASCENDING));
+
+		int columnIndexToSortArchiv = 4;
+		sortKeysArchiv.add(new RowSorter.SortKey(columnIndexToSortArchiv, SortOrder.ASCENDING)); // beschreibt die
+																						// Sortierreihenfolge in einer
+																						// Spalte über ColumnIndex
+
+		int columnIndexToSortArchiv1 = 3;
+		sortKeysArchiv.add(new RowSorter.SortKey(columnIndexToSortArchiv1, SortOrder.ASCENDING)); // beschreibt die
+																						// Sortierreihenfolge in einer
+																						// Spalte über ColumnIndex
+		
+		int columnIndexForMonteur = 5;
+		sortKeysArchiv.add(new RowSorter.SortKey(columnIndexForMonteur, SortOrder.ASCENDING));
+		 
+		int columnIndexForMitarbeiterNummer = 6;
+		sortKeysArchiv.add(new RowSorter.SortKey(columnIndexForMitarbeiterNummer, SortOrder.ASCENDING));
+		
+		int columnIndexForKundenNummer = 7;
+		sortKeysArchiv.add(new RowSorter.SortKey(columnIndexForKundenNummer, SortOrder.ASCENDING));
+
+		sorter.setComparator(columnIndexToSortArchiv, ((String datum1, String datum2) -> { // Erzeugen eines Comparators,der
+																						// ausgewählte Spalte sortiert
+			String[] datumGetrennt1 = datum1.split("\\."); // Datum-String wird in 3 Teile geteilt
+			String[] datumGetrennt2 = datum2.split("\\.");
+			if (datumGetrennt1.length != datumGetrennt2.length) // Daten werden miteinander verglichen, ob sie die Selbe
+																// Länge besitzen
+				throw new ClassCastException();
+			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0]; // Datum wird
+																										// zusammengesetzt
+			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
+
+			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2); // Ordnen der Daten über CompareTo-Methode
+
+		}));
+
+		sorter.setComparator(columnIndexToSortArchiv1, ((String datum1, String datum2) -> {
+			String[] datumGetrennt1 = datum1.split("\\.");
+			String[] datumGetrennt2 = datum2.split("\\.");
+			if (datumGetrennt1.length != datumGetrennt2.length)
+				throw new ClassCastException();
+			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
+			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
+
+			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
+
+		}));
+
+		sorter.setSortKeys(sortKeysArchiv);
+		sorter.sort();
+	}
+
 	private void auftraegeAktualisieren() {
 
 		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
@@ -328,20 +439,38 @@ public class DisponentFenster extends JFrame {
 			boolean[] columnEditables = new boolean[] { true, false, false, false, false, true, false, false };
 			// welche spalten lassen sich ändern
 		});
-		
+
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
 		// ButtonRenderer wird in Spalte 0 ausgeführt
 
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
 		// ButtonEditorwird in Spalte 0 ausgeführt
 
-		
-		
 		auftraegeTblFormat();
 		// Tabelle wird formatiert
 
 		monteureCombobox();
 		// monteureCombobox wird konfiguriert (muss bei jeder Aktualisierung geschehen)
+	}
+
+	private void archivAktualisieren() {
+
+		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
+		archivTbl.setModel(new DefaultTableModel(archiv(), new String[] { "", "AuftragsNummer", "Status",
+				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" }) {
+
+			boolean[] columnEditables = new boolean[] { true, false, false, false, false, true, false, false };
+			// welche spalten lassen sich ändern
+		});
+
+//		archivTbl.getColumn(archivTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("archivTbl"));
+		// ButtonRenderer wird in Spalte 0 ausgeführt
+
+//		archivTbl.getColumn(archivTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
+		// ButtonEditorwird in Spalte 0 ausgeführt
+
+		archivTblFormat();
+		// Tabelle wird formatiert
 	}
 
 	private void monteureAktualisieren() {
@@ -418,6 +547,78 @@ public class DisponentFenster extends JFrame {
 
 		}
 		return auftraege;
+	}
+
+	public Object[][] archiv() {
+		// Erstellt Inhalt zur befüllung der auftraegeTabelle
+
+		try {
+			Date date = java.util.Calendar.getInstance().getTime();
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
+
+			String dateString = dateFormatter.format(date);
+			System.out.println("ds" + dateString);
+			Instant grenze = new SimpleDateFormat("dd.MM.yyyy").parse(dateString).toInstant();
+			System.out.println("grenze" + grenze);
+
+			for (Auftrag auftrag : db.getAuftragsListe()) {
+				Instant auftragsfrist = new SimpleDateFormat("dd.MM.yyyy").parse(auftrag.getFrist()).toInstant();
+
+				if (auftragsfrist.isBefore(grenze) && auftrag.getStatus().equals("im Lager")) {
+					archivListe.add(auftrag);
+				}
+
+			}
+
+			zeilenArchiv = archivListe.size();
+			// größe der Tabelle wird ermittelt
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		for (Auftrag auftrag34 : archivListe) {
+			System.out.println(auftrag34);
+		}
+
+		archiv = new Object[zeilenArchiv][8];
+		// dieses Array wird die Tabelle befüllen
+
+		for (int i = 0; i < archivListe.size(); i++) {
+			archiv[i][0] = details;
+			archiv[i][1] = archivListe.get(i).getAuftragsNummer();
+			// AuftragsNummer
+
+			archiv[i][2] = archivListe.get(i).getStatus();
+			// Status
+
+			archiv[i][3] = archivListe.get(i).getErstellungsdatum();
+			// Erstellungsdatum
+
+			archiv[i][4] = archivListe.get(i).getFrist();
+			// Frist
+
+			archiv[i][5] = "";
+			// MitarbeiterName (Name Vorname) wenn kein Monteur zugwiesen ist
+
+			archiv[i][6] = "";
+			// MitarbeiterNummer wenn kein Monteur zugwiesen ist
+
+			archiv[i][7] = archivListe.get(i).getAuftraggeber().getKundenNummer();
+			// Auftraggeber
+
+			if (archivListe.get(i).getZustaendig() != null && archivListe.get(i).getZustaendig() != null
+					&& !archivListe.get(i).getZustaendig().getMitarbeiterNummer().equals("0000")) {
+				// ist ein Monteur zuständug?
+
+				archiv[i][5] = archivListe.get(i).getZustaendig().getName() + ", "
+						+ archivListe.get(i).getZustaendig().getVorname();
+				// MitarbeiterName (Name, Vorname)
+
+				archiv[i][6] = archivListe.get(i).getZustaendig().getMitarbeiterNummer();
+				// MitarbeiterNummer
+			}
+		}
+		return archiv;
 	}
 
 	private Object[][] monteure() {
@@ -501,6 +702,15 @@ public class DisponentFenster extends JFrame {
 
 		// Nur lesen nicht schreiben
 		auftraegeTbl.getTableHeader().setReorderingAllowed(false);
+	}
+
+	private void archivTblFormat() {
+
+		// Zeilenhöhe
+		archivTbl.setRowHeight(50);
+
+		// Nur lesen nicht schreiben
+		archivTbl.getTableHeader().setReorderingAllowed(false);
 	}
 
 	private void monteureTblFormat() {
