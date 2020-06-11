@@ -237,7 +237,6 @@ public class DisponentFenster extends JFrame {
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
 
-
 		/**
 		 * Archiv Reiter.==================================================
 		 */
@@ -309,9 +308,9 @@ public class DisponentFenster extends JFrame {
 
 	private void sortieren(JTable table) {
 		// ein neuer RowSorter wird erstellt, durch Anklicken des TableHeaders wird
-				// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
-				// bzw. einen Comparator sortiert werden
-		
+		// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
+		// bzw. einen Comparator sortiert werden
+
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table.getModel());
 		table.setRowSorter(sorter);
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); //
@@ -383,6 +382,10 @@ public class DisponentFenster extends JFrame {
 
 			boolean[] columnEditables = new boolean[] { true, false, false, false, false, true, false, false };
 			// welche spalten lassen sich ändern
+			
+			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+				return columnEditables[column];
+			}
 		});
 
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
@@ -407,8 +410,12 @@ public class DisponentFenster extends JFrame {
 		archivTbl.setModel(new DefaultTableModel(archiv(), new String[] { "", "AuftragsNummer", "Status",
 				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" }) {
 
-			boolean[] columnEditables = new boolean[] { true, false, false, false, false, true, false, false };
+			boolean[] columnEditables = new boolean[] { true, false, true, false, false, false, false, false };
 			// welche spalten lassen sich ändern
+
+			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+				return columnEditables[column];
+			}
 		});
 
 //		archivTbl.getColumn(archivTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("archivTbl"));
@@ -434,6 +441,10 @@ public class DisponentFenster extends JFrame {
 
 			boolean[] columnEditables = new boolean[] { false, false, false, true };
 			// welche spalten lassen sich ändern
+			
+			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+				return columnEditables[column];
+			}
 		});
 
 		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));
@@ -1016,7 +1027,7 @@ public class DisponentFenster extends JFrame {
 					if (!archivTbl.getValueAt(i, 2).equals(auftrag.getStatus())) {
 
 						auftrag.setStatus(archivTbl.getValueAt(i, 2).toString());
-					
+
 						db.setStatus(auftrag, auftrag.getStatus());
 						// wenn der selbe Auftrag in der Tabelle einen anderen Status als "im Lager"
 						// hat, wird der Status überschrieben und aktualisiert (in der DB)
