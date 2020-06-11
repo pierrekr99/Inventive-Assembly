@@ -124,19 +124,29 @@ public class AuftraegeListeFenster extends JFrame {
 				// hierzu nicht mehr die Aufträge, die bereits im Lager sind
 
 				auftraege[zeile][0] = "Details";
-				auftraege[zeile][1] = db.getAuftragsListe().get(i).getAuftragsNummer();
+				auftraege[zeile][1] = "";
+				if (db.getAuftragsListe().get(i).getAuftragsNummer() != null)
+					auftraege[zeile][1] = db.getAuftragsListe().get(i).getAuftragsNummer();
 				// AuftragsNummer
 
-				auftraege[zeile][2] = db.getAuftragsListe().get(i).getStatus();
+				auftraege[zeile][2] = "";
+				if (db.getAuftragsListe().get(i).getStatus() != null)
+					auftraege[zeile][2] = db.getAuftragsListe().get(i).getStatus();
 				// Status
 
-				auftraege[zeile][3] = db.getAuftragsListe().get(i).getErstellungsdatum();
+				auftraege[zeile][3] = "";
+				if (db.getAuftragsListe().get(i).getErstellungsdatum() != null)
+					auftraege[zeile][3] = db.getAuftragsListe().get(i).getErstellungsdatum();
 				// Erstellungsdatum
 
-				auftraege[zeile][4] = db.getAuftragsListe().get(i).getFrist();
+				auftraege[zeile][4] = "";
+				if (db.getAuftragsListe().get(i).getFrist() != null)
+					auftraege[zeile][4] = db.getAuftragsListe().get(i).getFrist();
 				// Frist
 
-				auftraege[zeile][5] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
+				auftraege[zeile][5] = "";
+				if (db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer() != null)
+					auftraege[zeile][5] = db.getAuftragsListe().get(i).getAuftraggeber().getKundenNummer();
 				zeile++;
 				// KundenNummer
 			}
@@ -256,7 +266,6 @@ public class AuftraegeListeFenster extends JFrame {
 				// Zuständiger Monteur = Monteur in der MonteurListe?
 				// Aufträge, welche bereits abgeschlossen/ im Lager sind, zählen nicht mehr in
 				// die Auftragssumme des einzelnen Monteurs
-
 
 				summe++;
 			}

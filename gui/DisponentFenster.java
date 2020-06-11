@@ -382,7 +382,7 @@ public class DisponentFenster extends JFrame {
 
 			boolean[] columnEditables = new boolean[] { true, false, false, false, false, true, false, false };
 			// welche spalten lassen sich ändern
-			
+
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
 				return columnEditables[column];
 			}
@@ -391,7 +391,7 @@ public class DisponentFenster extends JFrame {
 		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("auftraegeTbl"));
 		// ButtonRenderer wird in Spalte 0 ausgeführt
 
-		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
+		auftraegeTbl.getColumn(auftraegeTbl.getColumnName(0)).setCellEditor(new JButtonEditor("auftraegeTbl"));
 		// ButtonEditorwird in Spalte 0 ausgeführt
 
 		tblFormat(auftraegeTbl);
@@ -418,10 +418,10 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 
-//		archivTbl.getColumn(archivTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("archivTbl"));
+		archivTbl.getColumn(archivTbl.getColumnName(0)).setCellRenderer(new JButtonRenderer("archivTbl"));
 		// ButtonRenderer wird in Spalte 0 ausgeführt
 
-//		archivTbl.getColumn(archivTbl.getColumnName(0)).setCellEditor(new JButtonEditor());
+		archivTbl.getColumn(archivTbl.getColumnName(0)).setCellEditor(new JButtonEditor("archivTbl"));
 		// ButtonEditorwird in Spalte 0 ausgeführt
 
 		tblFormat(archivTbl);
@@ -441,7 +441,7 @@ public class DisponentFenster extends JFrame {
 
 			boolean[] columnEditables = new boolean[] { false, false, false, true };
 			// welche spalten lassen sich ändern
-			
+
 			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
 				return columnEditables[column];
 			}
@@ -450,7 +450,7 @@ public class DisponentFenster extends JFrame {
 		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellRenderer(new JButtonRenderer("monteureTbl"));
 		// ButtonRenderer wird in Spalte 3 ausgeführt
 
-		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellEditor(new JButtonEditor());
+		monteureTbl.getColumn(monteureTbl.getColumnName(3)).setCellEditor(new JButtonEditor("monteureTbl"));
 		// ButtonEditorwird in Spalte 3 ausgeführt
 
 		monteureTblFormat();
@@ -472,27 +472,29 @@ public class DisponentFenster extends JFrame {
 
 		for (int i = 0; i < auftragsListe.size(); i++) {
 			auftraege[i][0] = details;
-			auftraege[i][1] = auftragsListe.get(i).getAuftragsNummer();
+
+			auftraege[i][1] = "";
+			if (auftragsListe.get(i).getAuftragsNummer() != null)
+				auftraege[i][1] = auftragsListe.get(i).getAuftragsNummer();
 			// AuftragsNummer
 
-			auftraege[i][2] = auftragsListe.get(i).getStatus();
+			auftraege[i][2] = "";
+			if (auftragsListe.get(i).getStatus() != null)
+				auftraege[i][2] = auftragsListe.get(i).getStatus();
 			// Status
 
-			auftraege[i][3] = auftragsListe.get(i).getErstellungsdatum();
+			auftraege[i][3] = "";
+			if (auftragsListe.get(i).getErstellungsdatum() != null)
+				auftraege[i][3] = auftragsListe.get(i).getErstellungsdatum();
 			// Erstellungsdatum
 
-			auftraege[i][4] = auftragsListe.get(i).getFrist();
+			auftraege[i][4] = "";
+			if (auftragsListe.get(i).getFrist() != null)
+				auftraege[i][4] = auftragsListe.get(i).getFrist();
 			// Frist
 
 			auftraege[i][5] = "";
-			// MitarbeiterName (Name Vorname) wenn kein Monteur zugwiesen ist
-
 			auftraege[i][6] = "";
-			// MitarbeiterNummer wenn kein Monteur zugwiesen ist
-
-			auftraege[i][7] = auftragsListe.get(i).getAuftraggeber().getKundenNummer();
-			// Auftraggeber
-
 			if (auftragsListe.get(i).getZustaendig() != null && auftragsListe.get(i).getZustaendig() != null
 					&& !auftragsListe.get(i).getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				// ist ein Monteur zuständug?
@@ -507,10 +509,13 @@ public class DisponentFenster extends JFrame {
 			} else if (auftragsListe.get(i).getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				auftraege[i][5] = auftragsListe.get(i).getZustaendig().getName() + " "
 						+ auftragsListe.get(i).getZustaendig().getVorname();
-				// "nicht zugewiesen"
+				// Nicht zugewiesen
 			}
-			auftraege[i][6] = auftragsListe.get(i).getZustaendig().getMitarbeiterNummer();
-			// MitarbeiterNummer
+
+			auftraege[i][7] = "";
+			if (auftragsListe.get(i).getAuftraggeber().getKundenNummer() != null)
+				auftraege[i][7] = auftragsListe.get(i).getAuftraggeber().getKundenNummer();
+			// Auftraggeber
 
 		}
 		return auftraege;
@@ -532,27 +537,29 @@ public class DisponentFenster extends JFrame {
 
 				int i = 0; i < archivListe.size(); i++) {
 			archiv[i][0] = details;
-			archiv[i][1] = archivListe.get(i).getAuftragsNummer();
+
+			archiv[i][1] = "";
+			if (auftragsListe.get(i).getAuftraggeber().getKundenNummer() != null)
+				archiv[i][1] = archivListe.get(i).getAuftragsNummer();
 			// AuftragsNummer
 
-			archiv[i][2] = archivListe.get(i).getStatus();
+			archiv[i][2] = "";
+			if (auftragsListe.get(i).getAuftraggeber().getKundenNummer() != null)
+				archiv[i][2] = archivListe.get(i).getStatus();
 			// Status
 
-			archiv[i][3] = archivListe.get(i).getErstellungsdatum();
+			archiv[i][3] = "";
+			if (auftragsListe.get(i).getAuftraggeber().getKundenNummer() != null)
+				archiv[i][3] = archivListe.get(i).getErstellungsdatum();
 			// Erstellungsdatum
 
-			archiv[i][4] = archivListe.get(i).getFrist();
+			archiv[i][4] = "";
+			if (auftragsListe.get(i).getAuftraggeber().getKundenNummer() != null)
+				archiv[i][4] = archivListe.get(i).getFrist();
 			// Frist
 
 			archiv[i][5] = "";
-			// MitarbeiterName (Name Vorname) wenn kein Monteur zugwiesen ist
-
 			archiv[i][6] = "";
-			// MitarbeiterNummer wenn kein Monteur zugwiesen ist
-
-			archiv[i][7] = archivListe.get(i).getAuftraggeber().getKundenNummer();
-			// Auftraggeber
-
 			if (archivListe.get(i).getZustaendig() != null && archivListe.get(i).getZustaendig() != null
 					&& !archivListe.get(i).getZustaendig().getMitarbeiterNummer().equals("0000")) {
 				// ist ein Monteur zuständug?
@@ -564,6 +571,12 @@ public class DisponentFenster extends JFrame {
 				archiv[i][6] = archivListe.get(i).getZustaendig().getMitarbeiterNummer();
 				// MitarbeiterNummer
 			}
+
+			archiv[i][7] = "";
+			if (auftragsListe.get(i).getAuftraggeber().getKundenNummer() != null)
+				archiv[i][7] = archivListe.get(i).getAuftraggeber().getKundenNummer();
+			// Auftraggeber
+
 		}
 		return archiv;
 	}
@@ -579,24 +592,31 @@ public class DisponentFenster extends JFrame {
 
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
 			if (!db.getMonteurListe().get(i).getMitarbeiterNummer().equals("0000")) {
-				monteure[i][0] = db.getMonteurListe().get(i).getName() + " " + db.getMonteurListe().get(i).getVorname();
+
+				monteure[i][0] = "";
+				if (db.getMonteurListe().get(i).getName() != null && db.getMonteurListe().get(i).getVorname() != null)
+					monteure[i][0] = db.getMonteurListe().get(i).getName() + " "
+							+ db.getMonteurListe().get(i).getVorname();
 				// MitarbeiterName (Name Vorname)
 
-				monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();
+				monteure[i][1] = "";
+				if(db.getMonteurListe().get(i).getMitarbeiterNummer() != null) monteure[i][1] = db.getMonteurListe().get(i).getMitarbeiterNummer();
 				// MitarbeiterNummer
 
-				if (indexWochentag <= 4) {
+				monteure[i][2] = "";
+				if (indexWochentag <= 4 && db.getMonteurListe().get(i).getAnwesenheit() != null) {
 					// für Montag bis Freitag
 
 					monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit().get(indexWochentag);
 					// hier wird nur noch die Anwesenheit am jeweiligen Tag eingetragen
 
-				} else {
+				} else if(db.getMonteurListe().get(i).getAnwesenheit() != null){
 					// Samstag und Sonntag wird die komplette Liste angezeigt
 					monteure[i][2] = db.getMonteurListe().get(i).getAnwesenheit();
 				}
 
-				monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";
+				monteure[i][3] = "Aufträge anzeigen [0]";
+				if(db.getMonteurListe().get(i) != null) monteure[i][3] = "Aufträge anzeigen [" + summeAuftraege(db.getMonteurListe().get(i)) + "]";
 				// Summe der Aufträge
 			}
 		}
@@ -754,9 +774,12 @@ public class DisponentFenster extends JFrame {
 
 	class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
 		JButton button;
+		String tabelle;
+		// in welcher Tabelle ist der Button
 
-		public JButtonEditor() {
+		public JButtonEditor(String string) {
 			super();
+			this.tabelle = string;
 			button = new JButton();
 			button.setOpaque(true);
 			// ist der Button undurchsichtig oder nicht
@@ -765,10 +788,10 @@ public class DisponentFenster extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					// was passiert wenn man den Button anklickt
 
-					if (button.getText().equals(details)) {
-						// wird der deteilsButton gedrückt?
+					if (tabelle.equals("auftraegeTbl")) {
+						// wird der detailsButton gedrückt?
 
-						Auftrag auftrag = welcherAuftrag(auftraegeTbl.getEditingRow());
+						Auftrag auftrag = welcherAuftrag(auftraegeTbl.getEditingRow(),"auftraegeTbl");
 						// welcher Auftrag wird in der Zeile des geklickten Buttons angezeigt
 
 						if (auftrag != null) {
@@ -782,7 +805,7 @@ public class DisponentFenster extends JFrame {
 							// Tabelle wird neu geladen, damit der Button wieder erscheint
 						}
 
-					} else {
+					} else if (tabelle.equals("")){
 						Mitarbeiter monteur = welcherMonteur(monteureTbl.getEditingRow());
 						if (summeAuftraege(monteur).equals("0")) {
 							// ist der der Monteur für 0 Aufträge zuständig?
@@ -803,6 +826,20 @@ public class DisponentFenster extends JFrame {
 
 						monteureAktualisieren();
 						// Tabelle wird neu geladen, damit der Button wieder erscheint
+					} else if(tabelle.equals("archivTbl")) {
+						Auftrag auftrag = welcherAuftrag(archivTbl.getEditingRow(),"archivTbl");
+						// welcher Auftrag wird in der Zeile des geklickten Buttons angezeigt
+
+						if (auftrag != null) {
+							// es existiert ein Auftrag in der Zeile
+
+							DetailsFenster frame = new DetailsFenster(auftrag);
+							frame.setVisible(true);
+							// DetailsFenster wird geöffnet und der angezeigte Auftrag wird ihm mitgegeben
+
+							auftraegeAktualisieren();
+							// Tabelle wird neu geladen, damit der Button wieder erscheint
+						}
 					}
 				}
 			});
@@ -857,10 +894,12 @@ public class DisponentFenster extends JFrame {
 		return summe;
 	}
 
-	private Auftrag welcherAuftrag(int editingRow) {
+	private Auftrag welcherAuftrag(int editingRow, String tabelle) {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
 
-			if (auftraegeTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())) {
+			if (auftraegeTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer()) && tabelle.equals("auftraegeTbl")) {
+				return auftrag;
+			}else if(archivTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer()) && tabelle.equals("archivTbl")) {
 				return auftrag;
 			}
 		}
