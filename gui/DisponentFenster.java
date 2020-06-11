@@ -65,6 +65,7 @@ public class DisponentFenster extends JFrame {
 	private JTable monteureTbl;
 	private JScrollPane auftraegeSp;
 	private JScrollPane archivSp;
+	private JScrollPane monteureSp;
 	public int indexWochentag = 0;
 
 	Object[][] auftraege;
@@ -78,7 +79,7 @@ public class DisponentFenster extends JFrame {
 	String monteur;
 
 	JComboBox monteureCombobox = new JComboBox();
-	JComboBox DatumCBox;
+	JComboBox datumComboBox;
 	JComboBox auswahlBoxStatus = new JComboBox(); // Combobox zur Statusänderung
 	TableColumn monteureColumn;
 
@@ -117,15 +118,16 @@ public class DisponentFenster extends JFrame {
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-
-				if (tabbedPane.getSelectedComponent() == auftraegeSp || tabbedPane.getSelectedComponent() == archivSp) {
-					DatumCBox.setVisible(false);
-				} else {
-					DatumCBox.setVisible(true);
+				if (tabbedPane.getSelectedComponent() == monteureSp) {
+					datumComboBox.setVisible(true); // datumComboBox wird nur im Tab Monteur angezeigt
+				}else {
+					datumComboBox.setVisible(false);
 				}
-
 			}
 		});
+		
+		datumBefuellen();
+		// Befüllt die datumComboBox
 
 		JButton logoutKnopf = new JButton("Logout");// Logout schließt das fenster und Öffnet das LoginFenster
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -180,9 +182,6 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 
-		datumBefuellen();
-		// Befüllt die datumComboBox
-
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
@@ -191,7 +190,7 @@ public class DisponentFenster extends JFrame {
 										.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
-										.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										.addComponent(datumComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(18).addComponent(dbAktualisierenKnopf).addGap(18)
 										.addComponent(logoutKnopf))
@@ -203,10 +202,10 @@ public class DisponentFenster extends JFrame {
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf).addComponent(DatumCBox,
+								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf).addComponent(datumComboBox,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-						.addComponent(DatumCBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+						.addComponent(datumComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addPreferredGap(ComponentPlacement.UNRELATED)
 				.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE).addGap(6)));
@@ -269,7 +268,7 @@ public class DisponentFenster extends JFrame {
 		/**
 		 * Monteure Reiter.==================================================
 		 */
-		JScrollPane monteureSp = new JScrollPane();
+		monteureSp = new JScrollPane();
 		tabbedPane.addTab("Monteure", null, monteureSp, null);
 
 		monteureTbl = new JTable();
@@ -1082,46 +1081,32 @@ public class DisponentFenster extends JFrame {
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
 		// EEEE steht für den Wochentag
 
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(); // Kalendar Objekt wird erzeugt
 
-		Date datum = new Date();
+		Date datum = new Date(); // heutiger Tag
+		String tag1 = f.format(datum); // formatiert das Datum
+		
+		String [] datumArray = new String [5]; // Array der Länge 5
+		datumArray[0] = tag1;
+		
+		for (int i = 1; i < 5; i++) { // Array wir mit Tagen befüllt
+			
+			c.setTime(datum); // c wird auf datum gesetzt
+			c.add(Calendar.DATE, 1); // c wird ein Tag addiert
+			datum = c.getTime(); // datum wird gleich c gesetzt
+			
+			String tag = f.format(datum); // datum wird formatiert
+			datumArray[i] = tag;
+		}
+		
+		datumComboBox = new JComboBox(datumArray); // Combobox wird befüllt
+		datumComboBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		datumComboBox.setSelectedIndex(0);
 
-		String tag1 = datumAlsStringBekommen(datum);
-
-		c.setTime(datum);
-		c.add(Calendar.DATE, 1);
-		datum = c.getTime();
-
-		String tag2 = f.format(datum);
-
-		c.setTime(datum);
-		c.add(Calendar.DATE, 1);
-		datum = c.getTime();
-
-		String tag3 = f.format(datum);
-
-		c.setTime(datum);
-		c.add(Calendar.DATE, 1);
-		datum = c.getTime();
-
-		String tag4 = f.format(datum);
-
-		c.setTime(datum);
-		c.add(Calendar.DATE, 1);
-		datum = c.getTime();
-
-		String tag5 = f.format(datum);
-
-		String[] Datum = { tag1, tag2, tag3, tag4, tag5 };
-
-		DatumCBox = new JComboBox(Datum);
-		DatumCBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		DatumCBox.setSelectedIndex(0);
-
-		DatumCBox.addActionListener(new ActionListener() {
+		datumComboBox.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 
-				String ausgewaeltesDatum = (String) DatumCBox.getSelectedItem();
+				String ausgewaeltesDatum = (String) datumComboBox.getSelectedItem();
 				// liest Datum als String aus
 
 				String[] ausgewaelterWochentag = ausgewaeltesDatum.split(",");
@@ -1135,47 +1120,30 @@ public class DisponentFenster extends JFrame {
 				 * index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
 				 * können
 				 */
-
-				case "Montag":
-					indexWochentag = 0;
-					break;
-				case "Dienstag":
-					indexWochentag = 1;
-					break;
-				case "Mittwoch":
-					indexWochentag = 2;
-					break;
-				case "Donnerstag":
-					indexWochentag = 3;
-					break;
-				case "Freitag":
-					indexWochentag = 4;
-					break;
-				case "Samstag":
-					indexWochentag = 5;
-					break;
-				case "Sonntag":
-					indexWochentag = 6;
-					break;
-				default:
-					indexWochentag = 6;
-					break;
+				case "Montag":indexWochentag = 0;break;
+				case "Dienstag":indexWochentag = 1;break;
+				case "Mittwoch":indexWochentag = 2;break;
+				case "Donnerstag":indexWochentag = 3;break;
+				case "Freitag":indexWochentag = 4;break;
+				case "Samstag":indexWochentag = 5;break;
+				case "Sonntag":indexWochentag = 6;break;
+				default:indexWochentag = 6;break;
 				}
 
-				monteureAktualisieren();
+				monteureAktualisieren(); // Verfügbarkeit Spalte wird sofort aktualisiert
 
 			}
 		});
 
 	}
 
-	private String datumAlsStringBekommen(Date date) {
-		// gibt heutiges Datum zurück
-
-		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
-		// EEEE steht für den Wochentag
-		return f.format(date);
-	}
+//	private String datumAlsStringBekommen(Date date) {
+//		// gibt heutiges Datum zurück
+//
+//		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
+//		// EEEE steht für den Wochentag
+//		return f.format(date);
+//	}
 
 	private Instant getGrenze() {
 		Instant grenze = null;
