@@ -34,17 +34,21 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import Datenbank.datenbankVerbindung;
@@ -187,7 +191,7 @@ public class DisponentFenster extends JFrame {
 										 * Tabelle wird graphisch aktualisiert, die Summe der Aufträge eines Monteurs
 										 * passt sich an die neuen Zahlen an
 										 */
-
+				
 			}
 		});
 
@@ -210,6 +214,25 @@ public class DisponentFenster extends JFrame {
 						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
 					.addContainerGap())
 		);
+		gl_contentPane.setHorizontalGroup(
+				gl_contentPane.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_contentPane.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 520, Short.MAX_VALUE)
+								.addComponent(lblDatum)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(datumComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(18)
+								.addComponent(dbAktualisierenKnopf)
+								.addGap(18)
+								.addComponent(logoutKnopf))
+							.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
+						.addContainerGap())
+			);
+		
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
@@ -253,6 +276,32 @@ public class DisponentFenster extends JFrame {
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
+		TableModel modelAuftraege = new DefaultTableModel(auftraege(),new String[] { "AuftragsNummer", "Status",
+				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" });
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelAuftraege);
+		auftraegeTbl.setRowSorter(sorter);
+		txtSuche.getDocument().addDocumentListener(new DocumentListener() {
+	         @Override
+	         public void insertUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         @Override
+	         public void removeUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         @Override
+	         public void changedUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         public void search(String str) {
+	            if (str.length() == 0) {
+	               sorter.setRowFilter(null);
+	            } else {
+	               sorter.setRowFilter(RowFilter.regexFilter(str));
+	            }
+	         }
+	      });
 
 		/**
 		 * Archiv Reiter.==================================================
@@ -276,6 +325,33 @@ public class DisponentFenster extends JFrame {
 		archivAktualisieren();
 		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
+		
+		TableModel modelArchiv = new DefaultTableModel(archiv(), new String[] { "AuftragsNummer", "Status",
+				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" });
+		
+		TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelArchiv);
+		archivTbl.setRowSorter(sorter1);
+		txtSuche.getDocument().addDocumentListener(new DocumentListener() {
+	         @Override
+	         public void insertUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         @Override
+	         public void removeUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         @Override
+	         public void changedUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         public void search(String str) {
+	            if (str.length() == 0) {
+	               sorter1.setRowFilter(null);
+	            } else {
+	               sorter1.setRowFilter(RowFilter.regexFilter(str));
+	            }
+	         }
+	      });
 		/*
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
@@ -305,10 +381,36 @@ public class DisponentFenster extends JFrame {
 
 		monteureTblFormat();
 		// Monteure Tabelle wird formatiert
+		TableModel modelMonteur = new DefaultTableModel(monteure(), new String[] { "Name",
+				"MitarbeiterNummer", "Verfügbarkeit" });
+		
+		TableRowSorter<TableModel> sorter2 = new TableRowSorter<>(modelMonteur);
+		monteureTbl.setRowSorter(sorter2);
+		txtSuche.getDocument().addDocumentListener(new DocumentListener() {
+	         @Override
+	         public void insertUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         @Override
+	         public void removeUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         @Override
+	         public void changedUpdate(DocumentEvent e) {
+	            search(txtSuche.getText());
+	         }
+	         public void search(String str) {
+	            if (str.length() == 0) {
+	               sorter2.setRowFilter(null);
+	            } else {
+	               sorter2.setRowFilter(RowFilter.regexFilter(str));
+	            }
+	         }
+	      });
 
 // ?????????????????????????
 
-		monteureTbl.setAutoCreateRowSorter(true);
+//		monteureTbl.setAutoCreateRowSorter(true);
 		/*
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert

@@ -31,6 +31,8 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
@@ -38,6 +40,7 @@ import javax.swing.RowSorter;
 
 import java.awt.Font;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.RowFilter;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -46,6 +49,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import Datenbank.datenbankVerbindung;
@@ -217,6 +221,35 @@ public class MonteurFenster extends JFrame {
 								// in der natürlichen Ordnung und umgekehrt sortiert
 
 		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));// Formatierung der Schrift in der Tabelle
+		
+		TableModel modelAuftraege = new DefaultTableModel(// Befüllung der Tabelle
+				auftraege(), new String[] {  "Auftragsnummer", "Status", "Erstellungsdatum", 
+						"Frist", "Auftraggeber"
+				});
+		
+		TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelAuftraege);
+		auftraegeMonteurTBL.setRowSorter(sorter1);
+		suchFeld.getDocument().addDocumentListener(new DocumentListener() {
+	         @Override
+	         public void insertUpdate(DocumentEvent e) {
+	            search(suchFeld.getText());
+	         }
+	         @Override
+	         public void removeUpdate(DocumentEvent e) {
+	            search(suchFeld.getText());
+	         }
+	         @Override
+	         public void changedUpdate(DocumentEvent e) {
+	            search(suchFeld.getText());
+	         }
+	         public void search(String str) {
+	            if (str.length() == 0) {
+	               sorter1.setRowFilter(null);
+	            } else {
+	               sorter1.setRowFilter(RowFilter.regexFilter(str));
+	            }
+	         }
+	      });
 		scrollPane.setViewportView(auftraegeMonteurTBL);
 		auftraegeTab.setLayout(gl_auftraegeTab);
 
