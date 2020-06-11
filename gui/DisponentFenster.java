@@ -118,7 +118,7 @@ public class DisponentFenster extends JFrame {
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 
-				if (tabbedPane.getSelectedComponent() == auftraegeSp) {
+				if (tabbedPane.getSelectedComponent() == auftraegeSp || tabbedPane.getSelectedComponent() == archivSp) {
 					DatumCBox.setVisible(false);
 				} else {
 					DatumCBox.setVisible(true);
@@ -237,8 +237,6 @@ public class DisponentFenster extends JFrame {
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
 
-		monteureCombobox(auftraegeTbl);
-		// Befüllt die monteureCombobox
 
 		/**
 		 * Archiv Reiter.==================================================
