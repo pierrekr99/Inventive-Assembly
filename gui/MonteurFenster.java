@@ -62,6 +62,7 @@ public class MonteurFenster extends JFrame {
 	private JTextField suchFeld;
 	private JTable auftraegeMonteurTBL;
 	private JPanel contentPane;
+	private JLabel lblDatum; 
 
 	int zeilen = 0; // zeilen in der Auftragstabelle
 
@@ -162,29 +163,44 @@ public class MonteurFenster extends JFrame {
 			}
 		}
 		lbl_eingeloggterMonteur.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // Datumsformat
+		lblDatum = new JLabel(f.format(new Date())); // Heutigen Tag wird übergeben
+		lblDatum.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
-		gl_auftraegeTab.setHorizontalGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap().addGroup(gl_auftraegeTab
-						.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
+		gl_auftraegeTab.setHorizontalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
-								.addComponent(dbAktualisierenKnopf).addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(logoutKnopf)))
-						.addContainerGap()));
-		gl_auftraegeTab.setVerticalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap()
-						.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf)
-								.addComponent(lbl_eingeloggterMonteur))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE).addContainerGap()));
+							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+							.addComponent(lblDatum)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dbAktualisierenKnopf)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(logoutKnopf)))
+					.addContainerGap())
+		);
+		gl_auftraegeTab.setVerticalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
+						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(logoutKnopf)
+						.addComponent(dbAktualisierenKnopf)
+						.addComponent(lbl_eingeloggterMonteur)
+						.addComponent(lblDatum))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+					.addContainerGap())
+		);
 
 		/**
 		 * ***********************************************************************************************

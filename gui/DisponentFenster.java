@@ -66,6 +66,7 @@ public class DisponentFenster extends JFrame {
 	private JScrollPane auftraegeSp;
 	private JScrollPane archivSp;
 	private JScrollPane monteureSp;
+	private JLabel lblDatum;
 	public int indexWochentag = 0;
 
 	Object[][] auftraege;
@@ -120,15 +121,23 @@ public class DisponentFenster extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				if (tabbedPane.getSelectedComponent() == monteureSp) {
 					datumComboBox.setVisible(true); // datumComboBox wird nur im Tab Monteur angezeigt
+					lblDatum.setVisible(false);
 				}else {
 					datumComboBox.setVisible(false);
+					lblDatum.setVisible(true); // in allen anderen Tabs wir das lblDatum angezeigt
 				}
 			}
 		});
 		
 		datumBefuellen();
 		// Befüllt die datumComboBox
+		
+		
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // Datumsformat
+		lblDatum = new JLabel(f.format(new Date())); // heutigen Tag übergeben
+		lblDatum.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
+		
 		JButton logoutKnopf = new JButton("Logout");// Logout schließt das fenster und Öffnet das LoginFenster
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		logoutKnopf.addActionListener(new ActionListener() {
@@ -183,32 +192,41 @@ public class DisponentFenster extends JFrame {
 		});
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-										.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
-										.addComponent(datumComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18).addComponent(dbAktualisierenKnopf).addGap(18)
-										.addComponent(logoutKnopf))
-								.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
-						.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 520, Short.MAX_VALUE)
+							.addComponent(lblDatum)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(datumComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(dbAktualisierenKnopf)
+							.addGap(18)
+							.addComponent(logoutKnopf))
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf).addComponent(datumComboBox,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addComponent(datumComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE).addGap(6)));
+							.addComponent(txtSuche, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(logoutKnopf)
+							.addComponent(dbAktualisierenKnopf)
+							.addComponent(datumComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(datumComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblDatum)))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+					.addGap(6))
+		);
 
 		/**
 		 * Auftraege Reiter.==================================================
@@ -1193,5 +1211,4 @@ public class DisponentFenster extends JFrame {
 		}
 
 	}
-
 }
