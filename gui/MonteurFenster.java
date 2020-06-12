@@ -31,6 +31,8 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
@@ -38,6 +40,7 @@ import javax.swing.RowSorter;
 
 import java.awt.Font;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.RowFilter;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -46,6 +49,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import Datenbank.datenbankVerbindung;
@@ -62,6 +66,7 @@ public class MonteurFenster extends JFrame {
 	private JTextField suchFeld;
 	private JTable auftraegeMonteurTBL;
 	private JPanel contentPane;
+	private JLabel lblDatum; 
 
 	int zeilen = 0; // zeilen in der Auftragstabelle
 
@@ -116,9 +121,14 @@ public class MonteurFenster extends JFrame {
 		suchFeld.setText("Suche");// Suchfeld name
 		suchFeld.setColumns(10);
 
-		JButton logoutKnopf = new JButton("Logout");// logout button erstellen
-		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
-		logoutKnopf.addActionListener(new ActionListener() { // was passiert, wenn der Knopf gedrückt wird
+		JButton logoutKnopf = new JButton("Logout");
+		// logout button erstellen
+		
+		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		// Formatierung der Schrift
+		
+		logoutKnopf.addActionListener(new ActionListener() { 
+			// was passiert, wenn der Knopf gedrückt wird
 
 			@Override
 			public void actionPerformed(ActionEvent e) {// logout befehl...zurück zum login
@@ -162,29 +172,44 @@ public class MonteurFenster extends JFrame {
 			}
 		}
 		lbl_eingeloggterMonteur.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // Datumsformat
+		lblDatum = new JLabel(f.format(new Date())); // Heutigen Tag wird übergeben
+		lblDatum.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
-		gl_auftraegeTab.setHorizontalGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap().addGroup(gl_auftraegeTab
-						.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
+		gl_auftraegeTab.setHorizontalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
-								.addComponent(dbAktualisierenKnopf).addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(logoutKnopf)))
-						.addContainerGap()));
-		gl_auftraegeTab.setVerticalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap()
-						.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf)
-								.addComponent(lbl_eingeloggterMonteur))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE).addContainerGap()));
+							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+							.addComponent(lblDatum)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dbAktualisierenKnopf)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(logoutKnopf)))
+					.addContainerGap())
+		);
+		gl_auftraegeTab.setVerticalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
+						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(logoutKnopf)
+						.addComponent(dbAktualisierenKnopf)
+						.addComponent(lbl_eingeloggterMonteur)
+						.addComponent(lblDatum))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+					.addContainerGap())
+		);
 
 		/**
 		 * ***********************************************************************************************
@@ -201,6 +226,7 @@ public class MonteurFenster extends JFrame {
 								// in der natürlichen Ordnung und umgekehrt sortiert
 
 		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));// Formatierung der Schrift in der Tabelle
+		
 		scrollPane.setViewportView(auftraegeMonteurTBL);
 		auftraegeTab.setLayout(gl_auftraegeTab);
 
@@ -212,10 +238,39 @@ public class MonteurFenster extends JFrame {
 	 ***********************************************************************************************************
 	 */
 
+	private void suchen(JTable table) {
+		TableModel modelArchiv = table.getModel();
+		
+		TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelArchiv);
+		table.setRowSorter(sorter1);
+		suchFeld.getDocument().addDocumentListener(new DocumentListener() {
+	         @Override
+	         public void insertUpdate(DocumentEvent e) {
+	            search(suchFeld.getText());
+	         }
+	         @Override
+	         public void removeUpdate(DocumentEvent e) {
+	            search(suchFeld.getText());
+	         }
+	         @Override
+	         public void changedUpdate(DocumentEvent e) {
+	            search(suchFeld.getText());
+	         }
+	         public void search(String str) {
+	            if (str.length() == 0) {
+	               sorter1.setRowFilter(null);
+	            } else {
+	               sorter1.setRowFilter(RowFilter.regexFilter(str));
+	            }
+	         }
+	      });
+		}
+	
 	private void sortierenMonteurTbl() {
 		// ein neuer RowSorter wird erstellt, durch Anklicken des TableHeaders wird
 		// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
 		// bzw. einen Comparator sortiert werden
+		
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(
 				(DefaultTableModel) auftraegeMonteurTBL.getModel());
 		auftraegeMonteurTBL.setRowSorter(sorter);
@@ -300,6 +355,7 @@ public class MonteurFenster extends JFrame {
 		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());// Button
 																												// Details
 																												// erstellen
+		suchen(auftraegeMonteurTBL);
 	}
 
 	/*
@@ -361,8 +417,7 @@ public class MonteurFenster extends JFrame {
 	 * Funktionalität***************************
 	 * ***************************************************************************************************
 	 */
-	static void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { // wird auch in anderer Klasse
-																					// gebraucht
+	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { 
 
 		combobox.removeAllItems();// erstmal alle rauslöschen
 
@@ -371,8 +426,7 @@ public class MonteurFenster extends JFrame {
 		combobox.addItem("Teile fehlen");
 		combobox.addItem("disponiert");
 		combobox.addItem("im Lager");
-		combobox.addItem("nicht zugewiesen");
-
+		
 		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);// in welche Spalte soll die
 																			// Combobox
 		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));// Combobox jetzt anklickbar
