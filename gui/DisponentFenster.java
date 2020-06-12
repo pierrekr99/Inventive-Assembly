@@ -276,32 +276,7 @@ public class DisponentFenster extends JFrame {
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
-		TableModel modelAuftraege = new DefaultTableModel(auftraege(),new String[] {" ", "AuftragsNummer", "Status",
-				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" });
-		
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelAuftraege);
-		auftraegeTbl.setRowSorter(sorter);
-		txtSuche.getDocument().addDocumentListener(new DocumentListener() {
-	         @Override
-	         public void insertUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         @Override
-	         public void removeUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         @Override
-	         public void changedUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         public void search(String str) {
-	            if (str.length() == 0) {
-	               sorter.setRowFilter(null);
-	            } else {
-	               sorter.setRowFilter(RowFilter.regexFilter(str));
-	            }
-	         }
-	      });
+
 
 		/**
 		 * Archiv Reiter.==================================================
@@ -325,39 +300,8 @@ public class DisponentFenster extends JFrame {
 		archivAktualisieren();
 		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
-		
-		TableModel modelArchiv = new DefaultTableModel(archiv(), new String[] {" ", "AuftragsNummer", "Status",
-				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" });
-		
-		TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelArchiv);
-		archivTbl.setRowSorter(sorter1);
-		txtSuche.getDocument().addDocumentListener(new DocumentListener() {
-	         @Override
-	         public void insertUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         @Override
-	         public void removeUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         @Override
-	         public void changedUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         public void search(String str) {
-	            if (str.length() == 0) {
-	               sorter1.setRowFilter(null);
-	            } else {
-	               sorter1.setRowFilter(RowFilter.regexFilter(str));
-	            }
-	         }
-	      });
-		/*
-		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
-		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
-		 */
 
-		MonteurFenster.auswahlBoxStatus(archivTbl, auswahlBoxStatus, 2);
+		auswahlBoxStatus(archivTbl, auswahlBoxStatus, 2);
 
 		/**
 		 * Monteure Reiter.==================================================
@@ -381,40 +325,6 @@ public class DisponentFenster extends JFrame {
 
 		monteureTblFormat();
 		// Monteure Tabelle wird formatiert
-		TableModel modelMonteur = new DefaultTableModel(monteure(), new String[] { "Name",
-				"MitarbeiterNummer", "Verfügbarkeit" });
-		
-		TableRowSorter<TableModel> sorter2 = new TableRowSorter<>(modelMonteur);
-		monteureTbl.setRowSorter(sorter2);
-		txtSuche.getDocument().addDocumentListener(new DocumentListener() {
-	         @Override
-	         public void insertUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         @Override
-	         public void removeUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         @Override
-	         public void changedUpdate(DocumentEvent e) {
-	            search(txtSuche.getText());
-	         }
-	         public void search(String str) {
-	            if (str.length() == 0) {
-	               sorter2.setRowFilter(null);
-	            } else {
-	               sorter2.setRowFilter(RowFilter.regexFilter(str));
-	            }
-	         }
-	      });
-
-// ?????????????????????????
-
-//		monteureTbl.setAutoCreateRowSorter(true);
-		/*
-		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Monteure
-		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
-		 */
 
 		contentPane.setLayout(gl_contentPane);
 		// Group-Layout im contentPane wird festgelegt
@@ -425,6 +335,34 @@ public class DisponentFenster extends JFrame {
 	 * GUI-Hilfsmethoden.==================================================
 	 */
 
+	private void suchen(JTable table) {
+	TableModel modelArchiv = table.getModel();
+	
+	TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelArchiv);
+	table.setRowSorter(sorter1);
+	txtSuche.getDocument().addDocumentListener(new DocumentListener() {
+         @Override
+         public void insertUpdate(DocumentEvent e) {
+            search(txtSuche.getText());
+         }
+         @Override
+         public void removeUpdate(DocumentEvent e) {
+            search(txtSuche.getText());
+         }
+         @Override
+         public void changedUpdate(DocumentEvent e) {
+            search(txtSuche.getText());
+         }
+         public void search(String str) {
+            if (str.length() == 0) {
+               sorter1.setRowFilter(null);
+            } else {
+               sorter1.setRowFilter(RowFilter.regexFilter(str));
+            }
+         }
+      });
+	}
+	
 	private void sortieren(JTable table) {
 		// ein neuer RowSorter wird erstellt, durch Anklicken des TableHeaders wird
 		// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
@@ -518,6 +456,7 @@ public class DisponentFenster extends JFrame {
 
 		sortieren(auftraegeTbl); // die einzelnen Spalten können durch Anklicken nach der natürlichen Ordnung
 									// sortiert werden
+		suchen(auftraegeTbl);
 
 		monteureCombobox(auftraegeTbl);
 		// monteureCombobox wird konfiguriert (muss bei jeder Aktualisierung geschehen)
@@ -548,8 +487,9 @@ public class DisponentFenster extends JFrame {
 
 		sortieren(archivTbl); // die einzelnen Spalten können durch Anklicken nach der natürlichen Ordnung
 								// sortiert werden
+		suchen(archivTbl);
 
-		MonteurFenster.auswahlBoxStatus(archivTbl, auswahlBoxStatus, 2);
+		auswahlBoxStatus(archivTbl, auswahlBoxStatus, 2);
 	}
 
 	private void monteureAktualisieren() {
@@ -574,6 +514,8 @@ public class DisponentFenster extends JFrame {
 
 		monteureTblFormat();
 		// Tabelle wird formatiert
+		
+		suchen(monteureTbl);
 	}
 
 	public Object[][] auftraege() {
@@ -924,7 +866,7 @@ public class DisponentFenster extends JFrame {
 							// Tabelle wird neu geladen, damit der Button wieder erscheint
 						}
 
-					} else if (tabelle.equals("")){
+					} else if (tabelle.equals("monteureTbl")){
 						Mitarbeiter monteur = welcherMonteur(monteureTbl.getEditingRow());
 						if (summeAuftraege(monteur).equals("0")) {
 							// ist der der Monteur für 0 Aufträge zuständig?
@@ -1011,6 +953,21 @@ public class DisponentFenster extends JFrame {
 		// SummeAuftraege wird zurückgesetzt
 
 		return summe;
+	}
+	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { 
+
+		combobox.removeAllItems();// erstmal alle rauslöschen
+
+		// auswahlmöglichkeiten
+
+		combobox.addItem("Teile fehlen");
+		combobox.addItem("disponiert");
+		combobox.addItem("im Lager");
+		combobox.addItem("nicht zugewiesen");
+		
+		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);// in welche Spalte soll die
+																			// Combobox
+		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));// Combobox jetzt anklickbar
 	}
 
 	private Auftrag welcherAuftrag(int editingRow, String tabelle) {
@@ -1154,7 +1111,8 @@ public class DisponentFenster extends JFrame {
 				// db.getAuftragsliste() auf "disponiert" gesetzt (falls er noch auf "Teile
 				// fehlen" gesetzt ist)
 
-				db.setStatus(auftrag, "disponiert"); // Verändert den Status in der Datenbank
+				db.setStatus(auftrag, "disponiert"); 
+				// Verändert den Status in der Datenbank
 
 			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")
 					&& !auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {

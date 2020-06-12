@@ -121,9 +121,14 @@ public class MonteurFenster extends JFrame {
 		suchFeld.setText("Suche");// Suchfeld name
 		suchFeld.setColumns(10);
 
-		JButton logoutKnopf = new JButton("Logout");// logout button erstellen
-		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
-		logoutKnopf.addActionListener(new ActionListener() { // was passiert, wenn der Knopf gedrückt wird
+		JButton logoutKnopf = new JButton("Logout");
+		// logout button erstellen
+		
+		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		// Formatierung der Schrift
+		
+		logoutKnopf.addActionListener(new ActionListener() { 
+			// was passiert, wenn der Knopf gedrückt wird
 
 			@Override
 			public void actionPerformed(ActionEvent e) {// logout befehl...zurück zum login
@@ -222,13 +227,22 @@ public class MonteurFenster extends JFrame {
 
 		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));// Formatierung der Schrift in der Tabelle
 		
-		TableModel modelAuftraege = new DefaultTableModel(// Befüllung der Tabelle
-				auftraege(), new String[] { " ", "Auftragsnummer", "Status", "Erstellungsdatum", 
-						"Frist", "Auftraggeber"
-				});
+		scrollPane.setViewportView(auftraegeMonteurTBL);
+		auftraegeTab.setLayout(gl_auftraegeTab);
+
+	}
+
+	/*
+	 * Hilfsmethode: Auftraege aktualisieren - Tabelle wird
+	 * erstellt********************************************
+	 ***********************************************************************************************************
+	 */
+
+	private void suchen(JTable table) {
+		TableModel modelArchiv = table.getModel();
 		
-		TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelAuftraege);
-		auftraegeMonteurTBL.setRowSorter(sorter1);
+		TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelArchiv);
+		table.setRowSorter(sorter1);
 		suchFeld.getDocument().addDocumentListener(new DocumentListener() {
 	         @Override
 	         public void insertUpdate(DocumentEvent e) {
@@ -250,21 +264,13 @@ public class MonteurFenster extends JFrame {
 	            }
 	         }
 	      });
-		scrollPane.setViewportView(auftraegeMonteurTBL);
-		auftraegeTab.setLayout(gl_auftraegeTab);
-
-	}
-
-	/*
-	 * Hilfsmethode: Auftraege aktualisieren - Tabelle wird
-	 * erstellt********************************************
-	 ***********************************************************************************************************
-	 */
-
+		}
+	
 	private void sortierenMonteurTbl() {
 		// ein neuer RowSorter wird erstellt, durch Anklicken des TableHeaders wird
 		// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
 		// bzw. einen Comparator sortiert werden
+		
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(
 				(DefaultTableModel) auftraegeMonteurTBL.getModel());
 		auftraegeMonteurTBL.setRowSorter(sorter);
@@ -349,6 +355,7 @@ public class MonteurFenster extends JFrame {
 		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());// Button
 																												// Details
 																												// erstellen
+		suchen(auftraegeMonteurTBL);
 	}
 
 	/*
@@ -410,8 +417,7 @@ public class MonteurFenster extends JFrame {
 	 * Funktionalität***************************
 	 * ***************************************************************************************************
 	 */
-	static void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { // wird auch in anderer Klasse
-																					// gebraucht
+	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { 
 
 		combobox.removeAllItems();// erstmal alle rauslöschen
 
@@ -420,8 +426,7 @@ public class MonteurFenster extends JFrame {
 		combobox.addItem("Teile fehlen");
 		combobox.addItem("disponiert");
 		combobox.addItem("im Lager");
-		combobox.addItem("nicht zugewiesen");
-
+		
 		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);// in welche Spalte soll die
 																			// Combobox
 		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));// Combobox jetzt anklickbar
