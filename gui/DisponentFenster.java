@@ -805,7 +805,7 @@ public class DisponentFenster extends JFrame {
 							// Tabelle wird neu geladen, damit der Button wieder erscheint
 						}
 
-					} else if (tabelle.equals("")){
+					} else if (tabelle.equals("monteureTbl")){
 						Mitarbeiter monteur = welcherMonteur(monteureTbl.getEditingRow());
 						if (summeAuftraege(monteur).equals("0")) {
 							// ist der der Monteur für 0 Aufträge zuständig?
