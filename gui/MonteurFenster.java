@@ -223,7 +223,7 @@ public class MonteurFenster extends JFrame {
 		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));// Formatierung der Schrift in der Tabelle
 		
 		TableModel modelAuftraege = new DefaultTableModel(// Befüllung der Tabelle
-				auftraege(), new String[] {  "Auftragsnummer", "Status", "Erstellungsdatum", 
+				auftraege(), new String[] { " ", "Auftragsnummer", "Status", "Erstellungsdatum", 
 						"Frist", "Auftraggeber"
 				});
 		

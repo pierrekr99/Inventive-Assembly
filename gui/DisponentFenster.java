@@ -276,7 +276,7 @@ public class DisponentFenster extends JFrame {
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Aufträge
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
-		TableModel modelAuftraege = new DefaultTableModel(auftraege(),new String[] { "AuftragsNummer", "Status",
+		TableModel modelAuftraege = new DefaultTableModel(auftraege(),new String[] {" ", "AuftragsNummer", "Status",
 				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" });
 		
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelAuftraege);
@@ -326,7 +326,7 @@ public class DisponentFenster extends JFrame {
 		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
 		
-		TableModel modelArchiv = new DefaultTableModel(archiv(), new String[] { "AuftragsNummer", "Status",
+		TableModel modelArchiv = new DefaultTableModel(archiv(), new String[] {" ", "AuftragsNummer", "Status",
 				"Erstellungsdatum", "Frist", "MonteurName", "MonteurNummer", "Auftragsgeber" });
 		
 		TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelArchiv);
