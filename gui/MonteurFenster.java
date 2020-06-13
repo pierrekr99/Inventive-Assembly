@@ -66,7 +66,7 @@ public class MonteurFenster extends JFrame {
 	private JTextField suchFeld;
 	private JTable auftraegeMonteurTBL;
 	private JPanel contentPane;
-	private JLabel lblDatum; 
+	private JLabel lblDatum;
 
 	int zeilen = 0; // zeilen in der Auftragstabelle
 
@@ -75,7 +75,9 @@ public class MonteurFenster extends JFrame {
 	JComboBox auswahlBoxStatus = new JComboBox(); // Combobox zur Statusänderung
 
 	private ArrayList<Auftrag> angepassteAuftragsListe = new ArrayList<Auftrag>(); // Arrayliste für Aufträge des sich
-																					// anmeldenden Monteurs
+
+	private TableRowSorter<DefaultTableModel> sorter1;
+	// anmeldenden Monteurs
 
 	/**
 	 * Launch the application.
@@ -123,11 +125,11 @@ public class MonteurFenster extends JFrame {
 
 		JButton logoutKnopf = new JButton("Logout");
 		// logout button erstellen
-		
+
 		logoutKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		// Formatierung der Schrift
-		
-		logoutKnopf.addActionListener(new ActionListener() { 
+
+		logoutKnopf.addActionListener(new ActionListener() {
 			// was passiert, wenn der Knopf gedrückt wird
 
 			@Override
@@ -172,44 +174,33 @@ public class MonteurFenster extends JFrame {
 			}
 		}
 		lbl_eingeloggterMonteur.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
+
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // Datumsformat
 		lblDatum = new JLabel(f.format(new Date())); // Heutigen Tag wird übergeben
 		lblDatum.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
-		gl_auftraegeTab.setHorizontalGroup(
-			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+		gl_auftraegeTab.setHorizontalGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap().addGroup(gl_auftraegeTab
+						.createParallelGroup(Alignment.TRAILING)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
-							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
-							.addComponent(lblDatum)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(dbAktualisierenKnopf)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(logoutKnopf)))
-					.addContainerGap())
-		);
-		gl_auftraegeTab.setVerticalGroup(
-			gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
-						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-						.addComponent(logoutKnopf)
-						.addComponent(dbAktualisierenKnopf)
-						.addComponent(lbl_eingeloggterMonteur)
-						.addComponent(lblDatum))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-					.addContainerGap())
-		);
+								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 75, Short.MAX_VALUE).addComponent(lblDatum)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(dbAktualisierenKnopf)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutKnopf)))
+						.addContainerGap()));
+		gl_auftraegeTab.setVerticalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap()
+						.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
+								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf)
+								.addComponent(lbl_eingeloggterMonteur).addComponent(lblDatum))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE).addContainerGap()));
 
 		/**
 		 * ***********************************************************************************************
@@ -220,13 +211,12 @@ public class MonteurFenster extends JFrame {
 		auftraegeMonteurTBL.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Formatierung Schrift Kopf
 		auftraegeAktualisieren(); // Tabelle einlesen mit Hilfsmethode
 
-		auftraegeMonteurTBL.setRowHeight(50); // Zeilen höhe
-		sortierenMonteurTbl(); // durch Anklicken der Kopfzeile (in der jeweiligen Spalte)
-								// werden die Aufträge nach diesem Attribut
-								// in der natürlichen Ordnung und umgekehrt sortiert
+		auftraegeMonteurTBL.setRowHeight(50);
+		// Zeilenhöhe
 
-		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));// Formatierung der Schrift in der Tabelle
-		
+		auftraegeMonteurTBL.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		// Formatierung der Schrift in der Tabelle
+
 		scrollPane.setViewportView(auftraegeMonteurTBL);
 		auftraegeTab.setLayout(gl_auftraegeTab);
 
@@ -239,42 +229,15 @@ public class MonteurFenster extends JFrame {
 	 */
 
 	private void suchen(JTable table) {
-		TableModel modelArchiv = table.getModel();
-		
-		TableRowSorter<TableModel> sorter1 = new TableRowSorter<>(modelArchiv);
-		table.setRowSorter(sorter1);
-		suchFeld.getDocument().addDocumentListener(new DocumentListener() {
-	         @Override
-	         public void insertUpdate(DocumentEvent e) {
-	            search(suchFeld.getText());
-	         }
-	         @Override
-	         public void removeUpdate(DocumentEvent e) {
-	            search(suchFeld.getText());
-	         }
-	         @Override
-	         public void changedUpdate(DocumentEvent e) {
-	            search(suchFeld.getText());
-	         }
-	         public void search(String str) {
-	            if (str.length() == 0) {
-	               sorter1.setRowFilter(null);
-	            } else {
-	               sorter1.setRowFilter(RowFilter.regexFilter(str));
-	            }
-	         }
-	      });
-		}
-	
-	private void sortierenMonteurTbl() {
 		// ein neuer RowSorter wird erstellt, durch Anklicken des TableHeaders wird
 		// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
 		// bzw. einen Comparator sortiert werden
-		
-		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(
-				(DefaultTableModel) auftraegeMonteurTBL.getModel());
-		auftraegeMonteurTBL.setRowSorter(sorter);
-		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>(); //
+
+		sorter1 = new TableRowSorter<>((DefaultTableModel) auftraegeMonteurTBL.getModel());
+		auftraegeMonteurTBL.setRowSorter(sorter1);
+		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
+		// Erstellen eines neuen RowSorters, welcher der Tabelle zugewiesen wird. Zudem
+		// wird eine ArrayList erstellt, in der später die Sorierung vorgenommen wird
 
 		int columnIndexForAuftragsNummer = 1;
 		sortKeys.add(new RowSorter.SortKey(columnIndexForAuftragsNummer, SortOrder.ASCENDING));
@@ -283,51 +246,91 @@ public class MonteurFenster extends JFrame {
 		sortKeys.add(new RowSorter.SortKey(columnIndexForStatus, SortOrder.ASCENDING));
 
 		int columnIndexToSortDatum = 4;
-		sortKeys.add(new RowSorter.SortKey(columnIndexToSortDatum, SortOrder.ASCENDING)); // beschreibt die
-																							// Sortierreihenfolge in
-																							// einer
-																							// Spalte über ColumnIndex
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSortDatum, SortOrder.ASCENDING));
 
 		int columnIndexToSortDatum1 = 3;
-		sortKeys.add(new RowSorter.SortKey(columnIndexToSortDatum1, SortOrder.ASCENDING)); // beschreibt die
-																							// Sortierreihenfolge in
-																							// einer
-																							// Spalte über ColumnIndex
+		sortKeys.add(new RowSorter.SortKey(columnIndexToSortDatum1, SortOrder.ASCENDING));
 
 		int columnIndexForKundenNummer = 5;
 		sortKeys.add(new RowSorter.SortKey(columnIndexForKundenNummer, SortOrder.ASCENDING));
+		// Der Index liefert die Spalte, in der sortiert werden soll. Der zweite
+		// Parameter gibt an, wie sortiert werden soll(SortOrder.ASCENDING -> natürliche
+		// Ordnung, oder nach bestimmten Comparator)
 
-		sorter.setComparator(columnIndexToSortDatum, ((String datum1, String datum2) -> { // Erzeugen eines
-																							// Comparators,der
-																							// ausgewählte Spalte
-																							// sortiert
-			String[] datumGetrennt1 = datum1.split("\\."); // Datum-String wird in 3 Teile geteilt
-			String[] datumGetrennt2 = datum2.split("\\.");
-			if (datumGetrennt1.length != datumGetrennt2.length) // Daten werden miteinander verglichen, ob sie die Selbe
-																// Länge besitzen
-				throw new ClassCastException();
-			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0]; // Datum wird
-																										// zusammengesetzt
-			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
+		sorter1.setComparator(columnIndexToSortDatum, ((String datum1, String datum2) -> {
+			// Zuweisen eines Comparators, der ausgewählte Spalte nach Frist sortiert
 
-			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2); // Ordnen der Daten über CompareTo-Methode
-
-		}));
-
-		sorter.setComparator(columnIndexToSortDatum1, ((String datum1, String datum2) -> {
 			String[] datumGetrennt1 = datum1.split("\\.");
 			String[] datumGetrennt2 = datum2.split("\\.");
-			if (datumGetrennt1.length != datumGetrennt2.length)
+			// Datum-String wird in 3 Teile geteilt
+
+			if (datumGetrennt1.length != datumGetrennt2.length) {
+				// Daten werden miteinander verglichen, ob sie dieselbe Länge besitzen
+
 				throw new ClassCastException();
+			}
+
 			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
 			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
+			// Datum wird zusammengesetzt, sodass nun das Jahr am Anfang steht und es
+			// sortiert werden kann
 
 			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
+			// Ordnen der Daten über CompareTo-Methode
 
 		}));
 
-		sorter.setSortKeys(sortKeys);
-		sorter.sort();
+		sorter1.setComparator(columnIndexToSortDatum1, ((String datum1, String datum2) -> {
+			// Zuweisen eines Comparators, der ausgewählte Spalte nach Erstellungsdatum
+			// sortiert
+
+			String[] datumGetrennt1 = datum1.split("\\.");
+			String[] datumGetrennt2 = datum2.split("\\.");
+			// Datum-String wird in 3 Teile geteilt
+
+			if (datumGetrennt1.length != datumGetrennt2.length) {
+				throw new ClassCastException();
+			}
+
+			String datumZusammengesetzt1 = datumGetrennt1[2] + datumGetrennt1[1] + datumGetrennt1[0];
+			String datumZusammengesetzt2 = datumGetrennt2[2] + datumGetrennt2[1] + datumGetrennt2[0];
+			// Datum wird zusammengesetzt, sodass nun das Jahr am Anfang steht und es
+			// sortiert werden kann
+
+			return datumZusammengesetzt1.compareTo(datumZusammengesetzt2);
+			// Ordnen der Daten über CompareTo-Methode
+
+		}));
+
+		sorter1.setSortKeys(sortKeys);
+		sorter1.sort();
+		// dem Sorter wird die sortierte ArrayList übergeben, er schreibt diese dann nur
+		// noch in die Tabelle herein und diese wird somit neu befüllt und sortiert
+
+		suchFeld.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				search(suchFeld.getText());
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				search(suchFeld.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				search(suchFeld.getText());
+			}
+
+			public void search(String str) {
+				if (str.length() == 0) {
+					sorter1.setRowFilter(null);
+				} else {
+					sorter1.setRowFilter(RowFilter.regexFilter(str));
+				}
+			}
+		});
 	}
 
 	private void auftraegeAktualisieren() {
@@ -417,7 +420,7 @@ public class MonteurFenster extends JFrame {
 	 * Funktionalität***************************
 	 * ***************************************************************************************************
 	 */
-	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) { 
+	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
 
 		combobox.removeAllItems();// erstmal alle rauslöschen
 
@@ -426,10 +429,12 @@ public class MonteurFenster extends JFrame {
 		combobox.addItem("Teile fehlen");
 		combobox.addItem("disponiert");
 		combobox.addItem("im Lager");
-		
-		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);// in welche Spalte soll die
-																			// Combobox
-		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));// Combobox jetzt anklickbar
+
+		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);
+		// in welche Spalte soll die Combobox
+
+		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));
+		// Combobox jetzt anklickbar
 	}
 
 	/**
