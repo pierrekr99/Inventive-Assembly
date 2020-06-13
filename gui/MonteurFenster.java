@@ -61,23 +61,27 @@ import objekte.Mitarbeiter;
 
 public class MonteurFenster extends JFrame {
 
-	static datenbankVerbindung db = main.Main.getdb(); // Datenbankverbindung aus der Main
+	static datenbankVerbindung db = main.Main.getdb(); 
+	// Datenbankverbindung aus der Main
 
 	private JTextField suchFeld;
 	private JTable auftraegeMonteurTBL;
 	private JPanel contentPane;
 	private JLabel lblDatum;
 
-	int zeilen = 0; // zeilen in der Auftragstabelle
+	int zeilen = 0; 
+	// zeilen in der Auftragstabelle
 
-	String details = "Details anzeigen";// Hier wird der Detailsbutton gerendert
+	String details = "Details anzeigen";
+	// Hier wird der Detailsbutton gerendert
 
-	JComboBox auswahlBoxStatus = new JComboBox(); // Combobox zur Statusänderung
+	JComboBox auswahlBoxStatus = new JComboBox(); 
 
-	private ArrayList<Auftrag> angepassteAuftragsListe = new ArrayList<Auftrag>(); // Arrayliste für Aufträge des sich
+	private ArrayList<Auftrag> angepassteAuftragsListe = new ArrayList<Auftrag>();
+	// Arrayliste für Aufträge des Monteurs der sich eingeloggt hat
 
 	private TableRowSorter<DefaultTableModel> sorter1;
-	// anmeldenden Monteurs
+	
 
 	/**
 	 * Launch the application.
@@ -133,22 +137,36 @@ public class MonteurFenster extends JFrame {
 			// was passiert, wenn der Knopf gedrückt wird
 
 			@Override
-			public void actionPerformed(ActionEvent e) {// logout befehl...zurück zum login
+			public void actionPerformed(ActionEvent e) {
+				// logout Befehl...zurück zum login
 
-				LoginFenster login = new LoginFenster();// loginfenster erstellen
+				LoginFenster login = new LoginFenster();
+				// loginfenster erstellen
+				
 				login.setVisible(true);
+				
 				login.setLocationRelativeTo(null);
-				dispose();// aktuelles Fenster schließen
+				//Fenster erscheint mittig vom Bildschirm
+				
+				dispose();
+				// aktuelles Fenster schließen
 
 			}
 		});
 
-		JButton dbAktualisierenKnopf = new JButton("Aktualisieren");// "DB aktualisieren" button wird erstellt
-		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));// formatierung schrift
-		dbAktualisierenKnopf.addActionListener(new ActionListener() {// was passiert wenn der aktualisieren Knopf
-																		// gedrückt wird
+		JButton dbAktualisierenKnopf = new JButton("Aktualisieren");
+		// "DB aktualisieren" button wird erstellt
+		
+		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		// Formatierung der Schrift
+		
+		dbAktualisierenKnopf.addActionListener(new ActionListener() {
+			// was passiert wenn der "DB aktualisieren" Knopf gedrückt wird
+																		
 			public void actionPerformed(ActionEvent e) {
-				tabelleInArrayEinlesen(); // Hilfsmethoden werden ausgeführt
+				// folgende Hilfsmethoden werden ausgeführt
+				
+				tabelleInArrayEinlesen(); 
 				auftraegeAktualisieren();
 				auswahlBoxStatus(auftraegeMonteurTBL, auswahlBoxStatus, 2);
 
@@ -156,13 +174,14 @@ public class MonteurFenster extends JFrame {
 		});
 
 		/**
-		 * layout regelungen für scroll pane und anordnung der komponenten (vom
+		 * layout Regelungen für scroll pane und Anordnung der Komponenten (vom
 		 * windowbuilder
 		 * erstellt)********************************************************
 		 * ************************************************************************************************
 		 */
 
 		JScrollPane scrollPane = new JScrollPane();
+		//Einstellungen für das scroll pane
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -174,6 +193,7 @@ public class MonteurFenster extends JFrame {
 			}
 		}
 		lbl_eingeloggterMonteur.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
 
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // Datumsformat
 		lblDatum = new JLabel(f.format(new Date())); // Heutigen Tag wird übergeben
@@ -207,9 +227,12 @@ public class MonteurFenster extends JFrame {
 		 * ************************************************************************************************
 		 */
 
-		auftraegeMonteurTBL = new JTable();// tabelle erstellen
-		auftraegeMonteurTBL.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));// Formatierung Schrift Kopf
-		auftraegeAktualisieren(); // Tabelle einlesen mit Hilfsmethode
+		auftraegeMonteurTBL = new JTable();
+		auftraegeMonteurTBL.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		// Formatierung Schrift Kopf
+		
+		auftraegeAktualisieren();
+		// Tabelle einlesen mit Hilfsmethode
 
 		auftraegeMonteurTBL.setRowHeight(50);
 		// Zeilenhöhe
@@ -222,10 +245,9 @@ public class MonteurFenster extends JFrame {
 
 	}
 
-	/*
-	 * Hilfsmethode: Auftraege aktualisieren - Tabelle wird
-	 * erstellt********************************************
-	 ***********************************************************************************************************
+	/**
+	 * Hilfsmethode: Suchleiste und Tabelle sortieren****************************************************
+	 * **************************************************************************************************
 	 */
 
 	private void suchen(JTable table) {
@@ -308,57 +330,80 @@ public class MonteurFenster extends JFrame {
 		// noch in die Tabelle herein und diese wird somit neu befüllt und sortiert
 
 		suchFeld.getDocument().addDocumentListener(new DocumentListener() {
+			
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				search(suchFeld.getText());
 			}
+			//etwas wurde ins Suchfeld geschrieben - dies wird dann erfasst
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				search(suchFeld.getText());
 			}
+			//für den Fall, dass verschiedene Zeichen wieder gelöscht werden, wird das hier erfasst
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				search(suchFeld.getText());
 			}
+			//falls die Eingabe verändert wurde, wird auch dies erfasst
 
 			public void search(String str) {
 				if (str.length() == 0) {
 					sorter1.setRowFilter(null);
+					//wenn noch nichts eingegeben wurde, wird auch noch nicht gefiltert
+					
 				} else {
 					sorter1.setRowFilter(RowFilter.regexFilter(str));
+					//hier wird die Tabelle verglichen mit der Eingabe und nur passende Zeilen ausgegeben
 				}
 			}
 		});
 	}
+	
+	/**
+	 * Hilfsmethode: Auftraege aktualisieren - Tabelle wird
+	 * erstellt********************************************
+	 ***********************************************************************************************************
+	 */
 
 	private void auftraegeAktualisieren() {
-		auftraegeMonteurTBL.setModel(new DefaultTableModel(// Befüllung der Tabelle
-				auftraege(), // Methode wird aufgerufen und liest jetzt die Tabelle ein
+		// Befüllung der Tabelle
+		
+		auftraegeMonteurTBL.setModel(new DefaultTableModel(
+				auftraege(), 
+				// Methode wird aufgerufen und liest jetzt die Tabelle ein
 
-//				,
-				new String[] { "", "Auftragsnummer", "Status", "Erstellungsdatum", "Frist", "Auftraggeber"// welche
-																											// spaltennamen
-				// gibt es
+				new String[] { "", "Auftragsnummer", "Status", "Erstellungsdatum", "Frist", "Auftraggeber"
+						// welche Spaltennamen gibt es
+																																
 				}) {
-			boolean[] columnEditables = new boolean[] { // welche spalten lassen sich ändern
+			boolean[] columnEditables = new boolean[] { 
+					// welche spalten lassen sich ändern
+					
 					true, false, true, false, false, false };
 
-			public boolean isCellEditable(int row, int column) {// kontrollmethode ob spalten sich ändern lassen
+			public boolean isCellEditable(int row, int column) {
+				// Kontrollmethode ob Spalten sich ändern lassen
+				
 				return columnEditables[column];
 			}
 
 		});
-		auftraegeMonteurTBL.getTableHeader().setReorderingAllowed(false);// Tabellenspalten lassen sich nicht
-																			// verschieben
-		auswahlBoxStatus(auftraegeMonteurTBL, auswahlBoxStatus, 2); // Combobox in Spalte Status erstellt
+		auftraegeMonteurTBL.getTableHeader().setReorderingAllowed(false);
+		// Tabellenspalten lassen sich nicht verschieben
+																			
+		auswahlBoxStatus(auftraegeMonteurTBL, auswahlBoxStatus, 2);
+		// Combobox in Spalte Status erstellt
+		
 		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0))
 				.setCellRenderer(new JButtonRenderer("auftraegeMonteurTBL"));
-		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());// Button
-																												// Details
-																												// erstellen
+		auftraegeMonteurTBL.getColumn(auftraegeMonteurTBL.getColumnName(0)).setCellEditor(new JButtonEditor());
+		// Button Details erstellen
+		
 		suchen(auftraegeMonteurTBL);
+		//Suchfunktion implementiert
 	}
 
 	/*
@@ -373,11 +418,19 @@ public class MonteurFenster extends JFrame {
 	 * Tabelle**********************************************
 	 *************************************************************************************************
 	 */
-	private Object[][] auftraege() {// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
-		db.getAuftragsListe().clear(); // alte liste löschen
-		db.auftragEinlesen();// neu einlesen mit aktuellen daten
-		angepassteAuftragsListe.clear(); // angepassteAuftragsliste wird auch geleert
+	private Object[][] auftraege() {
+		// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
+		
+		db.getAuftragsListe().clear(); 
+		// alte Liste löschen
+		
+		db.auftragEinlesen();
+		// neu einlesen mit aktuellen Daten
+		
+		angepassteAuftragsListe.clear(); 
+		// angepassteAuftragsliste wird auch geleert
 
+		
 		// angepassteAuftragsListe wird befüllt. Dabei werden mit Hilfe eines Filters,
 		// diejenigen Aufträge ausgelesen,
 		// die mit der Mitarbeiternummer des tf_MitarbeiterID. Felds imLoginFensters
@@ -390,16 +443,21 @@ public class MonteurFenster extends JFrame {
 				.filter((a) -> a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer()))
 
 				.forEach(angepassteAuftragsListe::add);
+		
 
 		// Im Anschluss werden die Aufträge gezählt, damit die Zeilen der Tabelle
-		// übereinstimmen
+		// übereinstimmen. Die Zeilen Variable wird überschrieben
+		
 		zeilen = (int) db.getAuftragsListe().stream()
 				.filter((a) -> (a.getStatus().equals("disponiert") || a.getStatus().equals("Teile fehlen"))
 						&& a.getZustaendig().getMitarbeiterNummer().equals(LoginFenster.getMitarbeiternummer()))
 
 				.count();
+		
+		
 
-		Object[][] auftraege = new Object[zeilen][6];// Struktur der Tabelle
+		Object[][] auftraege = new Object[zeilen][6];
+		// Struktur der Tabelle
 
 		// einlesen der Tabelle aus der angepassten Auftragsliste
 		for (int i = 0; i < zeilen; i++) {
@@ -421,10 +479,12 @@ public class MonteurFenster extends JFrame {
 	 * ***************************************************************************************************
 	 */
 	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
+		
 
-		combobox.removeAllItems();// erstmal alle rauslöschen
+		combobox.removeAllItems();
+		// erstmal alle Items rauslöschen
 
-		// auswahlmöglichkeiten
+		// Auswahlmöglichkeiten
 
 		combobox.addItem("Teile fehlen");
 		combobox.addItem("disponiert");
@@ -438,8 +498,8 @@ public class MonteurFenster extends JFrame {
 	}
 
 	/**
+	 * Hilfsmethoden: Statusänderungen werden in die Datenbank eingetragen**********
 	 * *****************************************************************************
-	 * Hilfsmethoden: Statusänderungen werden in die Datenbank eingetragen
 	 **/
 
 	private void tabelleInArrayEinlesen() {
@@ -491,11 +551,14 @@ public class MonteurFenster extends JFrame {
 
 		JButton button = new JButton();
 		String tabelle;
+		// in welcher Tabelle ist der Button
+
 
 		public JButtonRenderer(String string) {
 			this.tabelle = string;
 		}
 
+		// Wie soll der Button ausehen und was soll drin stehen
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
 			table.setShowGrid(true);
@@ -535,6 +598,7 @@ public class MonteurFenster extends JFrame {
 		}
 	}
 
+	
 	private Auftrag welcherAuftrag(int editingRow) {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
 

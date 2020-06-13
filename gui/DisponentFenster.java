@@ -512,28 +512,39 @@ public class DisponentFenster extends JFrame {
 			sorter2 = new TableRowSorter<DefaultTableModel>((DefaultTableModel) table.getModel());
 			table.setRowSorter(sorter2);
 		}
+		
+		//3 Sorter = 3 Suchfunktionen. Diese sind im Prinzip gleich, außer, dass jede einen eigenen Sorter hat
 
 		txtSuche.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				search(txtSuche.getText());
 			}
+			//etwas wurde ins Suchfeld geschrieben - dies wird dann erfasst
+
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				search(txtSuche.getText());
 			}
+			//für den Fall, dass verschiedene Zeichen wieder gelöscht werden, wird das hier erfasst
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				search(txtSuche.getText());
 			}
+			//falls die Eingabe verändert wurde, wird auch dies erfasst
+
 
 			public void search(String str) {
 				if (str.length() == 0) {
 					sorter.setRowFilter(null);
+					//wenn noch nichts eingegeben wurde, wird auch noch nicht gefiltert
+
 				} else {
 					sorter.setRowFilter(RowFilter.regexFilter(str));
+					//hier wird die Tabelle verglichen mit der Eingabe und nur passende Zeilen ausgegeben
+
 				}
 			}
 		});
@@ -894,7 +905,7 @@ public class DisponentFenster extends JFrame {
 		// Zeilenhöhe
 		table.setRowHeight(50);
 
-		// Nur lesen nicht schreiben
+		// Spalten lassen sich nicht verschieben
 		table.getTableHeader().setReorderingAllowed(false);
 	}
 
@@ -922,7 +933,7 @@ public class DisponentFenster extends JFrame {
 		// Zeilenhöhe
 		monteureTbl.setRowHeight(50);
 
-		// Nur lesen nicht schreiben
+		// Spalten lassen sich nicht verschieben
 		monteureTbl.getTableHeader().setReorderingAllowed(false);
 	}
 
