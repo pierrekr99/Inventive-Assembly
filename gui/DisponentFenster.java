@@ -1018,7 +1018,7 @@ public class DisponentFenster extends JFrame {
 					if (tabelle.equals("auftraegeTbl")) {
 						// wird der detailsButton gedrückt?
 
-						Auftrag auftrag = welcherAuftrag(auftraegeTbl.getEditingRow(), "auftraegeTbl");
+						Auftrag auftrag = welcherAuftrag(auftraegeTbl.getEditingRow(), auftraegeTbl);
 						// welcher Auftrag wird in der Zeile des geklickten Buttons angezeigt
 
 						if (auftrag != null) {
@@ -1054,7 +1054,7 @@ public class DisponentFenster extends JFrame {
 						monteureAktualisieren();
 						// Tabelle wird neu geladen, damit der Button wieder erscheint
 					} else if (tabelle.equals("archivTbl")) {
-						Auftrag auftrag = welcherAuftrag(archivTbl.getEditingRow(), "archivTbl");
+						Auftrag auftrag = welcherAuftrag(archivTbl.getEditingRow(), archivTbl);
 						// welcher Auftrag wird in der Zeile des geklickten Buttons angezeigt
 
 						if (auftrag != null) {
@@ -1134,19 +1134,18 @@ public class DisponentFenster extends JFrame {
 
 		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);
 		// in welche Spalte soll die Combobox
-		
+
 		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));
 		// Combobox jetzt anklickbar
 	}
 
-	private Auftrag welcherAuftrag(int editingRow, String tabelle) {
+	private Auftrag welcherAuftrag(int editingRow, JTable tabelle) {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
 
-			if (auftraegeTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())
-					&& tabelle.equals("auftraegeTbl")) {
+			if (tabelle == auftraegeTbl && auftraegeTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())) {
 				return auftrag;
-			} else if (archivTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())
-					&& tabelle.equals("archivTbl")) {
+			} else if (tabelle == archivTbl
+					&& archivTbl.getValueAt(editingRow, 1).equals(auftrag.getAuftragsNummer())) {
 				return auftrag;
 			}
 		}
