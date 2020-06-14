@@ -967,7 +967,7 @@ public class DisponentFenster extends JFrame {
 			} else {
 				monteureCombobox.addItem(
 					db.getMonteurListe().get(i).getName() + ", " + db.getMonteurListe().get(i).getVorname()+ " [" + summeAuftraege(db.getMonteurListe().get(i))+"]");
-				// ansonsten erfolgt Befüllung der Combobox nach folgendem System: Name, Vorname
+				// ansonsten erfolgt Befüllung der Combobox nach folgendem System: Name, Vorname, [Anzahl der Aufträge]
 				
 			}
 		}
