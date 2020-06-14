@@ -23,7 +23,7 @@ public class datenbankVerbindung {
 	private ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
 
 
-	// ==== Konstruktor === 
+	// === Konstruktor === 
 	
 	public datenbankVerbindung() {
 		
@@ -92,9 +92,11 @@ public class datenbankVerbindung {
 	public void auftragEinlesen() { // Aufträge werden aus der Datenbank eingelesen
 
 		try {
+			
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 
+			
 			while (rs.next()) {
 				int indexmitarbeiter = -1;
 				int indexAuftraggeber = -1;
@@ -102,19 +104,31 @@ public class datenbankVerbindung {
 				Mitarbeiter m = null;
 
 				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
+				
+				
+				// In der Datenbanktabelle für Aufträge sind die Komponenten in diesem Format xxxx,yyyy,zzzz abgespeichert,
+				// deshalb muss der String erstmal gespalten werden wo das Komma steht
 				String[] komponentennrarray = rs.getString("Komponenten").split(",");
-
-				for (String ab : komponentennrarray) { // Passende Exemplare von Komponenten werden geuscht
+				
+				
+				// Alle Komponentennummern werden nun mit den Komponentennummern der Exemplare verglichen
+				// falls es zu einer Übereinstimmung kommt wird das Exemplar der Komponente dem Auftrag zugewießen, 
+				// bzw. erstmal in dem Array "komponentenlisteauftrag" gespeichert
+				for (String komponente : komponentennrarray) { 
 
 					for (int i = 0; i < komponentenListe.size(); i++) {
-						if (ab.equals(komponentenListe.get(i).getKomponentenNummer())) {
+						if (komponente.equals(komponentenListe.get(i).getKomponentenNummer())) {
 							komponentenlisteauftrag.add(komponentenListe.get(i));
 
 						}
 					}
 
 				}
-
+				
+				
+				//die Mitarbeiternummer wird aus dem Auftrag ausgelesen und mit den Nummern von den Monteurexemplaren verglichen
+				// bei einer Übereinstimmung wird der Index von dem Monteurexemplar gespeichert
+				// sollte es zu keiner Überseinstimmung kommen bleibt "indexmitarbeiter" -1 
 				for (int i = 0; i < monteurListe.size(); i++) { // Passender Exemplare von Monteur wird gesucht
 
 					if (monteurListe.get(i).getMitarbeiterNummer()
@@ -123,6 +137,8 @@ public class datenbankVerbindung {
 					}
 				}
 
+				// 
+				
 				for (int i = 0; i < auftraggeberListe.size(); i++) { // passender Exemplare von Auftraggeber wird
 																		// gesucht
 
@@ -131,17 +147,19 @@ public class datenbankVerbindung {
 					}
 				}
 
+				
+				
+				
+				
+				
 				if (indexmitarbeiter == -1) {
-
 					for (Mitarbeiter monteur : monteurListe) {
 						if (monteur.getName().equals("nicht")) {
 							m = monteur;
-						} else {
-
-						}
+						} 
 					}
 
-					System.out.println("Kein Monteur konnte dem Auftrag zugewiesen werden");
+					
 				} else {
 					m = monteurListe.get(indexmitarbeiter);
 				}
