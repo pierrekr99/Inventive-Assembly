@@ -64,7 +64,7 @@ public class LoginFenster extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setIconImage(image); //Titel- und Taskleiste
-		setTitle("Login");
+		setTitle("Inventive Assembly");
 
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
