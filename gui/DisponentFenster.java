@@ -938,6 +938,7 @@ public class DisponentFenster extends JFrame {
 	}
 
 	private void monteureCombobox(JTable table) {
+		/**Die monteureCombobox scheint nicht mehr sortiert zu werden*/
 		// Fügt Optionen zur Statusveränderung hinzu
 
 		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
