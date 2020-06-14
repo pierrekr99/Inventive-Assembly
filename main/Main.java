@@ -20,7 +20,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					// Login 
+					// Login Fenster wird erstellt
 					LoginFenster login = new LoginFenster();
 					login.setTitle("Inventive Assembly");
 					login.setResizable(false);
@@ -35,6 +35,7 @@ public class Main {
 	
 	public static datenbankVerbindung getdb() {
 		return db;
+		// Datenbankverbindung wird an andere Klassen übergeben
 	}
 	
 	
