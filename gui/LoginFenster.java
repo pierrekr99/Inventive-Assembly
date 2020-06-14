@@ -102,6 +102,7 @@ public class LoginFenster extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean loginFehler = false;
 				String id = tf_MitarbeiterID.getText();
+				mitarbeiternummer = tf_MitarbeiterID.getText();
 				String passwort = String.valueOf(tf_password.getPassword());
 				
 				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) { // Disponentenliste durchlaufen
