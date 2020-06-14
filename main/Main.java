@@ -22,7 +22,6 @@ public class Main {
 				try {
 					// Login 
 					LoginFenster login = new LoginFenster();
-					login.setTitle("Inventive Assembly");
 					login.setResizable(false);
 					login.setVisible(true);
 					login.setLocationRelativeTo(null);

@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -38,6 +40,7 @@ public class LoginFenster extends JFrame {
 	private JTextField tf_MitarbeiterID;
 	private JPasswordField tf_password;
 	private Icon icon;
+	private Icon bild;
 	private static Image image = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_IA.png").getImage();
 	private static String mitarbeiternummer;
 	
@@ -55,7 +58,7 @@ public class LoginFenster extends JFrame {
 	public LoginFenster() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 500);
+		setBounds(100, 100, 900, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -63,38 +66,49 @@ public class LoginFenster extends JFrame {
 		setIconImage(image); //Titel- und Taskleiste
 		setTitle("Login");
 
-		JLabel titelLabel = new JLabel("L O G I N ");
-		titelLabel.setFont(new Font("Verdana", Font.BOLD | Font.ITALIC, 18));
-		titelLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(titelLabel, BorderLayout.NORTH);
-
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 
-		JLabel idLabel = new JLabel("Mitarbeiter-ID:");
-		idLabel.setFont(new Font("Verdana", Font.ITALIC, 11));
-		idLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		idLabel.setBounds(223, 135, 97, 29);
-		panel.add(idLabel);
-
-		JLabel passwortLabel = new JLabel("Passwort:");
-		passwortLabel.setFont(new Font("Verdana", Font.ITALIC, 11));
-		passwortLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		passwortLabel.setBounds(223, 189, 97, 29);
-		panel.add(passwortLabel);
-
 		tf_MitarbeiterID = new JTextField();
+		tf_MitarbeiterID.setText("Mitarbeiter-ID");
 		tf_MitarbeiterID.setToolTipText("Hier ihre ID eingeben...");
-		tf_MitarbeiterID.setBounds(330, 138, 144, 25);
+		tf_MitarbeiterID.setBounds(364, 265, 144, 25);
 		panel.add(tf_MitarbeiterID);
 		tf_MitarbeiterID.setColumns(10);
+		tf_MitarbeiterID.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tf_MitarbeiterID.setText("");
+			}
+		});
 		
 
 		tf_password = new JPasswordField();
 		tf_password.setToolTipText("Hier Passwort eingeben...");
 		tf_password.setColumns(10);
-		tf_password.setBounds(330, 192, 144, 25);
+		tf_password.setBounds(364, 301, 144, 25);
 		panel.add(tf_password);		
 		
 		JButton bt_Login = new JButton("Login");
@@ -160,23 +174,27 @@ public class LoginFenster extends JFrame {
 	    });
 		
 		
-		bt_Login.setFont(new Font("Verdana", Font.ITALIC, 11));
-		bt_Login.setBounds(330, 247, 144, 23);
+		bt_Login.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		bt_Login.setBounds(364, 351, 144, 23);
 		panel.add(bt_Login);
-
-		JLabel textLabel = new JLabel("Bitte geben Sie hier ihre Anmeldedaten ein...");
-		textLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		textLabel.setFont(new Font("Verdana", Font.ITALIC, 12));
-		textLabel.setBounds(242, 69, 278, 14);
-		panel.add(textLabel);
 
 		JLabel logoLabel = new JLabel("");
 		logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		logoLabel.setForeground(Color.WHITE);
-		logoLabel.setBounds(594, 0, 180, 102);
+		logoLabel.setBounds(267, 31, 317, 78);
 		panel.add(logoLabel);
-		icon = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_final180x100.png"); //Titelbild
+		icon = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Login.png"); //Titelbild
 		logoLabel.setIcon(icon);
+		
+		JLabel bildLabel = new JLabel("");
+		bildLabel.setBounds(240, 120, 562, 391);
+		panel.add(bildLabel);
+		bild = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo.png");
+		bildLabel.setIcon(bild);
+		
+		JLabel loginLabel = new JLabel("");
+		loginLabel.setBounds(10, 21, 247, 71);
+		panel.add(loginLabel);
 
 	}
 }
