@@ -26,7 +26,10 @@ import objekte.Mitarbeiter;
 
 public class LoginFenster extends JFrame {
 
-	
+	private static final long serialVersionUID = 1L;
+
+
+
 	static datenbankVerbindung db = main.Main.getdb();
 	
 	
@@ -51,15 +54,13 @@ public class LoginFenster extends JFrame {
 
 	public LoginFenster() {
 		
-		
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		setIconImage(image);
+		setIconImage(image); //Titel- und Taskleiste
 		setTitle("Login");
 
 		JLabel titelLabel = new JLabel("L O G I N ");
@@ -99,34 +100,35 @@ public class LoginFenster extends JFrame {
 		JButton bt_Login = new JButton("Login");
 		bt_Login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				boolean funktion = false;
+				boolean loginFehler = false;
 				String id = tf_MitarbeiterID.getText();
 				mitarbeiternummer = tf_MitarbeiterID.getText();
+				String passwort = String.valueOf(tf_password.getPassword());
 				
 				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) { // Disponentenliste durchlaufen
-					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) { //vergleich der eingegebenen Daten mit den Daten aus der Disponentenliste
+					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && passwort.equals(mitarbeiter.getPasswort())) { //vergleich der eingegebenen Daten mit den Daten aus der Disponentenliste
 						DisponentFenster disponent = new DisponentFenster(); // wenn ein Objekt gefunden wurde, dann Disponentenfenster erzeugen
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH); //
 						disponent.setVisible(true); // Fenster anzeigen
 						disponent.setIconImage(image); //Icon in der Taskleiste
 						disponent.setTitle("Inventive Assembly"); // Titel setzen
 						dispose(); //Login verschwindet
-						funktion = true; // LoginVariable wird true gesetzt
+						loginFehler = true; // LoginVariable wird true gesetzt
 					}
 				}
 				
 				for(Mitarbeiter mitarbeiter : db.getMonteurListe()) {
-					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && tf_password.getText().equals(mitarbeiter.getPasswort())) {
+					if(id.equals(mitarbeiter.getMitarbeiterNummer()) && passwort.equals(mitarbeiter.getPasswort())) {
 						MonteurFenster monteur = new MonteurFenster(); // Monteurfenster erzeugen
 						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						monteur.setVisible(true); // Monteurfenster wird angezeigt
 						monteur.setIconImage(image);
 						monteur.setTitle("Inventive Assembly");
 						dispose(); // Login verschwindet
-						funktion = true;
+						loginFehler = true;
 					}
 				}
-				if(!funktion) { // wenn funktion-Variable false ist erscheint eine Fehlermeldung
+				if(!loginFehler) { // wenn funktion-Variable false ist erscheint eine Fehlermeldung
 					JOptionPane.showMessageDialog(null, "Anmeldedaten überprüfen!");
 				}
 				
@@ -173,7 +175,7 @@ public class LoginFenster extends JFrame {
 		logoLabel.setForeground(Color.WHITE);
 		logoLabel.setBounds(594, 0, 180, 102);
 		panel.add(logoLabel);
-		icon = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_final180x100.png");
+		icon = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_final180x100.png"); //Titelbild
 		logoLabel.setIcon(icon);
 
 	}

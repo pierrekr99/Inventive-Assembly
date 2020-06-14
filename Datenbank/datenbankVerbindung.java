@@ -12,53 +12,22 @@ import objekte.*;
 
 public class datenbankVerbindung {
 
-	Connection verbindung = null;
-	ResultSet rs;
-	Statement stmt;
+	private Connection verbindung = null;
+	private ResultSet rs;
+	private Statement stmt;
 
-	ArrayList<Auftrag> auftragsListe = new ArrayList<>();
-	ArrayList<Auftraggeber> auftraggeberListe = new ArrayList<>();
-	ArrayList<Mitarbeiter> disponentListe = new ArrayList<>();
-	ArrayList<Komponente> komponentenListe = new ArrayList<>();
-	ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
+	private ArrayList<Auftrag> auftragsListe = new ArrayList<>();
+	private ArrayList<Auftraggeber> auftraggeberListe = new ArrayList<>();
+	private ArrayList<Mitarbeiter> disponentListe = new ArrayList<>();
+	private ArrayList<Komponente> komponentenListe = new ArrayList<>();
+	private ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
 
-	public Connection getVerbindung() {
-		return verbindung;
-	}
 
-	public ResultSet getRs() {
-		return rs;
-	}
-
-	public ArrayList<Auftrag> getAuftragsListe() {
-		return auftragsListe;
-	}
-
-	public ArrayList<Auftraggeber> getAuftraggeberListe() {
-		return auftraggeberListe;
-	}
-
-	public ArrayList<Mitarbeiter> getDisponentListe() {
-		return disponentListe;
-	}
-
-	public ArrayList<Komponente> getKomponentenListe() {
-		return komponentenListe;
-	}
-
-	public ArrayList<Mitarbeiter> getMonteurListe() {
-		return monteurListe;
-	}
-
+	// ==== Konstruktor === 
+	
 	public datenbankVerbindung() {
+		
 		verbinden();
-
-//		ArrayList<String> test = new ArrayList<String>();
-
-//		for (int i = 0; i < 5; i++) {
-//			test.add("Strich");
-//		}
-
 		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null));
 		auftraggeberEinlesen();
 		disponentEinlesen();
@@ -68,6 +37,8 @@ public class datenbankVerbindung {
 
 	}
 
+	// === Hilfsmethoden ===
+	
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
 
 		String adresse = "jdbc:mysql://3.125.60.55/db2";
@@ -78,7 +49,7 @@ public class datenbankVerbindung {
 		try {
 			Class.forName(treiber);
 			verbindung = DriverManager.getConnection(adresse, benutzername, passwort);
-			// System.out.println("Verbindung hergestellt");
+		
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,9 +61,9 @@ public class datenbankVerbindung {
 
 		try {
 			verbindung.close();
-			// System.out.println("Verbindung getrennt");
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -106,10 +77,7 @@ public class datenbankVerbindung {
 		komponentenListe.clear();
 		monteurListe.clear();
 		
-//		ArrayList<String> test = new ArrayList<String>();
-//		for (int i = 0; i < 5; i++) {
-//			test.add("-");
-//		}
+
 		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null));
 		auftraggeberEinlesen();
 		disponentEinlesen();
@@ -118,7 +86,10 @@ public class datenbankVerbindung {
 		auftragEinlesen();
 	}
 
-	public void auftragEinlesen() { // ließt alle Aufträge ein
+	
+	// === Einlese-Methoden ===
+	
+	public void auftragEinlesen() { // Aufträge werden aus der Datenbank eingelesen
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -192,10 +163,6 @@ public class datenbankVerbindung {
 
 			}
 
-			// System.out.println("Aufträge einlesen:");
-//			for (Auftrag auftrag : auftragsListe) {
-//				System.out.println(auftrag);
-//			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -214,7 +181,7 @@ public class datenbankVerbindung {
 						rs.getString("KundenNummer")); // Exemplar von Auftraggeber wird erstellt
 				auftraggeberListe.add(Auftraggeber); // Exemplar Auftraggeber wird der aufttragsliste hinzugefügt
 			}
-			// System.out.println("Auftraggeber einlesen:" + auftraggeberListe);
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -222,7 +189,7 @@ public class datenbankVerbindung {
 
 	}
 
-	public void disponentEinlesen() { // Disponent wird eingelesen
+	public void disponentEinlesen() { // Disponent wird aus der Datenbank eingelesen
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -247,7 +214,7 @@ public class datenbankVerbindung {
 
 				}
 			}
-			// System.out.println("Disponenten einlesen:" + disponentListe);
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -255,7 +222,7 @@ public class datenbankVerbindung {
 
 	}
 
-	public void komponenteEinlesen() { // Komponenten werden eingelesen
+	public void komponenteEinlesen() { // Komponenten werden aus der Datenbank eingelesen
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -266,18 +233,14 @@ public class datenbankVerbindung {
 						rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"), rs.getString("Attribut"));
 				komponentenListe.add(Komponente);
 			}
-			// System.out.println("-------------------------------");
-//			for (Komponente komponente : komponentenListe) {
-//				System.out.println(komponente);
-//			}
-			// System.out.println("-------------------------------");
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void monteurEinlesen() { // Monteure werden eingelesen
+	public void monteurEinlesen() { // Monteure werden aus der Datenbank eingelesen
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -308,15 +271,18 @@ public class datenbankVerbindung {
 				}
 
 			}
-			// System.out.println("Monteur einlesen:" + monteurListe);
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-
-	public void setZustaendig(Auftrag auftrag, Mitarbeiter monteur) {
+	
+	
+	// === Setter-Methoden ===
+	
+	public void setZustaendig(Auftrag auftrag, Mitarbeiter monteur) { // verändert in der Datenbank den zuständigen Monteur
 
 		try {
 
@@ -332,7 +298,7 @@ public class datenbankVerbindung {
 
 	}
 
-	public void setStatus(Auftrag auftrag, String status) {
+	public void setStatus(Auftrag auftrag, String status) { // verändert in der Datenbank den Status eines Auftrages
 
 		try {
 
@@ -346,5 +312,35 @@ public class datenbankVerbindung {
 		}
 
 	}
+	
+	
+	//  === Getter-Methoden ===
+	
+	public Connection getVerbindung() {
+		return verbindung;
+	}
 
+	public ResultSet getRs() {
+		return rs;
+	}
+
+	public ArrayList<Auftrag> getAuftragsListe() {
+		return auftragsListe;
+	}
+
+	public ArrayList<Auftraggeber> getAuftraggeberListe() {
+		return auftraggeberListe;
+	}
+
+	public ArrayList<Mitarbeiter> getDisponentListe() {
+		return disponentListe;
+	}
+
+	public ArrayList<Komponente> getKomponentenListe() {
+		return komponentenListe;
+	}
+
+	public ArrayList<Mitarbeiter> getMonteurListe() {
+		return monteurListe;
+	}
 }
