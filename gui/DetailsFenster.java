@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,8 +17,6 @@ import javax.swing.table.DefaultTableModel;
 import Datenbank.datenbankVerbindung;
 import objekte.Auftrag;
 
-import javax.swing.LayoutStyle.ComponentPlacement;
-
 public class DetailsFenster extends JFrame {
 
 	static datenbankVerbindung db = main.Main.getdb();
@@ -36,7 +33,7 @@ public class DetailsFenster extends JFrame {
 
 		setTitle("Details");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		// Nur dieses Fenster wird Geschlossen
+		// Nur dieses Fenster wird geschlossen
 		
 		setBounds(100, 100, 1060, 466);
 		contentPane = new JPanel();

@@ -118,6 +118,8 @@ public class DisponentFenster extends JFrame {
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+			// wenn ein anderes Tab ausgewählt wird
+				
 				if (tabbedPane.getSelectedComponent() == monteureSp) {
 					datumComboBox.setVisible(true);
 					// datumComboBox wird nur im Tab Monteur angezeigt
@@ -1337,35 +1339,54 @@ public class DisponentFenster extends JFrame {
 	}
 
 	private void datumBefuellen() {
-		// ComboBox um das Datum auwählen zu können
+		// ComboBox um das Datum auswählen und die Verfügbarkeit 
+		// der Monteure am jeweiligen Tag einsehen zu können
 
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
 		// EEEE steht für den Wochentag
 
-		Calendar c = Calendar.getInstance(); // Kalendar Objekt wird erzeugt
+		Calendar c = Calendar.getInstance();
+		// Kalendar Objekt wird erzeugt
 
-		Date datum = new Date(); // heutiger Tag
-		String tag1 = f.format(datum); // formatiert das Datum
+		Date datum = new Date();
+		// heutiger Tag
+		
+		String tag1 = f.format(datum);
+		// formatiert das Datum
 
-		String[] datumArray = new String[5]; // Array der Länge 5
+		String[] datumArray = new String[5]; 
 		datumArray[0] = tag1;
+		// Array an der Stelle 0 wir mit dem heutigen Tag befüllt
 
-		for (int i = 1; i < 5; i++) { // Array wir mit Tagen befüllt
+		for (int i = 1; i < 5; i++) { 
+		// Array wir mit Tagen befüllt
 
-			c.setTime(datum); // c wird auf datum gesetzt
-			c.add(Calendar.DATE, 1); // c wird ein Tag addiert
-			datum = c.getTime(); // datum wird gleich c gesetzt
+			c.setTime(datum); 
+			// c wird auf datum gesetzt
+			
+			c.add(Calendar.DATE, 1); 
+			// c wird ein Tag addiert
+			
+			datum = c.getTime(); 
+			// datum wird gleich c gesetzt
 
-			String tag = f.format(datum); // datum wird formatiert
+			String tag = f.format(datum); 
+			// datum wird formatiert
+			
 			datumArray[i] = tag;
+			// der jeweilige Tag wir in das Array übergeben 
 		}
 
-		datumComboBox = new JComboBox(datumArray); // Combobox wird befüllt
+		datumComboBox = new JComboBox(datumArray); 
+		// Combobox wird befüllt
+		
 		datumComboBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		datumComboBox.setSelectedIndex(0);
+		// heutige Tag als Defaultwert 
 
 		datumComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+			// Wenn in der ComboBox ein anderer Tag ausgewählt wird
 
 				String ausgewaeltesDatum = (String) datumComboBox.getSelectedItem();
 				// liest Datum als String aus
@@ -1378,8 +1399,8 @@ public class DisponentFenster extends JFrame {
 
 				switch (s) {
 				/*
-				 * index für wochentag. wird benötigt um verfügbarkeit der monteure aufrufen zu
-				 * können
+				 * index für wochentag. wird in der Methode "monteure()"benötigt um verfügbarkeit 
+				 * der monteure am jeweiligen Tag aufrufen zu können
 				 */
 				case "Montag":
 					indexWochentag = 0;
@@ -1407,20 +1428,11 @@ public class DisponentFenster extends JFrame {
 					break;
 				}
 
-				monteureAktualisieren(); // Verfügbarkeit Spalte wird sofort aktualisiert
-
+				monteureAktualisieren();
+				// Verfügbarkeit Spalte wird sofort aktualisiert
 			}
 		});
-
 	}
-
-//	private String datumAlsStringBekommen(Date date) {
-//		// gibt heutiges Datum zurück
-//
-//		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
-//		// EEEE steht für den Wochentag
-//		return f.format(date);
-//	}
 
 	private Instant getGrenze() {
 		Instant grenze = null;
