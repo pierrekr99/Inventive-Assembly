@@ -974,7 +974,6 @@ public class DisponentFenster extends JFrame {
 	}
 
 	private void monteureCombobox(JTable table) {
-		/**Die monteureCombobox scheint nicht mehr sortiert zu werden*/
 		// Fügt Optionen zur Statusveränderung hinzu
 
 		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -991,6 +990,16 @@ public class DisponentFenster extends JFrame {
 
 		monteureCombobox.removeAllItems();
 		// monteureCombobox wird geleert vor Befüllung
+		
+		Collections.sort(db.getMonteurListe(), new Comparator<Mitarbeiter>() {
+			// sortiert die monteureCombobox nach Nachname
+
+			@Override
+			public int compare(Mitarbeiter o1, Mitarbeiter o2) {
+
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
 
 		for (int i = 0; i < db.getMonteurListe().size(); i++) {
 
@@ -1007,15 +1016,7 @@ public class DisponentFenster extends JFrame {
 				
 			}
 		}
-		Collections.sort(db.getMonteurListe(), new Comparator<Mitarbeiter>() {
-			// sortiert die monteureCombobox nach Nachname
-
-			@Override
-			public int compare(Mitarbeiter o1, Mitarbeiter o2) {
-
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
+		
 	}
 
 	/**
