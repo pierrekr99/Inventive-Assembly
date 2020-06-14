@@ -166,7 +166,7 @@ public class DetailsFenster extends JFrame {
 		tMonteur.getColumnModel().getColumn(2).setMaxWidth(500);
 
 		tMonteur.getColumnModel().getColumn(3).setPreferredWidth(100);
-		tMonteur.getColumnModel().getColumn(3).setMinWidth(100);
+		tMonteur.getColumnModel().getColumn(3).setMinWidth(150);
 		tMonteur.getColumnModel().getColumn(3).setMaxWidth(200);
 
 		tMonteur.getColumnModel().getColumn(4).setPreferredWidth(100);
@@ -188,12 +188,23 @@ public class DetailsFenster extends JFrame {
 																	// eines Auftrags in
 																	// die Tabelle ein
 
-			komponenten[i][0] = auftrag.getKomponenten().get(i).getKomponentenNummer();
-			komponenten[i][1] = auftrag.getKomponenten().get(i).getName();
-			komponenten[i][2] = auftrag.getKomponenten().get(i).getAttribut();
-			komponenten[i][3] = auftrag.getKomponenten().get(i).getKategorie();
+			komponenten[i][0] = "";
+			if (auftrag.getKomponenten().get(i).getKomponentenNummer() != null)
+				komponenten[i][0] = auftrag.getKomponenten().get(i).getKomponentenNummer();
 
-			if (auftrag.getKomponenten().get(i).isVerfuegbarkeit() == true) {
+			komponenten[i][1] = "";
+			if (auftrag.getKomponenten().get(i).getName() != null)
+				komponenten[i][1] = auftrag.getKomponenten().get(i).getName();
+
+			komponenten[i][2] = "";
+			if (auftrag.getKomponenten().get(i).getAttribut() != null)
+				komponenten[i][2] = auftrag.getKomponenten().get(i).getAttribut();
+
+			komponenten[i][3] = "";
+			if (auftrag.getKomponenten().get(i).getKategorie() != null)
+				komponenten[i][3] = auftrag.getKomponenten().get(i).getKategorie();
+
+			if (auftrag.getKomponenten().get(i) != null && auftrag.getKomponenten().get(i).isVerfuegbarkeit() == true) {
 				komponenten[i][4] = "verfügbar";
 			} else {
 				komponenten[i][4] = "nicht verfügbar";
@@ -208,19 +219,29 @@ public class DetailsFenster extends JFrame {
 
 		Object[][] monteur = new Object[1][5];
 
-		monteur[0][0] = auftrag.getAuftragsNummer();
-		monteur[0][1] = auftrag.getAuftraggeber().getKundenNummer();
-		monteur[0][2] = auftrag.getAuftraggeber().getName();
+		monteur[0][0] = "";
+		if (auftrag.getAuftragsNummer() != null)
+			monteur[0][0] = auftrag.getAuftragsNummer();
+
+		monteur[0][1] = "";
+		if (auftrag.getAuftraggeber().getKundenNummer() != null)
+			monteur[0][1] = auftrag.getAuftraggeber().getKundenNummer();
+
+		monteur[0][2] = "";
+		if (auftrag.getAuftraggeber().getName() != null)
+			monteur[0][2] = auftrag.getAuftraggeber().getName();
+
 		monteur[0][3] = "nicht Zugewiesen";
 		monteur[0][4] = "nicht Zugewiesen";
 
-		if (auftrag.getZustaendig() != null && !auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
-			monteur[0][3] = auftrag.getZustaendig().getMitarbeiterNummer();
-			monteur[0][4] = auftrag.getZustaendig().getName() + ", " + auftrag.getZustaendig().getVorname();
-		
-		} else if (auftrag.getZustaendig() != null && auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
-			monteur[0][3] = auftrag.getZustaendig().getMitarbeiterNummer();
-			monteur[0][4] = auftrag.getZustaendig().getName() + " " + auftrag.getZustaendig().getVorname();
+		if (auftrag.getZustaendig() != null) {
+			if (auftrag.getZustaendig().getMitarbeiterNummer() != null
+					&& auftrag.getZustaendig().getMitarbeiterNummer() != "0000")
+				monteur[0][3] = auftrag.getZustaendig().getMitarbeiterNummer();
+
+			if (auftrag.getZustaendig().getName() != null && auftrag.getZustaendig().getVorname() != null
+					&& auftrag.getZustaendig().getMitarbeiterNummer() != "0000")
+				monteur[0][4] = auftrag.getZustaendig().getName() + ", " + auftrag.getZustaendig().getVorname();
 		}
 
 		return monteur;
