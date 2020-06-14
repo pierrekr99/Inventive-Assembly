@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
@@ -82,17 +83,7 @@ public class MonteurFenster extends JFrame {
 
 	private TableRowSorter<DefaultTableModel> sorter1;
 
-	/**
-	 * Launch the application.
-	 */
-	/*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { MonteurFenster window = new
-	 * MonteurFenster();
-	 * 
-	 * window.setVisible(true); } catch (Exception e) { e.printStackTrace(); } } });
-	 * }
-	 */
+
 	/**
 	 * Create the application.
 	 */
@@ -125,6 +116,40 @@ public class MonteurFenster extends JFrame {
 		suchFeld.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
 		suchFeld.setText("Suche");// Suchfeld name
 		suchFeld.setColumns(10);
+		suchFeld.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				suchFeld.setText("");
+				// Textfeld wird beim Anklicken leer gemacht
+				
+			}
+		});
+
 
 		JButton logoutKnopf = new JButton("Logout");
 		// logout button erstellen
@@ -406,12 +431,6 @@ public class MonteurFenster extends JFrame {
 		// Suchfunktion implementiert
 	}
 
-	/*
-	 * *****************************************************************************
-	 * *************************************
-	 * *****************************************************************************
-	 * *************************************
-	 */
 
 	/**
 	 * Hilfsmethoden: Die Methode zum Füllen der
