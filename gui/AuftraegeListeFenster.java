@@ -99,9 +99,16 @@ public class AuftraegeListeFenster extends JFrame {
 		tabelle.setModel(new DefaultTableModel(tabelle(monteur),
 				new String[] { "", "AuftragsNummer", "Status", "Erstellungsdatum", "Frist", "Auftragsgeber" }) {
 
-			boolean[] columnEditables = new boolean[] { true, false, false, false, false, false };
-			// welche spalten lassen sich ändern
+					boolean[] columnEditables = new boolean[] { true, false, false, false, false, false };
+					// welche spalten lassen sich ändern
+			
+					public boolean isCellEditable(int row, int column) {
+					// Kontrollmethode ob spalten sich ändern lassen
+
+						return columnEditables[column];
+			}
 		});
+		
 		tabelle.getColumn(tabelle.getColumnName(0)).setCellRenderer(new JButtonRenderer());
 		// ButtonRenderer wird in Spalte 0 ausgeführt
 
@@ -188,6 +195,9 @@ public class AuftraegeListeFenster extends JFrame {
 
 		// Zeilenhöhe
 		tabelle.setRowHeight(50);
+		
+		tabelle.getTableHeader().setReorderingAllowed(false);
+		// Spalten lassen sich nicht verschieben
 	}
 
 	/**

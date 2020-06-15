@@ -35,11 +35,10 @@ public class DetailsFenster extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		// Nur dieses Fenster wird geschlossen
 		
-		setBounds(100, 100, 1060, 466);
+		setBounds(100, 100, 1060, 469);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-//		JPanel panel = new JPanel();
 		setIconImage(LoginFenster.getImage());
 
 //		-------  Komponenten Tabelle  ----------------------------------------
@@ -53,26 +52,25 @@ public class DetailsFenster extends JFrame {
 		tKomponenten.getTableHeader().setReorderingAllowed(false);
 		// Spalten lassen sich nicht verschieben
 		
-		// DefaultTableModel(Tabelle,Kopfzeile)
 		tKomponenten.setModel(new DefaultTableModel(komponenten(auftrag),
 				new String[] { "TeileNummer", "Name", "Attribut", "Kategorie", "Verfügbarkeit" }) {
+				// DefaultTableModel(Tabelle,Kopfzeile)
 			
-			boolean[] columnEditables = new boolean[] {false, false, false, false, false};
-			// welche Spalten lassen sich ändern
+					boolean[] columnEditables = new boolean[] {false, false, false, false, false};
+						// welche Spalten lassen sich ändern
 
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];}
-			// Kontrollmethode ob spalten sich ändern lassen
-			
+					public boolean isCellEditable(int row, int column) {
+								return columnEditables[column];}
+					// Kontrollmethode ob spalten sich ändern lassen
 		});
 
 		sPKomponenten.setViewportView(tKomponenten);
-//		sPKomponenten.setColumnHeaderView(panel);
 
 //      -------  Monteur Tabelle  ----------------------------------------
 
 		auftragMonteur(auftrag);
 		sPMonteur = new JScrollPane();
+		sPMonteur.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		tMonteur = new JTable();
 		
 		// DefaultTableModel(Tabelle,Kopfzeile)
@@ -121,6 +119,8 @@ public class DetailsFenster extends JFrame {
 		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
 		tMonteur.setRowHeight(50);
 		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		
+		komponentenTblFormat();
 		monteureTblFormat();
 
 		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
@@ -128,49 +128,83 @@ public class DetailsFenster extends JFrame {
 		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
 		tKomponenten.setAutoCreateRowSorter(true);
-		
 		/*
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Komponenten 
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(sPKomponenten, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
-						.addComponent(sPMonteur, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-						.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE).addGap(47)
-						.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(sPMonteur, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
+						.addComponent(sPKomponenten, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+					.addGap(46)
+					.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE))
+		);
 		contentPane.setLayout(gl_contentPane);
-
 	}
 
 	private void monteureTblFormat() {
+	// Festlegung der Größe der Spalten	
+		
 		tMonteur.getColumnModel().getColumn(0).setPreferredWidth(150);
 		tMonteur.getColumnModel().getColumn(0).setMinWidth(100);
-		tMonteur.getColumnModel().getColumn(0).setMaxWidth(200);
+		tMonteur.getColumnModel().getColumn(0).setMaxWidth(400);
 
-		tMonteur.getColumnModel().getColumn(1).setPreferredWidth(100);
+		tMonteur.getColumnModel().getColumn(1).setPreferredWidth(175);
 		tMonteur.getColumnModel().getColumn(1).setMinWidth(100);
-		tMonteur.getColumnModel().getColumn(1).setMaxWidth(200);
+		tMonteur.getColumnModel().getColumn(1).setMaxWidth(300);
 
-		tMonteur.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tMonteur.getColumnModel().getColumn(2).setPreferredWidth(150);
 		tMonteur.getColumnModel().getColumn(2).setMinWidth(100);
-		tMonteur.getColumnModel().getColumn(2).setMaxWidth(500);
+		tMonteur.getColumnModel().getColumn(2).setMaxWidth(400);
 
-		tMonteur.getColumnModel().getColumn(3).setPreferredWidth(100);
+		tMonteur.getColumnModel().getColumn(3).setPreferredWidth(125);
 		tMonteur.getColumnModel().getColumn(3).setMinWidth(150);
-		tMonteur.getColumnModel().getColumn(3).setMaxWidth(200);
+		tMonteur.getColumnModel().getColumn(3).setMaxWidth(300);
 
-		tMonteur.getColumnModel().getColumn(4).setPreferredWidth(100);
+		tMonteur.getColumnModel().getColumn(4).setPreferredWidth(150);
 		tMonteur.getColumnModel().getColumn(4).setMinWidth(100);
-		tMonteur.getColumnModel().getColumn(4).setMaxWidth(500);
+		tMonteur.getColumnModel().getColumn(4).setMaxWidth(400);
 		
 		tMonteur.getTableHeader().setReorderingAllowed(false);
+		// Spalten lassen sich nicht verschieben
+	}
+	
+	private void komponentenTblFormat() {
+	// Festlegung der Größe der Spalten 
+		
+		tKomponenten.getColumnModel().getColumn(0).setPreferredWidth(150);
+		tKomponenten.getColumnModel().getColumn(0).setMinWidth(100);
+		tKomponenten.getColumnModel().getColumn(0).setMaxWidth(400);
+		
+		tKomponenten.getColumnModel().getColumn(1).setPreferredWidth(175);
+		tKomponenten.getColumnModel().getColumn(1).setMinWidth(100);
+		tKomponenten.getColumnModel().getColumn(1).setMaxWidth(300);
+
+		tKomponenten.getColumnModel().getColumn(2).setPreferredWidth(150);
+		tKomponenten.getColumnModel().getColumn(2).setMinWidth(100);
+		tKomponenten.getColumnModel().getColumn(2).setMaxWidth(400);
+
+		tKomponenten.getColumnModel().getColumn(3).setPreferredWidth(125);
+		tKomponenten.getColumnModel().getColumn(3).setMinWidth(150);
+		tKomponenten.getColumnModel().getColumn(3).setMaxWidth(300);
+
+		tKomponenten.getColumnModel().getColumn(4).setPreferredWidth(150);
+		tKomponenten.getColumnModel().getColumn(4).setMinWidth(100);
+		tKomponenten.getColumnModel().getColumn(4).setMaxWidth(400);
+		
+		tKomponenten.getTableHeader().setReorderingAllowed(false);
 		// Spalten lassen sich nicht verschieben
 	}
 
