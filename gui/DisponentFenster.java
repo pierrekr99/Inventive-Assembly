@@ -1076,6 +1076,8 @@ public class DisponentFenster extends JFrame {
 
 							DetailsFenster frame = new DetailsFenster(auftrag);
 							frame.toFront();
+							frame.requestFocus();
+							frame.transferFocus();
 							frame.setVisible(true);
 							// DetailsFenster wird geöffnet und der angezeigte Auftrag wird ihm mitgegeben
 
