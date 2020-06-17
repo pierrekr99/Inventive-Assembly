@@ -1075,6 +1075,7 @@ public class DisponentFenster extends JFrame {
 							// es existiert ein Auftrag in der Zeile
 
 							DetailsFenster frame = new DetailsFenster(auftrag);
+							frame.toFront();
 							frame.setVisible(true);
 							// DetailsFenster wird geöffnet und der angezeigte Auftrag wird ihm mitgegeben
 

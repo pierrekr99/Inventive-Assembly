@@ -22,11 +22,10 @@ public class datenbankVerbindung {
 	private ArrayList<Komponente> komponentenListe = new ArrayList<>();
 	private ArrayList<Mitarbeiter> monteurListe = new ArrayList<>();
 
+	// === Konstruktor ===
 
-	// === Konstruktor === 
-	
 	public datenbankVerbindung() {
-		
+
 		verbinden();
 		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null));
 		auftraggeberEinlesen();
@@ -38,7 +37,7 @@ public class datenbankVerbindung {
 	}
 
 	// === Hilfsmethoden ===
-	
+
 	public void verbinden() { // stellt Verbindung mit der Datenbank her
 
 		String adresse = "jdbc:mysql://3.125.60.55/db2";
@@ -49,7 +48,6 @@ public class datenbankVerbindung {
 		try {
 			Class.forName(treiber);
 			verbindung = DriverManager.getConnection(adresse, benutzername, passwort);
-		
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,9 +59,9 @@ public class datenbankVerbindung {
 
 		try {
 			verbindung.close();
-			
+
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 
@@ -76,7 +74,6 @@ public class datenbankVerbindung {
 		disponentListe.clear();
 		komponentenListe.clear();
 		monteurListe.clear();
-		
 
 		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null));
 		auftraggeberEinlesen();
@@ -86,17 +83,15 @@ public class datenbankVerbindung {
 		auftragEinlesen();
 	}
 
-	
 	// === Einlese-Methoden ===
-	
+
 	public void auftragEinlesen() { // Aufträge werden aus der Datenbank eingelesen
 
 		try {
-			
+
 			Statement stmt = verbindung.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM `auftrag`");
 
-			
 			while (rs.next()) {
 				int indexmitarbeiter = -1;
 				int indexAuftraggeber = -1;
@@ -104,17 +99,18 @@ public class datenbankVerbindung {
 				Mitarbeiter m = null;
 
 				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
-				
-				
-				// In der Datenbanktabelle für Aufträge sind die Komponenten in diesem Format xxxx,yyyy,zzzz abgespeichert,
+
+				// In der Datenbanktabelle für Aufträge sind die Komponenten in diesem Format
+				// xxxx,yyyy,zzzz abgespeichert,
 				// deshalb muss der String erstmal gespalten werden wo das Komma steht
 				String[] komponentennrarray = rs.getString("Komponenten").split(",");
-				
-				
-				// Alle Komponentennummern werden nun mit den Komponentennummern der Exemplare verglichen
-				// falls es zu einer Übereinstimmung kommt wird das Exemplar der Komponente dem Auftrag zugewießen, 
+
+				// Alle Komponentennummern werden nun mit den Komponentennummern der Exemplare
+				// verglichen
+				// falls es zu einer Übereinstimmung kommt wird das Exemplar der Komponente dem
+				// Auftrag zugewießen,
 				// bzw. erstmal in dem Array "komponentenlisteauftrag" gespeichert
-				for (String komponente : komponentennrarray) { 
+				for (String komponente : komponentennrarray) {
 
 					for (int i = 0; i < komponentenListe.size(); i++) {
 						if (komponente.equals(komponentenListe.get(i).getKomponentenNummer())) {
@@ -124,21 +120,20 @@ public class datenbankVerbindung {
 					}
 
 				}
-				
-				
-				//die Mitarbeiternummer wird aus dem Auftrag ausgelesen und mit den Nummern von den Monteurexemplaren verglichen
+
+				// die Mitarbeiternummer wird aus dem Auftrag ausgelesen und mit den Nummern von
+				// den Monteurexemplaren verglichen
 				// bei einer Übereinstimmung wird der Index von dem Monteurexemplar gespeichert
-				// sollte es zu keiner Überseinstimmung kommen bleibt "indexmitarbeiter" -1 
+				// sollte es zu keiner Überseinstimmung kommen bleibt "indexmitarbeiter" -1
 				for (int i = 0; i < monteurListe.size(); i++) { // Passender Exemplare von Monteur wird gesucht
 
-					if (monteurListe.get(i).getMitarbeiterNummer()
-							.equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
+					if (monteurListe.get(i).getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
 						indexmitarbeiter = i;
 					}
 				}
 
-				// 
-				
+				//
+
 				for (int i = 0; i < auftraggeberListe.size(); i++) { // passender Exemplare von Auftraggeber wird
 																		// gesucht
 
@@ -147,19 +142,13 @@ public class datenbankVerbindung {
 					}
 				}
 
-				
-				
-				
-				
-				
 				if (indexmitarbeiter == -1) {
 					for (Mitarbeiter monteur : monteurListe) {
 						if (monteur.getName().equals("nicht")) {
 							m = monteur;
-						} 
+						}
 					}
 
-					
 				} else {
 					m = monteurListe.get(indexmitarbeiter);
 				}
@@ -170,17 +159,15 @@ public class datenbankVerbindung {
 					a = auftraggeberListe.get(indexAuftraggeber);
 				}
 
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"),
-						rs.getString("Frist"), rs.getString("Status"), m, a, komponentenlisteauftrag); // Exemplar von
-																										// Aftrag wird
-																										// erstellt mit
-																										// den Daten aus
-																										// der Datenbank
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), m, a, komponentenlisteauftrag); // Exemplar von
+																																																		// Aftrag wird
+																																																		// erstellt mit
+																																																		// den Daten aus
+																																																		// der Datenbank
 
 				auftragsListe.add(Auftrag); // Exexmplar Auftrag wird der auftragsListe hinzugefügt
 
 			}
-
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -195,11 +182,9 @@ public class datenbankVerbindung {
 			rs = stmt.executeQuery("SELECT * FROM `auftraggeber`");
 
 			while (rs.next()) {
-				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"),
-						rs.getString("KundenNummer")); // Exemplar von Auftraggeber wird erstellt
+				objekte.Auftraggeber Auftraggeber = new Auftraggeber(rs.getString("Name"), rs.getString("KundenNummer")); // Exemplar von Auftraggeber wird erstellt
 				auftraggeberListe.add(Auftraggeber); // Exemplar Auftraggeber wird der aufttragsliste hinzugefügt
 			}
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -217,17 +202,9 @@ public class datenbankVerbindung {
 
 				if (rs.getString("Rolle").equals("Disponent")) {
 					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
-							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), null); // Exemplar
-																															// von
-																															// Disponent
-																															// wird
-																															// erstellt
-																															// mit
-																															// den
-																															// Daten
-																															// aus
-																															// der
-																															// Datenbank
+							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), null); 
+					//Exemplar von Disponent wir derstellt mit den Daten aus der Datenbank
+																														
 					disponentListe.add(Disponent); // Explar Disponent wird der disponentenListe hinzugefügt
 
 				}
@@ -247,11 +224,9 @@ public class datenbankVerbindung {
 			rs = stmt.executeQuery("SELECT * FROM `komponente`");
 
 			while (rs.next()) {
-				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("KomponentenNummer"),
-						rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"), rs.getString("Attribut"));
+				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("KomponentenNummer"), rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"), rs.getString("Attribut"));
 				komponentenListe.add(Komponente);
 			}
-
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -270,8 +245,7 @@ public class datenbankVerbindung {
 
 				Statement stmte = verbindung.createStatement();
 				ResultSet rss;
-				rss = stmte.executeQuery(
-						"SELECT * FROM `schichtplan` WHERE `Mitarbeiternummer` = " + Mitarbeiternummer + "");
+				rss = stmte.executeQuery("SELECT * FROM `schichtplan` WHERE `Mitarbeiternummer` = " + Mitarbeiternummer + "");
 
 				// Schichtplan Array wird erstellt
 
@@ -283,32 +257,27 @@ public class datenbankVerbindung {
 				anwesenheit.add(rss.getString("Freitag"));
 
 				if (rs.getString("Rolle").equals("Monteur")) {
-					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
-							rs.getString("Vorname"), Mitarbeiternummer, rs.getString("Passwort"), anwesenheit);
+					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), Mitarbeiternummer, rs.getString("Passwort"), anwesenheit);
 					monteurListe.add(Monteur);
 				}
 
 			}
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-	
-	
+
 	// === Setter-Methoden ===
-	
+
 	public void setZustaendig(Auftrag auftrag, Mitarbeiter monteur) { // verändert in der Datenbank den zuständigen Monteur
 
 		try {
 
 			Statement stmt = verbindung.createStatement();
 
-			stmt.executeUpdate("UPDATE `auftrag` SET `ZustaendigName` = '" + monteur.getName()
-					+ "', `ZustaendigMitarbeiterNummer` = '" + monteur.getMitarbeiterNummer()
-					+ "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
+			stmt.executeUpdate("UPDATE `auftrag` SET `ZustaendigName` = '" + monteur.getName() + "', `ZustaendigMitarbeiterNummer` = '" + monteur.getMitarbeiterNummer() + "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -322,18 +291,16 @@ public class datenbankVerbindung {
 
 			Statement stmt = verbindung.createStatement();
 
-			stmt.executeUpdate("UPDATE `auftrag` SET `Status` = '" + status + "' WHERE (`AuftragsNummer` = '"
-					+ auftrag.getAuftragsNummer() + "');");
+			stmt.executeUpdate("UPDATE `auftrag` SET `Status` = '" + status + "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
 			// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-	
-	
-	//  === Getter-Methoden ===
-	
+
+	// === Getter-Methoden ===
+
 	public Connection getVerbindung() {
 		return verbindung;
 	}
