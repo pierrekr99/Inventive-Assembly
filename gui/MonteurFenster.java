@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -97,7 +99,7 @@ public class MonteurFenster extends JFrame {
 		gridBagLayout.columnWidths = new int[] { 0, 0 };//
 		gridBagLayout.rowHeights = new int[] { 362, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, Double.MIN_VALUE };//
-		gridBagLayout.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };//
+		gridBagLayout.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };//
 		getContentPane().setLayout(gridBagLayout);// ...bis hier
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);// layout für tabbed pane von hier...
@@ -107,7 +109,7 @@ public class MonteurFenster extends JFrame {
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
 		gbc_tabbedPane.gridx = 0;
 		gbc_tabbedPane.gridy = 0;
-		getContentPane().add(tabbedPane, gbc_tabbedPane);// ...bis hier
+		getContentPane().add(tabbedPane, gbc_tabbedPane);
 
 		JPanel auftraegeTab = new JPanel();
 		tabbedPane.addTab("Aufträge", null, auftraegeTab, null);// tab wird sichtbar
@@ -147,6 +149,44 @@ public class MonteurFenster extends JFrame {
 				suchFeld.setText("");
 				// Textfeld wird beim Anklicken leer gemacht
 				
+			}
+		});
+		
+		suchFeld.addKeyListener((KeyListener) new KeyListener() {
+			// Dem Textfield wird ein KeyListener hinzugefügt, welcher den Text in dem
+			// TextField zurückssetzt, sodass der Benutzer direkt nach dem gewünschten
+			// Kriterium suchen kann.
+
+			int zaehler = 0;
+			// Der Zaehler wird benötigt, um das Suchkriterium eingeben zu können. Würde
+			// der Zaehler fehlen, könnte der Benutzer nicht sein Suchkriterium
+			// eingeben, da dieses nach jedem "Tastendruck" zurückgesetzt wird.
+
+			public void keyPressed(KeyEvent e) {
+				if (zaehler < 1) {
+					suchFeld.setText("");
+					zaehler++;
+					// wenn der zaehler <1 ist, wird das Textfield geleert. Anschließend wird der
+					// Zaehler erhöht.
+				}
+			};
+
+			public void keyTyped(KeyEvent e) {
+				if (zaehler < 1) {
+					suchFeld.setText("");
+					zaehler++;
+					// wenn der zaehler <1 ist, wird das Textfield geleert. Anschließend wird der
+					// Zaehler erhöht.
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {
+				if (zaehler < 1) {
+					suchFeld.setText("");
+					zaehler++;
+					// wenn der zaehler <1 ist, wird das Textfield geleert. Anschließend wird der
+					// Zaehler erhöht.
+				}
 			}
 		});
 
@@ -226,27 +266,38 @@ public class MonteurFenster extends JFrame {
 		lblDatum.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
-		gl_auftraegeTab.setHorizontalGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap().addGroup(gl_auftraegeTab
-						.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
+		gl_auftraegeTab.setHorizontalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
 						.addGroup(gl_auftraegeTab.createSequentialGroup()
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 75, Short.MAX_VALUE).addComponent(lblDatum)
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(dbAktualisierenKnopf)
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutKnopf)))
-						.addContainerGap()));
-		gl_auftraegeTab.setVerticalGroup(gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_auftraegeTab.createSequentialGroup().addContainerGap()
-						.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
-								.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(logoutKnopf).addComponent(dbAktualisierenKnopf)
-								.addComponent(lbl_eingeloggterMonteur).addComponent(lblDatum))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE).addContainerGap()));
+							.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(lbl_eingeloggterMonteur, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblDatum)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dbAktualisierenKnopf)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(logoutKnopf)))
+					.addContainerGap())
+		);
+		gl_auftraegeTab.setVerticalGroup(
+			gl_auftraegeTab.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_auftraegeTab.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_auftraegeTab.createParallelGroup(Alignment.BASELINE)
+						.addComponent(logoutKnopf)
+						.addComponent(dbAktualisierenKnopf)
+						.addComponent(lbl_eingeloggterMonteur)
+						.addComponent(lblDatum)
+						.addComponent(suchFeld, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+					.addContainerGap())
+		);
 
 		/**
 		 * ***********************************************************************************************
