@@ -274,8 +274,8 @@ public class DetailsFenster extends JFrame {
 			monteur[0][2] = auftrag.getAuftraggeber().getName();
 		// Dritte Spalte: Auftraggeber
 
-		monteur[0][3] = "nicht Zugewiesen";
-		monteur[0][4] = "nicht Zugewiesen";
+		monteur[0][3] = "";
+		monteur[0][4] = "nicht zugewiesen";
 		// Vierte und Fünfte Spalte auf "nicht Zugewiesen" setzten
 
 		if (auftrag.getZustaendig() != null) {
