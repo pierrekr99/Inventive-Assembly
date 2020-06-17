@@ -193,6 +193,7 @@ public class MonteurFenster extends JFrame {
 				// folgende Hilfsmethoden werden ausgeführt
 				
 				tabelleInArrayEinlesen();
+				db.einlesen();
 				auftraegeAktualisieren();
 				auswahlBoxStatus(auftraegeMonteurTBL, auswahlBoxStatus, 2);
 
@@ -607,6 +608,8 @@ public class MonteurFenster extends JFrame {
 			button.setOpaque(true);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					suchFeld.setText("");
+					
 					DetailsFenster frame = new DetailsFenster(welcherAuftrag(auftraegeMonteurTBL.getEditingRow()));
 					frame.setVisible(true);
 					auftraegeAktualisieren();
