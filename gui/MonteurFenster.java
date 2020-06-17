@@ -188,8 +188,10 @@ public class MonteurFenster extends JFrame {
 			// was passiert wenn der "DB aktualisieren" Knopf gedrückt wird
 
 			public void actionPerformed(ActionEvent e) {
+				
+				suchFeld.setText("");
 				// folgende Hilfsmethoden werden ausgeführt
-
+				
 				tabelleInArrayEinlesen();
 				auftraegeAktualisieren();
 				auswahlBoxStatus(auftraegeMonteurTBL, auswahlBoxStatus, 2);

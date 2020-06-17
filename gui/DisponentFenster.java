@@ -235,16 +235,12 @@ public class DisponentFenster extends JFrame {
 		dbAktualisierenKnopf.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		dbAktualisierenKnopf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				txtSuche.setText("");
+				// Das SuchFeld wird zurückgesetzt, um eine ArrayIndexOutOfBoundsException zu
+				// vermeiden.
 
-				statusAktualisieren();
-
-				/*
-				 * Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile
-				 * werden überprüft) und ggf. überschrieben
-				 */
-
-				archivInDBAktualisieren();
 				monteureInArrayEinlesen();
+				archivInDBAktualisieren();
 				/*
 				 * die aktuelle Tabelle wird in db.getAuftragsListe() eingelesen, dieser wird
 				 * ggf. ein neuer Monteur/Status zugewiesen (stimmt dann wieder mit den Tabellen
@@ -255,6 +251,13 @@ public class DisponentFenster extends JFrame {
 				/*
 				 * alle Listen, die direkt aus der DB befüllt werden, werden gelöscht und
 				 * anschließend mit der aktualisierten, neu eingelesenen Datenbank befüllt
+				 */
+
+				statusAktualisieren();
+
+				/*
+				 * Jeder Status wird bei Knopfdruck überprüft (alle Verfügbarkeiten der Teile
+				 * werden überprüft) und ggf. überschrieben
 				 */
 
 				auftraegeAktualisieren();
@@ -1108,6 +1111,8 @@ public class DisponentFenster extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					// was passiert wenn man den Button anklickt
 
+					txtSuche.setText("");
+
 					if (tabelle.equals("auftraegeTbl")) {
 						// wird der detailsButton gedrückt?
 
@@ -1360,6 +1365,8 @@ public class DisponentFenster extends JFrame {
 	}
 
 	private void statusAktualisieren() {
+		arrayListeBefuellen(auftragsListe);
+
 		for (Auftrag auftrag : auftragsListe) {
 
 			int verfuegbareKomponenten = (int) auftrag.getKomponenten().stream().filter((k) -> k.isVerfuegbarkeit())
@@ -1400,6 +1407,7 @@ public class DisponentFenster extends JFrame {
 	}
 
 	private void archivInDBAktualisieren() {
+
 		for (int i = 0; i < archivListe.size(); i++) {
 			for (Auftrag auftrag : archivListe) {
 				// die Aufträge in der Tabelle werden mit dem Aufträgen in der Archivliste
@@ -1413,6 +1421,22 @@ public class DisponentFenster extends JFrame {
 						db.setStatus(auftrag, auftrag.getStatus());
 						// wenn der selbe Auftrag in der Tabelle einen anderen Status als "im Lager"
 						// hat, wird der Status überschrieben und aktualisiert (in der DB)
+
+						if (auftrag.getStatus().equals("nicht zugewiesen")) {
+							for (Mitarbeiter monteur : db.getMonteurListe()) {
+								// ist der Status des Auftrages auf "nicht zugewiesen" gesetzt, wird die
+								// Monteurliste durchlaufen
+
+								if (monteur.getMitarbeiterNummer().equals("0000")) {
+									auftrag.setZustaendig(monteur);
+									db.setZustaendig(auftrag, monteur);
+									// wenn der Monteur "0000" nicht zugewiesen erreicht wurde, wird dieser dem
+									// Auftrag als Platzhalter hinzugewiesen. Dies wird direkt in der DB
+									// gespeichert.
+									
+								}
+							}
+						}
 					}
 				}
 			}
