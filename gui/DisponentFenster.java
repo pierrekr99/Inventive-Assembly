@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GraphicsConfiguration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -115,36 +117,73 @@ public class DisponentFenster extends JFrame {
 		txtSuche.setText("Suche");
 		txtSuche.setColumns(10);
 		txtSuche.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				txtSuche.setText("");
 				// Textfeld wird beim Anklicken leer gemacht
-				
+
+			}
+		});
+		txtSuche.addKeyListener((KeyListener) new KeyListener() {
+			// Dem Textfield wird ein KeyListener hinzugefügt, welcher den Text in dem
+			// TextField zurückssetzt, sodass der Benutzer direkt nach dem gewünschten
+			// Kriterium suchen kann.
+
+			int zaehler = 0;
+			// Der Zaehler wird benötigt, um das Suchkriterium eingeben zu können. Würde
+			// der Zaehler fehlen, könnte der Benutzer nicht sein Suchkriterium
+			// eingeben, da dieses nach jedem "Tastendruck" zurückgesetzt wird.
+
+			public void keyPressed(KeyEvent e) {
+				if (zaehler < 1) {
+					txtSuche.setText("");
+					zaehler++;
+					// wenn der zaehler <1 ist, wird das Textfield geleert. Anschließend wird der
+					// Zaehler erhöht.
+				}
+			};
+
+			public void keyTyped(KeyEvent e) {
+				if (zaehler < 1) {
+					txtSuche.setText("");
+					zaehler++;
+					// wenn der zaehler <1 ist, wird das Textfield geleert. Anschließend wird der
+					// Zaehler erhöht.
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {
+				if (zaehler < 1) {
+					txtSuche.setText("");
+					zaehler++;
+					// wenn der zaehler <1 ist, wird das Textfield geleert. Anschließend wird der
+					// Zaehler erhöht.
+				}
 			}
 		});
 
@@ -152,8 +191,8 @@ public class DisponentFenster extends JFrame {
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-			// wenn ein anderes Tab ausgewählt wird
-				
+				// wenn ein anderes Tab ausgewählt wird
+
 				if (tabbedPane.getSelectedComponent() == monteureSp) {
 					datumComboBox.setVisible(true);
 					// datumComboBox wird nur im Tab Monteur angezeigt
@@ -548,38 +587,39 @@ public class DisponentFenster extends JFrame {
 			sorter2 = new TableRowSorter<DefaultTableModel>((DefaultTableModel) table.getModel());
 			table.setRowSorter(sorter2);
 		}
-		
-		//3 Sorter = 3 Suchfunktionen. Diese sind im Prinzip gleich, außer, dass jede einen eigenen Sorter hat
+
+		// 3 Sorter = 3 Suchfunktionen. Diese sind im Prinzip gleich, außer, dass jede
+		// einen eigenen Sorter hat
 
 		txtSuche.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				search(txtSuche.getText());
 			}
-			//etwas wurde ins Suchfeld geschrieben - dies wird dann erfasst
-
+			// etwas wurde ins Suchfeld geschrieben - dies wird dann erfasst
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				search(txtSuche.getText());
 			}
-			//für den Fall, dass verschiedene Zeichen wieder gelöscht werden, wird das hier erfasst
+			// für den Fall, dass verschiedene Zeichen wieder gelöscht werden, wird das hier
+			// erfasst
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				search(txtSuche.getText());
 			}
-			//falls die Eingabe verändert wurde, wird auch dies erfasst
-
+			// falls die Eingabe verändert wurde, wird auch dies erfasst
 
 			public void search(String str) {
 				if (str.length() == 0) {
 					sorter.setRowFilter(null);
-					//wenn noch nichts eingegeben wurde, wird auch noch nicht gefiltert
+					// wenn noch nichts eingegeben wurde, wird auch noch nicht gefiltert
 
 				} else {
 					sorter.setRowFilter(RowFilter.regexFilter(str));
-					//hier wird die Tabelle verglichen mit der Eingabe und nur passende Zeilen ausgegeben
+					// hier wird die Tabelle verglichen mit der Eingabe und nur passende Zeilen
+					// ausgegeben
 
 				}
 			}
@@ -770,8 +810,8 @@ public class DisponentFenster extends JFrame {
 				// ist ein Monteur zuständug?
 
 				auftraege[i][5] = auftragsListe.get(i).getZustaendig().getName() + ", "
-						+ auftragsListe.get(i).getZustaendig().getVorname()+ " ["
-		                        + summeAuftraege(auftragsListe.get(i).getZustaendig()) + "]";
+						+ auftragsListe.get(i).getZustaendig().getVorname() + " ["
+						+ summeAuftraege(auftragsListe.get(i).getZustaendig()) + "]";
 				// MitarbeiterName (Name, Vorname)
 
 				auftraege[i][6] = auftragsListe.get(i).getZustaendig().getMitarbeiterNummer();
@@ -991,7 +1031,7 @@ public class DisponentFenster extends JFrame {
 
 		monteureCombobox.removeAllItems();
 		// monteureCombobox wird geleert vor Befüllung
-		
+
 		Collections.sort(db.getMonteurListe(), new Comparator<Mitarbeiter>() {
 			// sortiert die monteureCombobox nach Nachname
 
@@ -1011,13 +1051,15 @@ public class DisponentFenster extends JFrame {
 				// Stelle mit "nicht (Nachname) zugewiesen (Vorname)" befüllt
 
 			} else {
-				monteureCombobox.addItem(
-					db.getMonteurListe().get(i).getName() + ", " + db.getMonteurListe().get(i).getVorname()+ " [" + summeAuftraege(db.getMonteurListe().get(i))+"]");
-				// ansonsten erfolgt Befüllung der Combobox nach folgendem System: Name, Vorname, [Anzahl der Aufträge]
-				
+				monteureCombobox
+						.addItem(db.getMonteurListe().get(i).getName() + ", " + db.getMonteurListe().get(i).getVorname()
+								+ " [" + summeAuftraege(db.getMonteurListe().get(i)) + "]");
+				// ansonsten erfolgt Befüllung der Combobox nach folgendem System: Name,
+				// Vorname, [Anzahl der Aufträge]
+
 			}
 		}
-		
+
 	}
 
 	/**
@@ -1378,7 +1420,7 @@ public class DisponentFenster extends JFrame {
 	}
 
 	private void datumBefuellen() {
-		// ComboBox um das Datum auswählen und die Verfügbarkeit 
+		// ComboBox um das Datum auswählen und die Verfügbarkeit
 		// der Monteure am jeweiligen Tag einsehen zu können
 
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
@@ -1389,43 +1431,43 @@ public class DisponentFenster extends JFrame {
 
 		Date datum = new Date();
 		// heutiger Tag
-		
+
 		String tag1 = f.format(datum);
 		// formatiert das Datum
 
-		String[] datumArray = new String[5]; 
+		String[] datumArray = new String[5];
 		datumArray[0] = tag1;
 		// Array an der Stelle 0 wir mit dem heutigen Tag befüllt
 
-		for (int i = 1; i < 5; i++) { 
-		// Array wir mit Tagen befüllt
+		for (int i = 1; i < 5; i++) {
+			// Array wir mit Tagen befüllt
 
-			c.setTime(datum); 
+			c.setTime(datum);
 			// c wird auf datum gesetzt
-			
-			c.add(Calendar.DATE, 1); 
+
+			c.add(Calendar.DATE, 1);
 			// c wird ein Tag addiert
-			
-			datum = c.getTime(); 
+
+			datum = c.getTime();
 			// datum wird gleich c gesetzt
 
-			String tag = f.format(datum); 
+			String tag = f.format(datum);
 			// datum wird formatiert
-			
+
 			datumArray[i] = tag;
-			// der jeweilige Tag wir in das Array übergeben 
+			// der jeweilige Tag wir in das Array übergeben
 		}
 
-		datumComboBox = new JComboBox(datumArray); 
+		datumComboBox = new JComboBox(datumArray);
 		// Combobox wird befüllt
-		
+
 		datumComboBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		datumComboBox.setSelectedIndex(0);
-		// heutige Tag als Defaultwert 
+		// heutige Tag als Defaultwert
 
 		datumComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			// Wenn in der ComboBox ein anderer Tag ausgewählt wird
+				// Wenn in der ComboBox ein anderer Tag ausgewählt wird
 
 				String ausgewaeltesDatum = (String) datumComboBox.getSelectedItem();
 				// liest Datum als String aus
@@ -1438,8 +1480,8 @@ public class DisponentFenster extends JFrame {
 
 				switch (s) {
 				/*
-				 * index für wochentag. wird in der Methode "monteure()"benötigt um verfügbarkeit 
-				 * der monteure am jeweiligen Tag aufrufen zu können
+				 * index für wochentag. wird in der Methode "monteure()"benötigt um
+				 * verfügbarkeit der monteure am jeweiligen Tag aufrufen zu können
 				 */
 				case "Montag":
 					indexWochentag = 0;
