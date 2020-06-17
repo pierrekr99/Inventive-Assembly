@@ -770,7 +770,8 @@ public class DisponentFenster extends JFrame {
 				// ist ein Monteur zuständug?
 
 				auftraege[i][5] = auftragsListe.get(i).getZustaendig().getName() + ", "
-						+ auftragsListe.get(i).getZustaendig().getVorname();
+						+ auftragsListe.get(i).getZustaendig().getVorname()+ " ["
+		                        + summeAuftraege(auftragsListe.get(i).getZustaendig()) + "]";
 				// MitarbeiterName (Name, Vorname)
 
 				auftraege[i][6] = auftragsListe.get(i).getZustaendig().getMitarbeiterNummer();
@@ -865,9 +866,9 @@ public class DisponentFenster extends JFrame {
 
 				monteure[i][0] = "";
 				if (db.getMonteurListe().get(i).getName() != null && db.getMonteurListe().get(i).getVorname() != null)
-					monteure[i][0] = db.getMonteurListe().get(i).getName() + " "
+					monteure[i][0] = db.getMonteurListe().get(i).getName() + ", "
 							+ db.getMonteurListe().get(i).getVorname();
-				// MitarbeiterName (Name Vorname)
+				// MitarbeiterName (Name, Vorname)
 
 				monteure[i][1] = "";
 				if (db.getMonteurListe().get(i).getMitarbeiterNummer() != null)
