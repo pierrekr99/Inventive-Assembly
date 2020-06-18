@@ -413,6 +413,19 @@ public class DisponentFenster extends JFrame {
 	 * GUI-Hilfsmethoden.==================================================
 	 */
 
+	/**
+	 * Implementierung von Such - und Sortierfunktion
+	 * <p>
+	 * Es wird ein RowSorter erstellt, welcher der übergebenen Tabelle zugewiesen
+	 * wird. Zudem wird eine ArrayList erstellt, die den Sortierschlüssel für jede
+	 * Spalte enthält(Spalte, Reihenfolge) und anschließend dem Sorter übergeben
+	 * wird, der die in der ArrayList gespeicherten Exemplare sortiert und
+	 * anschließend die Sortierung in die Tabelle bzw. je nach Bedarf dem
+	 * DocumentListener übergibt.
+	 * 
+	 * @param table Die übergebene Tabelle bekommt eine Sortierfunktion (durch einen
+	 *              neu erstellten RowSorter) sowie eine Suchfunktion.
+	 */
 	private void suchen(JTable table) {
 
 		if (table == auftraegeTbl) {
@@ -1263,6 +1276,11 @@ public class DisponentFenster extends JFrame {
 		return null;
 	}
 
+	/**
+	 * Vergleicht die Monteure, die in der Tabelle einem Auftrag zugewiesen sind mit
+	 * den Monteuren aus der Auftragsliste. Bei Unstimmigkeiten wird der Monteur aus
+	 * der Tabelle in die Liste sowie in der Datenbank übernommen.
+	 */
 	private void monteureInArrayEinlesen() {
 
 		for (int i = 0; i < zeilen; i++) {// jede Tabellenzeile wird mit dieser for-Schleife durchlaufen
@@ -1364,6 +1382,17 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
+	/**
+	 * Status wird aktualisiert.
+	 * <p>
+	 * Zu Beginn werden die Arraylisten durch die Methode arrayListeBefuellen()
+	 * aktualisiert. Dann wird jeder Status und die damit verbundene Anzahl der
+	 * Komponentenverfügbarkeit aus der Tabelle mit der Anzahl der verfügbaren
+	 * Komponenten verglichen. Sollte sich die Verfügbarkeit einer Komponente
+	 * ändern, wird umgehend der Status angepasst.
+	 * 
+	 * @see {@link gui.DisponentFenster#arrayListeBefuellen(ArrayList)}
+	 */
 	private void statusAktualisieren() {
 		arrayListeBefuellen(auftragsListe);
 
@@ -1406,6 +1435,11 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
+	/**
+	 * Ein Auftrag, welcher nicht "im Lager" ist, wird aus der Archivtabelle
+	 * entfernt und bekommt den passenden Status zugewiesen. Darauf hin erfolgt die
+	 * Aktualisierung mit der DB.
+	 */
 	private void archivInDBAktualisieren() {
 
 		for (int i = 0; i < archivListe.size(); i++) {
@@ -1433,7 +1467,7 @@ public class DisponentFenster extends JFrame {
 									// wenn der Monteur "0000" nicht zugewiesen erreicht wurde, wird dieser dem
 									// Auftrag als Platzhalter hinzugewiesen. Dies wird direkt in der DB
 									// gespeichert.
-									
+
 								}
 							}
 						}
@@ -1539,6 +1573,13 @@ public class DisponentFenster extends JFrame {
 		});
 	}
 
+	/**
+	 * Hilfsmethode, die das heutige Datum ermittelt
+	 * 
+	 * @return Instant grenze
+	 *         <p>
+	 *         heutiges Datum
+	 */
 	private Instant getGrenze() {
 		Instant grenze = null;
 		try {
@@ -1556,6 +1597,15 @@ public class DisponentFenster extends JFrame {
 		return grenze;
 	}
 
+	/**
+	 * Die übergebene Liste wird aktualisiert.
+	 * <p>
+	 * Es wird überprüft, welchen Status ein Auftrag hat, anschließend wird der
+	 * Auftrag der richtigen Liste zugeordnet. Diese kann dann in die Tabelle oder
+	 * in die DB eingelesen werden.
+	 * 
+	 * @param liste Die übergebene Liste wird aktualisiert.
+	 */
 	private void arrayListeBefuellen(ArrayList<Auftrag> liste) {
 
 		liste.clear(); // übergebene Liste wird gelöscht und anschließend neu befüllt

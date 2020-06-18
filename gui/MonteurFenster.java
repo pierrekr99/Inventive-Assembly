@@ -240,7 +240,7 @@ public class MonteurFenster extends JFrame {
 			}
 		});
 
-		/**
+		/*
 		 * layout Regelungen für scroll pane und Anordnung der Komponenten (vom
 		 * windowbuilder
 		 * erstellt)********************************************************
@@ -322,12 +322,26 @@ public class MonteurFenster extends JFrame {
 
 	}
 
-	/**
+	/*
 	 * Hilfsmethode: Suchleiste und Tabelle
 	 * sortieren****************************************************
 	 * **************************************************************************************************
 	 */
-
+	
+	/**
+	 * Implementierung von Such - und Sortierfunktion
+	 * <p>
+	 * Es wird ein RowSorter erstellt, welcher der übergebenen Tabelle zugewiesen
+	 * wird. Zudem wird eine ArrayList erstellt, die den Sortierschlüssel für jede
+	 * Spalte enthält(Spalte, Reihenfolge) und anschließend dem Sorter übergeben
+	 * wird, der die in der ArrayList gespeicherten Exemplare sortiert und
+	 * anschließend die Sortierung in die Tabelle bzw. je nach Bedarf dem
+	 * DocumentListener übergibt.
+	 * 
+	 * @param table Die übergebene Tabelle bekommt eine Sortierfunktion (durch einen
+	 *              neu erstellten RowSorter) sowie eine Suchfunktion.
+	 */
+	
 	private void suchen(JTable table) {
 		// ein neuer RowSorter wird erstellt, durch Anklicken des TableHeaders wird
 		// Index geliefert, anschließend kann mit diesem nach der natürlichen Ordnung
@@ -557,7 +571,7 @@ public class MonteurFenster extends JFrame {
 		return auftraege;
 	}
 
-	/**
+	/*
 	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und
 	 * Funktionalität***************************
 	 * ***************************************************************************************************
@@ -580,11 +594,14 @@ public class MonteurFenster extends JFrame {
 		// Combobox jetzt anklickbar
 	}
 
-	/**
-	 * Hilfsmethoden: Statusänderungen werden in die Datenbank eingetragen**********
+	/*
+	 * Hilfsmethoden: Statusänderungen werden in die Datenbank eingetragen
 	 * *****************************************************************************
 	 **/
 
+	/**
+	 * Diese Methode ermöglicht es dem Monteur, den Status eines Auftrags zu verändern.
+	 */
 	private void tabelleInArrayEinlesen() {
 		for (int i = 0; i < zeilen; i++) {
 			// für jeden Auftrag der Tabelle abfragen ob der Status mit dem aus der
