@@ -1358,7 +1358,7 @@ public class DisponentFenster extends JFrame {
 								// mind. ein Teil nicht verfügbar ist und somit wird der Auftragsstatus auf
 								// "Teile fehlen" gesetzt.
 
-								db.setStatus(auftrag, "Teile fehlen"); // Verändert den Status in der Datenbank
+								db.setStatus(auftrag, "Teile fehlen"); 
 
 							}
 							if (auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
@@ -1370,7 +1370,7 @@ public class DisponentFenster extends JFrame {
 								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
 								// Auftragsstatus wird dann wieder geändert.
 
-								db.setStatus(auftrag, "nicht zugewiesen"); // Verändert den Status in der Datenbank
+								db.setStatus(auftrag, "nicht zugewiesen"); 
 							}
 
 						}
@@ -1414,7 +1414,6 @@ public class DisponentFenster extends JFrame {
 				// fehlen" gesetzt ist)
 
 				db.setStatus(auftrag, "disponiert");
-				// Verändert den Status in der Datenbank
 
 			} else if (verfuegbareKomponenten != 5 && !auftrag.getStatus().equals("im Lager")
 					&& !auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
@@ -1430,7 +1429,7 @@ public class DisponentFenster extends JFrame {
 				// wenn kein Monteur einem Auftrag zugewiesen ist, wird der Status auf nicht
 				// zugewiesen gestellt
 
-				db.setStatus(auftrag, "nicht zugewiesen"); // Verändert den Status in der Datenbank
+				db.setStatus(auftrag, "nicht zugewiesen"); 
 			}
 		}
 	}

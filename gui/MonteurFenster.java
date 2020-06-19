@@ -624,7 +624,7 @@ public class MonteurFenster extends JFrame {
 						// wenn ein Unterschied festgestellt wird, wird der Auftragsstatus aus der
 						// ArrayList mit dem Status aus der Tabelle überschrieben
 
-						db.setStatus(auftrag, status); // nimmt Änderung in der DB vor
+						db.setStatus(auftrag, status); 
 
 						if (auftrag.getStatus().equals("nicht zugewiesen")) {
 							for (Mitarbeiter monteur : db.getMonteurListe()) {
@@ -632,7 +632,7 @@ public class MonteurFenster extends JFrame {
 									auftrag.setZustaendig(monteur);
 									// wenn der Auftrag "nicht zugewiesen" ist, wird auch der jeweilige Monteur ggf.
 									// von diesem Auftrag entfernt
-									db.setZustaendig(auftrag, monteur); // nimmt Änderungen in der DB vor
+									db.setZustaendig(auftrag, monteur); 
 								}
 							}
 						}
