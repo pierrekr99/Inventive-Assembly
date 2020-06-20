@@ -110,6 +110,7 @@ public class MonteurFenster extends JFrame {
 		gbc_tabbedPane.gridx = 0;
 		gbc_tabbedPane.gridy = 0;
 		getContentPane().add(tabbedPane, gbc_tabbedPane);
+		//Was macht das? und mach das mal so dass das tabbed pane sich wieder an die Größe des Fensters anpasst
 
 		JPanel auftraegeTab = new JPanel();
 		tabbedPane.addTab("Aufträge", null, auftraegeTab, null);// tab wird sichtbar
