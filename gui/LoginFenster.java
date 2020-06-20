@@ -38,7 +38,7 @@ public class LoginFenster extends JFrame {
 	private JPasswordField tf_password;
 	private Icon icon;
 	private Icon bild;
-	private static Image image = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo_IA.png").getImage();
+	private static Image image = new ImageIcon(LoginFenster.class.getResource("/bilder/Logo.png")).getImage();
 	private static String mitarbeiternummer;
 
 	public static Image getImage() {
@@ -223,18 +223,14 @@ public class LoginFenster extends JFrame {
 		logoLabel.setForeground(Color.WHITE);
 		logoLabel.setBounds(267, 31, 317, 78);
 		panel.add(logoLabel);
-		icon = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Login.png"); // Titelbild
+		icon = new ImageIcon(LoginFenster.class.getResource("/bilder/Login.png")); // Titelbild
 		logoLabel.setIcon(icon);
 
 		JLabel bildLabel = new JLabel("");
 		bildLabel.setBounds(240, 120, 562, 391);
 		panel.add(bildLabel);
-		bild = new ImageIcon("C:\\Users\\Eclipse_treiber_für_db\\Logo.png");
+		bild = new ImageIcon(LoginFenster.class.getResource("/bilder/Logo.png"));
 		bildLabel.setIcon(bild);
-
-		JLabel loginLabel = new JLabel("");
-		loginLabel.setBounds(10, 21, 247, 71);
-		panel.add(loginLabel);
 
 	}
 }
