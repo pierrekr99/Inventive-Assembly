@@ -28,135 +28,141 @@ public class DetailsFenster extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param auftrag Auftrag, von welchem man die Details sehen möchte
 	 */
-	public DetailsFenster(Auftrag auftrag) { // reihe des auftrags als parameter
+	public DetailsFenster(Auftrag auftrag) { 
 
 		setTitle("Details");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		// Nur dieses Fenster wird geschlossen
-		
+
 		setBounds(100, 100, 1060, 469);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		setIconImage(LoginFenster.getImage());
 
-//		-------  Komponenten Tabelle  ----------------------------------------
+		
+		erstellenKomponetenTabelle(auftrag);
+		erstellenMonteurTabelle(auftrag);
+		eilbestellen();
+		komponentenTblFormat();
+		monteureTblFormat();
 
-		komponenten(auftrag);
+		
+		
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(sPMonteur, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014,
+										Short.MAX_VALUE)
+								.addComponent(sPKomponenten, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014,
+										Short.MAX_VALUE))
+						.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE).addGap(46)
+						.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)));
+		contentPane.setLayout(gl_contentPane);
+	}
+
+	/**
+	 * Tabelle für die Komponenten wird erstellt
+	 * @param auftrag Auftrag, von welchem man die Details sehen möchte
+	 */
+	
+	
+	private void erstellenKomponetenTabelle(Auftrag auftrag) {
+		
 		sPKomponenten = new JScrollPane();
 		sPKomponenten.setBounds(5, 36, 922, 449);
 		tKomponenten = new JTable();
 		tKomponenten.setCellSelectionEnabled(true);
-		
+
 		tKomponenten.getTableHeader().setReorderingAllowed(false);
 		// Spalten lassen sich nicht verschieben
-		
-		tKomponenten.setModel(new DefaultTableModel(komponenten(auftrag),
-				new String[] { "TeileNummer", "Name", "Attribut", "Kategorie", "Verfügbarkeit" }) {
-				// DefaultTableModel(Tabelle,Kopfzeile)
-			
-					boolean[] columnEditables = new boolean[] {false, false, false, false, false};
-						// welche Spalten lassen sich ändern
 
-					public boolean isCellEditable(int row, int column) {
-								return columnEditables[column];}
-					// Kontrollmethode ob spalten sich ändern lassen
+		tKomponenten.setModel(new DefaultTableModel(befuellenKomponentenTabelle(auftrag),
+				new String[] { "TeileNummer", "Name", "Attribut", "Kategorie", "Verfügbarkeit" }) {
+			// DefaultTableModel(Tabelle,Kopfzeile)
+
+			boolean[] columnEditables = new boolean[] { false, false, false, false, false };
+			// welche Spalten lassen sich ändern
+
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+			// Kontrollmethode ob spalten sich ändern lassen
 		});
 
 		sPKomponenten.setViewportView(tKomponenten);
 
-//      -------  Monteur Tabelle  ----------------------------------------
+	}
 
-		auftragMonteur(auftrag);
+	/**
+	 * Tabelle für den zugewiesenen Monteur und Auftragsgeber wird erstellt
+	 * @param auftrag Auftrag, von welchem man die Details sehen möchte
+	 */
+	private void erstellenMonteurTabelle(Auftrag auftrag) {
+
 		sPMonteur = new JScrollPane();
 		sPMonteur.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		tMonteur = new JTable();
-		
+
 		// DefaultTableModel(Tabelle,Kopfzeile)
-		tMonteur.setModel(new DefaultTableModel(auftragMonteur(auftrag),
+		tMonteur.setModel(new DefaultTableModel(befuellenMonteurTabelle(auftrag),
 				new String[] { "AuftragsNummer", "KundenNummer", "Auftraggeber", "MonteurNummer", "MonteurName" }) {
 
-			boolean[] columnEditables = new boolean[] {false, false, false, false, false};
+			boolean[] columnEditables = new boolean[] { false, false, false, false, false };
 			// welche spalten lassen sich ändern
 
 			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];}
+				return columnEditables[column];
+			}
 			// kontrollmethode ob spalten sich ändern lassen
-			
+
 		});
 
 		sPMonteur.setViewportView(tMonteur);
-
-//      -------  Eilbestellung  ----------------------------------------		
-
+	}
+	
+	/**
+	 * Eine Nachricht erscheint wenn die Verfügbarkeit einer Komponenten 
+	 * angeklickt wird und diese nicht verfügbar ist 
+	 */
+	private void eilbestellen() {
 		
-		// MouseListener für KomponentenTabelle um Eilbestellung auszuführen
 		tKomponenten.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.MOUSE_PRESSED == 501) {
-				// Wenn die Maus Gedrückt wird 
-					
+					// Wenn die Maus Gedrückt wird
+
 					JTable target = (JTable) e.getSource();
 					int row = target.getSelectedRow();
 					int column = target.getSelectedColumn();
 					// Welches Objekt/Reihe/Spalte wurde ausgewählt
-					
-					
+
 					if (column == 4 && tKomponenten.getValueAt(row, column).equals("nicht verfügbar")) {
-					// Wenn Spalte 4 (Verfügbarkeit) ausgewäglt wurde und diese "nicht verfügbar beinhaltet"	
-					
+						// Wenn Spalte 4 (Verfügbarkeit) ausgewäglt wurde und diese "nicht verfügbar
+						// beinhaltet"
+
 						JOptionPane.showMessageDialog(null, ("Eilbestellung für [" + tKomponenten.getValueAt(row, 1)
 								+ " " + tKomponenten.getValueAt(row, 2) + "] wurde ausgeführt"));
-						// Nachricht über Eilbestellung inkl. Name der fehlenden Komponente 
+						// Nachricht über Eilbestellung inkl. Name der fehlenden Komponente
 					}
 				}
 			}
 		});
 
-		
-		// -------  Formatierung  -------------------------------------------------
-		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
-		tMonteur.setRowHeight(50);
-		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		
-		komponentenTblFormat();
-		monteureTblFormat();
-
-		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
-		tKomponenten.setRowHeight(50);
-		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));
-
-		tKomponenten.setAutoCreateRowSorter(true);
-		/*
-		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die Komponenten 
-		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
-		 */
-		
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(sPMonteur, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
-						.addComponent(sPKomponenten, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(sPMonteur, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-					.addGap(46)
-					.addComponent(sPKomponenten, GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE))
-		);
-		contentPane.setLayout(gl_contentPane);
 	}
 
 	private void monteureTblFormat() {
-	// Festlegung der Größe der Spalten	
-		
+		// Festlegung der Größe der Spalten
+		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		tMonteur.setRowHeight(50);
+		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));
+
 		tMonteur.getColumnModel().getColumn(0).setPreferredWidth(150);
 		tMonteur.getColumnModel().getColumn(0).setMinWidth(100);
 		tMonteur.getColumnModel().getColumn(0).setMaxWidth(400);
@@ -176,18 +182,28 @@ public class DetailsFenster extends JFrame {
 		tMonteur.getColumnModel().getColumn(4).setPreferredWidth(150);
 		tMonteur.getColumnModel().getColumn(4).setMinWidth(100);
 		tMonteur.getColumnModel().getColumn(4).setMaxWidth(400);
-		
+
 		tMonteur.getTableHeader().setReorderingAllowed(false);
 		// Spalten lassen sich nicht verschieben
 	}
-	
+
 	private void komponentenTblFormat() {
-	// Festlegung der Größe der Spalten 
-		
+		// Festlegung der Größe der Spalten
+		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		tKomponenten.setRowHeight(50);
+		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));
+
+		tKomponenten.setAutoCreateRowSorter(true);
+		/*
+		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die
+		 * Komponenten nach diesem Attribut in der natürlichen Ordnung und umgekehrt
+		 * sortiert
+		 */
+
 		tKomponenten.getColumnModel().getColumn(0).setPreferredWidth(150);
 		tKomponenten.getColumnModel().getColumn(0).setMinWidth(100);
 		tKomponenten.getColumnModel().getColumn(0).setMaxWidth(400);
-		
+
 		tKomponenten.getColumnModel().getColumn(1).setPreferredWidth(175);
 		tKomponenten.getColumnModel().getColumn(1).setMinWidth(100);
 		tKomponenten.getColumnModel().getColumn(1).setMaxWidth(300);
@@ -203,20 +219,26 @@ public class DetailsFenster extends JFrame {
 		tKomponenten.getColumnModel().getColumn(4).setPreferredWidth(150);
 		tKomponenten.getColumnModel().getColumn(4).setMinWidth(100);
 		tKomponenten.getColumnModel().getColumn(4).setMaxWidth(400);
-		
+
 		tKomponenten.getTableHeader().setReorderingAllowed(false);
 		// Spalten lassen sich nicht verschieben
 	}
-
-	private Object[][] komponenten(Auftrag auftrag) {
-		// Komponenten werden aus Komponentensliste ausgelesen und in ein Array eingebaut
-		// auftrag dient dazu die Komponenten des richtigen Auftrags zu erhalten
 	
+	/**
+	 * Befüllt ein Array mit den Komponenten des Auftrags,
+	 * indem die Daten aus dem jeweiligen Auftrag gelesen
+	 * werden.
+	 * 
+	 * @param auftrag Auftrag, von welchem man die Details sehen möchte
+	 * @return Array mit jeweiligen Komponenten
+	 */
+	private Object[][] befuellenKomponentenTabelle(Auftrag auftrag) {
+		
 		int zeilen = auftrag.getKomponenten().size();
 		Object[][] komponenten = new Object[zeilen][5];
 
-		for (int i = 0; i < auftrag.getKomponenten().size(); i++) { 
-		// 	fügt Komponenten eines Auftrags in das Array ein																		 
+		for (int i = 0; i < auftrag.getKomponenten().size(); i++) {
+			// fügt Komponenten eines Auftrags in das Array ein
 
 			komponenten[i][0] = "";
 			if (auftrag.getKomponenten().get(i).getKomponentenNummer() != null)
@@ -239,21 +261,30 @@ public class DetailsFenster extends JFrame {
 			// Vierte Spalte: Kategorie
 
 			if (auftrag.getKomponenten().get(i) != null && auftrag.getKomponenten().get(i).isVerfuegbarkeit() == true) {
-			// Wenn eine Komponente im Auftrag eingetragen ist und die Verfügbarkeit "true" ist
-				
+				// Wenn eine Komponente im Auftrag eingetragen ist und die Verfügbarkeit "true"
+				// ist
+
 				komponenten[i][4] = "verfügbar";
 				// Fünfte Spalte: "verfügbar"
-				
-			}else{
+
+			} else {
 				komponenten[i][4] = "nicht verfügbar";
 				// Ansonsten "Nicht verfügbar"
 			}
 		}
-		
+
 		return komponenten;
 	}
 
-	private Object[][] auftragMonteur(Auftrag auftrag) { 
+	/**
+	 * Befüllt ein Array mit der Auftragsnummer, Kundennummer, Auftragssgeber und
+	 * dem zugwiesenen Monteur, indem die Daten aus dem jeweiligen Auftrag gelesen
+	 * werden.
+	 * 
+	 * @param auftrag Auftrag, von welchem man die Details sehen möchte
+	 * @return Array mit jeweiligen Details
+	 */
+	private Object[][] befuellenMonteurTabelle(Auftrag auftrag) {
 		// fügt zugewiesenen Monteur und Auftraggeber in das Array ein
 
 		Object[][] monteur = new Object[1][5];
@@ -262,32 +293,30 @@ public class DetailsFenster extends JFrame {
 		monteur[0][0] = "";
 		if (auftrag.getAuftragsNummer() != null)
 			monteur[0][0] = auftrag.getAuftragsNummer();
-		// Erste Spalte: Auftragsnummer
 
 		monteur[0][1] = "";
 		if (auftrag.getAuftraggeber().getKundenNummer() != null)
 			monteur[0][1] = auftrag.getAuftraggeber().getKundenNummer();
-		// Zweite Spalte: Kundennummer
 
 		monteur[0][2] = "";
 		if (auftrag.getAuftraggeber().getName() != null)
 			monteur[0][2] = auftrag.getAuftraggeber().getName();
-		// Dritte Spalte: Auftraggeber
 
 		monteur[0][3] = "";
 		monteur[0][4] = "nicht zugewiesen";
-		// Vierte und Fünfte Spalte auf "nicht Zugewiesen" setzten
 
 		if (auftrag.getZustaendig() != null) {
 			if (auftrag.getZustaendig().getMitarbeiterNummer() != null
 					&& auftrag.getZustaendig().getMitarbeiterNummer() != "0000")
 				monteur[0][3] = auftrag.getZustaendig().getMitarbeiterNummer();
-			// Wenn ein Monteur zugewiesen wurde: Mitarbeiternummer wir in die vierte Spalte eingetragen
+			// Wenn ein Monteur zugewiesen wurde: Mitarbeiternummer wir in die vierte Spalte
+			// eingetragen
 
 			if (auftrag.getZustaendig().getName() != null && auftrag.getZustaendig().getVorname() != null
 					&& auftrag.getZustaendig().getMitarbeiterNummer() != "0000")
 				monteur[0][4] = auftrag.getZustaendig().getName() + ", " + auftrag.getZustaendig().getVorname();
-			// Wenn ein Monteur zugewiesen wurde: Monteurname wird in die fünfte Spalte eingetragen
+			// Wenn ein Monteur zugewiesen wurde: Monteurname wird in die fünfte Spalte
+			// eingetragen
 		}
 
 		return monteur;

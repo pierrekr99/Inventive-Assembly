@@ -74,7 +74,7 @@ public class DisponentFenster extends JFrame {
 	private JScrollPane archivSp;
 	private JScrollPane monteureSp;
 	private JLabel lblDatum;
-	public int indexWochentag = 0;
+	private int indexWochentag = 0;
 
 	Object[][] auftraege;
 	int zeilen = 0;
@@ -206,7 +206,7 @@ public class DisponentFenster extends JFrame {
 			}
 		});
 
-		datumBefuellen();
+		befuellenDatumComboBox();
 		// Befüllt die datumComboBox
 
 		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy");
@@ -280,6 +280,8 @@ public class DisponentFenster extends JFrame {
 
 			}
 		});
+		
+		
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -1358,7 +1360,7 @@ public class DisponentFenster extends JFrame {
 								// mind. ein Teil nicht verfügbar ist und somit wird der Auftragsstatus auf
 								// "Teile fehlen" gesetzt.
 
-								db.setStatus(auftrag, "Teile fehlen"); 
+								db.setStatus(auftrag, "Teile fehlen");
 
 							}
 							if (auftrag.getZustaendig().getMitarbeiterNummer().equals("0000")) {
@@ -1370,10 +1372,10 @@ public class DisponentFenster extends JFrame {
 								// "aus Versehen" im Lager gelandet ist, wieder einem Monteur zuweisen und der
 								// Auftragsstatus wird dann wieder geändert.
 
-								db.setStatus(auftrag, "nicht zugewiesen"); 
+								db.setStatus(auftrag, "nicht zugewiesen");
 							}
-
 						}
+						
 					}
 					;
 				}
@@ -1429,7 +1431,7 @@ public class DisponentFenster extends JFrame {
 				// wenn kein Monteur einem Auftrag zugewiesen ist, wird der Status auf nicht
 				// zugewiesen gestellt
 
-				db.setStatus(auftrag, "nicht zugewiesen"); 
+				db.setStatus(auftrag, "nicht zugewiesen");
 			}
 		}
 	}
@@ -1476,7 +1478,11 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
-	private void datumBefuellen() {
+	/**
+	 * Erstellt eine ComboBox, in der man das Datum der kommenden vier Tage
+	 * auswählen kann und einen Index für den jeweiligen Wochentag
+	 */
+	private void befuellenDatumComboBox() {
 		// ComboBox um das Datum auswählen und die Verfügbarkeit
 		// der Monteure am jeweiligen Tag einsehen zu können
 
@@ -1565,11 +1571,11 @@ public class DisponentFenster extends JFrame {
 					indexWochentag = 6;
 					break;
 				}
-
 				monteureAktualisieren();
 				// Verfügbarkeit Spalte wird sofort aktualisiert
 			}
 		});
+		
 	}
 
 	/**
