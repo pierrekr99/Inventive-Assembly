@@ -10,6 +10,18 @@ import java.util.List;
 
 import objekte.*;
 
+/**
+ * @author pierr
+ *
+ */
+/**
+ * @author pierr
+ *
+ */
+/**
+ * @author pierr
+ *
+ */
 public class datenbankVerbindung {
 
 	private Connection verbindung = null;
@@ -27,18 +39,17 @@ public class datenbankVerbindung {
 	public datenbankVerbindung() {
 
 		verbinden();
-		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null));
-		auftraggeberEinlesen();
-		disponentEinlesen();
-		komponenteEinlesen();
-		monteurEinlesen();
-		auftragEinlesen();
+		einlesen();
 
 	}
 
 	// === Hilfsmethoden ===
 
-	public void verbinden() { // stellt Verbindung mit der Datenbank her
+	/**
+	 * stellt Verbindung mit der Datenbank her
+	 * 
+	 */
+	public void verbinden() {
 
 		String adresse = "jdbc:mysql://3.125.60.55/db2";
 		String treiber = "com.mysql.cj.jdbc.Driver";
@@ -55,7 +66,10 @@ public class datenbankVerbindung {
 
 	}
 
-	public void trennen() { // trennt die Verbindung mit der Datenbank
+	/**
+	 * trennt die Verbindung mit der Datenbank
+	 */
+	public void trennen() {
 
 		try {
 			verbindung.close();
@@ -67,8 +81,10 @@ public class datenbankVerbindung {
 
 	}
 
-	public void einlesen() { // Methode um alle Daten von der Datenbank neu einzulesen
-		// Listen werden gelehrt und dann neu eingelesen
+	/**
+	 * ließt die Datenbank neu ein
+	 */
+	public void einlesen() {
 		auftragsListe.clear();
 		auftraggeberListe.clear();
 		disponentListe.clear();
@@ -85,7 +101,10 @@ public class datenbankVerbindung {
 
 	// === Einlese-Methoden ===
 
-	public void auftragEinlesen() { // Aufträge werden aus der Datenbank eingelesen
+	/**
+	 * Aufträge werden aus der Datenbank eingelesen
+	 */
+	public void auftragEinlesen() { 
 
 		try {
 
@@ -94,9 +113,8 @@ public class datenbankVerbindung {
 
 			while (rs.next()) {
 				int indexmitarbeiter = -1;
-				int indexAuftraggeber = -1;
-				Auftraggeber a;
-				Mitarbeiter m = null;
+				Auftraggeber auftraggeber = null;
+				Mitarbeiter mitarbeiter = null;
 
 				ArrayList<Komponente> komponentenlisteauftrag = new ArrayList<>();
 
@@ -132,38 +150,31 @@ public class datenbankVerbindung {
 					}
 				}
 
-				//
-
-				for (int i = 0; i < auftraggeberListe.size(); i++) { // passender Exemplare von Auftraggeber wird
+				for (int i = 0; i < auftraggeberListe.size(); i++) { // passendes Exemplar von Auftraggeber wird
 																		// gesucht
 
 					if (auftraggeberListe.get(i).getKundenNummer().equals(rs.getString("Auftraggeber"))) {
-						indexAuftraggeber = i;
+						auftraggeber = auftraggeberListe.get(i);
 					}
 				}
 
 				if (indexmitarbeiter == -1) {
 					for (Mitarbeiter monteur : monteurListe) {
 						if (monteur.getName().equals("nicht")) {
-							m = monteur;
+							mitarbeiter = monteur;
 						}
 					}
 
 				} else {
-					m = monteurListe.get(indexmitarbeiter);
+					mitarbeiter = monteurListe.get(indexmitarbeiter);
 				}
 
-				if (indexAuftraggeber == -1) {
-					a = null; // Wenn kein auftraggeber dem Auftrag zugewiesen ist oder keiner gefunden wurde
-				} else {
-					a = auftraggeberListe.get(indexAuftraggeber);
-				}
-
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), m, a, komponentenlisteauftrag); // Exemplar von
-																																																		// Aftrag wird
-																																																		// erstellt mit
-																																																		// den Daten aus
-																																																		// der Datenbank
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), mitarbeiter, auftraggeber, komponentenlisteauftrag); // Exemplar von
+				// Aftrag wird
+				auftraggeber = null;
+				mitarbeiter = null; // erstellt mit
+				// den Daten aus
+				// der Datenbank
 
 				auftragsListe.add(Auftrag); // Exexmplar Auftrag wird der auftragsListe hinzugefügt
 
@@ -175,7 +186,10 @@ public class datenbankVerbindung {
 
 	}
 
-	public void auftraggeberEinlesen() { // Auftraggeber werden eingelesen aus der Datenbank
+	/**
+	 * Auftraggeber werden eingelesen aus der Datenbank
+	 */
+	public void auftraggeberEinlesen() { 
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -192,7 +206,10 @@ public class datenbankVerbindung {
 
 	}
 
-	public void disponentEinlesen() { // Disponent wird aus der Datenbank eingelesen
+	/**
+	 * Disponent wird aus der Datenbank eingelesen
+	 */
+	public void disponentEinlesen() { 
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -201,15 +218,13 @@ public class datenbankVerbindung {
 			while (rs.next()) {
 
 				if (rs.getString("Rolle").equals("Disponent")) {
-					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"),
-							rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), null); 
-					//Exemplar von Disponent wir derstellt mit den Daten aus der Datenbank
-																														
+					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), null);
+					// Exemplar von Disponent wir derstellt mit den Daten aus der Datenbank
+
 					disponentListe.add(Disponent); // Explar Disponent wird der disponentenListe hinzugefügt
 
 				}
 			}
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -217,7 +232,10 @@ public class datenbankVerbindung {
 
 	}
 
-	public void komponenteEinlesen() { // Komponenten werden aus der Datenbank eingelesen
+	/**
+	 * Komponenten werden aus der Datenbank eingelesen
+	 */
+	public void komponenteEinlesen() { 
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -233,7 +251,10 @@ public class datenbankVerbindung {
 		}
 	}
 
-	public void monteurEinlesen() { // Monteure werden aus der Datenbank eingelesen
+	/**
+	 * Monteure werden aus der Datenbank eingelesen
+	 */
+	public void monteurEinlesen() { 
 
 		try {
 			Statement stmt = verbindung.createStatement();
@@ -271,7 +292,13 @@ public class datenbankVerbindung {
 
 	// === Setter-Methoden ===
 
-	public void setZustaendig(Auftrag auftrag, Mitarbeiter monteur) { // verändert in der Datenbank den zuständigen Monteur
+	/**
+	 * verändert in der Datenbank den zuständigen Monteur
+	 * @param auftrag
+	 * @param monteur
+	 * 
+	 */
+	public void setZustaendig(Auftrag auftrag, Mitarbeiter monteur) { 
 
 		try {
 
@@ -285,7 +312,11 @@ public class datenbankVerbindung {
 
 	}
 
-	public void setStatus(Auftrag auftrag, String status) { // verändert in der Datenbank den Status eines Auftrages
+	/**verändert den Status eines Auftrages in der Datenbank
+	 * @param auftrag
+	 * @param status
+	 */
+	public void setStatus(Auftrag auftrag, String status) { 
 
 		try {
 
