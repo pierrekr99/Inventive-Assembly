@@ -10,18 +10,7 @@ import java.util.List;
 
 import objekte.*;
 
-/**
- * @author pierr
- *
- */
-/**
- * @author pierr
- *
- */
-/**
- * @author pierr
- *
- */
+
 public class datenbankVerbindung {
 
 	private Connection verbindung = null;
@@ -45,6 +34,7 @@ public class datenbankVerbindung {
 
 	// === Hilfsmethoden ===
 
+	
 	/**
 	 * stellt Verbindung mit der Datenbank her
 	 * 
@@ -91,7 +81,9 @@ public class datenbankVerbindung {
 		komponentenListe.clear();
 		monteurListe.clear();
 
-		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null));
+		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null)); 
+		//erstellt leeren Monteur, jeder Auftrag dem keinen Monteur zugeordnet ist, hat den leeren Monteur als zuständigkeit
+		
 		auftraggeberEinlesen();
 		disponentEinlesen();
 		komponenteEinlesen();
@@ -120,7 +112,8 @@ public class datenbankVerbindung {
 
 				// In der Datenbanktabelle für Aufträge sind die Komponenten in diesem Format
 				// xxxx,yyyy,zzzz abgespeichert,
-				// deshalb muss der String erstmal gespalten werden wo das Komma steht
+				// deshalb muss der String erstmal gespalten werden
+				
 				String[] komponentennrarray = rs.getString("Komponenten").split(",");
 
 				// Alle Komponentennummern werden nun mit den Komponentennummern der Exemplare
@@ -128,6 +121,7 @@ public class datenbankVerbindung {
 				// falls es zu einer Übereinstimmung kommt wird das Exemplar der Komponente dem
 				// Auftrag zugewießen,
 				// bzw. erstmal in dem Array "komponentenlisteauftrag" gespeichert
+				
 				for (String komponente : komponentennrarray) {
 
 					for (int i = 0; i < komponentenListe.size(); i++) {
@@ -138,12 +132,13 @@ public class datenbankVerbindung {
 					}
 
 				}
-
+				
 				// die Mitarbeiternummer wird aus dem Auftrag ausgelesen und mit den Nummern von
 				// den Monteurexemplaren verglichen
 				// bei einer Übereinstimmung wird der Index von dem Monteurexemplar gespeichert
 				// sollte es zu keiner Überseinstimmung kommen bleibt "indexmitarbeiter" -1
-				for (int i = 0; i < monteurListe.size(); i++) { // Passender Exemplare von Monteur wird gesucht
+				
+				for (int i = 0; i < monteurListe.size(); i++) { // Passendes Exemplar von Monteur wird gesucht
 
 					if (monteurListe.get(i).getMitarbeiterNummer().equals(rs.getString("ZustaendigMitarbeiterNummer"))) {
 						indexmitarbeiter = i;
@@ -158,24 +153,26 @@ public class datenbankVerbindung {
 					}
 				}
 
-				if (indexmitarbeiter == -1) {
+				
+				if (indexmitarbeiter == -1) { 
 					for (Mitarbeiter monteur : monteurListe) {
 						if (monteur.getName().equals("nicht")) {
 							mitarbeiter = monteur;
 						}
 					}
-
+					//wenn es zu keiner Übereinstimmung kommt wird dem Auftrag der "leere" Monteur zugeordnet 
 				} else {
 					mitarbeiter = monteurListe.get(indexmitarbeiter);
 				}
 
-				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), mitarbeiter, auftraggeber, komponentenlisteauftrag); // Exemplar von
-				// Aftrag wird
+				
+				
+				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), mitarbeiter, auftraggeber, komponentenlisteauftrag); 
+				// Exemplar von Auftrag wird erstellt
+				
 				auftraggeber = null;
-				mitarbeiter = null; // erstellt mit
-				// den Daten aus
-				// der Datenbank
-
+				mitarbeiter = null; 
+			
 				auftragsListe.add(Auftrag); // Exexmplar Auftrag wird der auftragsListe hinzugefügt
 
 			}
