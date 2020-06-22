@@ -164,9 +164,6 @@ public class DatenbankVerbindung {
 				} else {
 					mitarbeiter = monteurListe.get(indexmitarbeiter);
 				}
-				 
-				
-				
 				
 				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), mitarbeiter, auftraggeber, komponentenlisteauftrag); 
 				// Exemplar von Auftrag wird erstellt
