@@ -94,9 +94,6 @@ public class MonteurFenster extends JFrame {
 
 	
 	public MonteurFenster() {
-
-		setTitle("Inventive Assembly Monteur Auftragsansicht");
-		// Namen des Fensters setzen
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		// Groﬂansicht
