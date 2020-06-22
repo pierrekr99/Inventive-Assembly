@@ -54,6 +54,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.sun.java.accessibility.util.GUIInitializedListener;
+
 import Datenbank.datenbankVerbindung;
 import objekte.Auftrag;
 import objekte.Mitarbeiter;
@@ -82,7 +84,6 @@ public class DisponentFenster extends JFrame {
 	private int zeilenArchiv = 0;
 	int zeilenMonteure = 0;
 
-	int summeAuftraege = 0;
 	String details = "Details anzeigen";
 	String monteur;
 
@@ -280,8 +281,6 @@ public class DisponentFenster extends JFrame {
 
 			}
 		});
-		
-		
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -330,7 +329,7 @@ public class DisponentFenster extends JFrame {
 								.addPreferredGap(ComponentPlacement.UNRELATED)
 								.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE).addGap(6)));
 
-		/**
+		/*
 		 * Auftraege Reiter.==================================================
 		 */
 
@@ -356,7 +355,7 @@ public class DisponentFenster extends JFrame {
 		 * nach diesem Attribut in der natürlichen Ordnung und umgekehrt sortiert
 		 */
 
-		/**
+		/*
 		 * Archiv Reiter.==================================================
 		 */
 
@@ -378,11 +377,11 @@ public class DisponentFenster extends JFrame {
 		archivAktualisieren();
 		// Erstellen/aktualisieren der Auftragstabelle -> mehr Details in der Methode
 
-		auswahlBoxStatus(archivTbl, auswahlBoxStatus, 2);
+		auswahlBoxStatus(archivTbl, 2);
 		// erstellen einer Combobox, durch die der Disponent ggf. den Status rückgängig
 		// machen kann
 
-		/**
+		/*
 		 * Monteure Reiter.==================================================
 		 */
 
@@ -411,7 +410,7 @@ public class DisponentFenster extends JFrame {
 
 	}
 
-	/**
+	/*
 	 * GUI-Hilfsmethoden.==================================================
 	 */
 
@@ -694,6 +693,27 @@ public class DisponentFenster extends JFrame {
 		});
 	}
 
+	/**
+	 * Aktualisierung einer Tabelle
+	 * <p>
+	 * auftraegeAktualisieren erstellt das DefaultTableModel, generiert die Buttons,
+	 * formatiert die Tabelle, führt suche(tabelle) für diese Tabelle aus und führt
+	 * monteureCombobox(tabelle) aus. Im DefaulttableModel wird die Tabelle und die
+	 * die Kopfzeile erstellt, zu dem wird festgelegt welche Spalten Editierbar
+	 * sind.
+	 * 
+	 * @see {@link gui.DisponentFenster #auftraege()())}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster.JButtonRenderer}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster.JButtonEditor}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #tblFormat(JTable)}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #suchen(JTable)}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #monteureCombobox(JTable)}
+	 */
 	private void auftraegeAktualisieren() {
 
 		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
@@ -726,6 +746,25 @@ public class DisponentFenster extends JFrame {
 		// monteureCombobox wird konfiguriert (muss bei jeder Aktualisierung geschehen)
 	}
 
+	/**
+	 * Funktioniert wie auftraegeAktualisieren(). Der Unterschied liegt darin, dass
+	 * eine andere Combobox generiert wird und somit auch eine andere Spalte
+	 * Editierbar ist.
+	 * 
+	 * @see {@link gui.DisponentFenster #auftraegeAktualisieren()}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #archiv())}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster.JButtonRenderer}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster.JButtonEditor}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #tblFormat(JTable)}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #suchen(JTable)}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #auswahlBoxStatus(JTable, JComboBox, int)}
+	 */
 	private void archivAktualisieren() {
 
 		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
@@ -753,9 +792,26 @@ public class DisponentFenster extends JFrame {
 		suchen(archivTbl);
 		// Suchfunktion + Sortieralgorithmus wird in Tabelle implementiert
 
-		auswahlBoxStatus(archivTbl, auswahlBoxStatus, 2);
+		auswahlBoxStatus(archivTbl, 2);
 	}
 
+	/**
+	 * Funktioniert wie auftraegeAktualisieren(). Der Unterschied liegt darin, dass
+	 * es hier keine Combobox gibt, ein anderes Format verwendet wird und ein
+	 * anderer Button erstellt wird.
+	 * 
+	 * @see {@link gui.DisponentFenster #auftraegeAktualisieren()}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #monteure())}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster.JButtonRenderer}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster.JButtonEditor}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #suchen(JTable)}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #monteureTblFormat()}
+	 */
 	private void monteureAktualisieren() {
 
 		// DefaultTableModel(Tabelle,Kopfzeile){z.B. was ist editierbar?}
@@ -785,6 +841,18 @@ public class DisponentFenster extends JFrame {
 		// Suchfunktion + Sortieralgorithmus wird in Tabelle implementiert
 	}
 
+	/**
+	 * auftraege() arrayListeBefuellen(ArrayList<Auftrag>) mit dem Parameter
+	 * "auftragsListe" aus, zählt mit auftragsListe.size() die Zeilen die die
+	 * Tabelle haben wird, erstellt ein zweidimensionales Array auftraege, befüllt
+	 * die einzelne Felder im Array und nachbbestimmten Bedingungen.
+	 * 
+	 * @return Object[][] auftraege: Ein Array, das die Inhalte der Tabelle im
+	 *         Auftragsreiter enthält. Die Position im array wird in der Form
+	 *         auftraege[Zeie][Spalte] definiert}
+	 *         <p>
+	 * @see {@link gui.DisponentFenster #arrayListeBefuellen(ArrayList)}
+	 */
 	public Object[][] auftraege() {
 		// Erstellt Inhalt zur befüllung der auftraegeTabelle
 		arrayListeBefuellen(auftragsListe);
@@ -795,7 +863,7 @@ public class DisponentFenster extends JFrame {
 
 		// größe der Tabelle wird ermittelt
 
-		auftraege = new Object[zeilen][8];
+		Object[][] auftraege = new Object[zeilen][8];
 		// dieses Array wird die Tabelle befüllen
 
 		for (int i = 0; i < auftragsListe.size(); i++) {
@@ -850,6 +918,15 @@ public class DisponentFenster extends JFrame {
 		return auftraege;
 	}
 
+	/**
+	 * Funktioniert wie auftraege()
+	 * 
+	 * @return Object[][] archiv
+	 *         <p>
+	 * @see {@link gui.DisponentFenster #auftraege()}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #arrayListeBefuellen(ArrayList)}
+	 */
 	public Object[][] archiv() {
 		// Erstellt Inhalt zur befüllung der auftraegeTabelle
 
@@ -859,7 +936,7 @@ public class DisponentFenster extends JFrame {
 		zeilenArchiv = archivListe.size();
 		// größe der Tabelle wird ermittelt
 
-		archiv = new Object[zeilenArchiv][8];
+		Object[][] archiv = new Object[zeilenArchiv][8];
 		// dieses Array wird die Tabelle befüllen
 
 		for (
@@ -910,6 +987,15 @@ public class DisponentFenster extends JFrame {
 		return archiv;
 	}
 
+	/**
+	 * Funktioniert wie auftraege()
+	 * 
+	 * @return Object[][] monteure
+	 *         <p>
+	 * @see {@link gui.DisponentFenster #auftraege()}
+	 *      <p>
+	 * @see {@link gui.DisponentFenster #arrayListeBefuellen(ArrayList)}
+	 */
 	private Object[][] monteure() {
 		// Erstellt Inhalt zur befüllung der monteureTabelle
 
@@ -954,9 +1040,13 @@ public class DisponentFenster extends JFrame {
 		return monteure;
 	}
 
+	/**
+	 * Legt dann die Breite der jeweiligen Spalten und die Höhe der Zeilen in table
+	 * fest. Die Möglichkeit die Spalten zu verschieben wird deaktiviert.
+	 * 
+	 * @param table
+	 */
 	private void tblFormat(JTable table) {
-		// als Parameter werden die Auftrags- oder Archivtabelle übergeben
-
 		// Details
 		table.getColumnModel().getColumn(0).setPreferredWidth(150);
 		table.getColumnModel().getColumn(0).setMinWidth(150);
@@ -997,13 +1087,15 @@ public class DisponentFenster extends JFrame {
 		table.getColumnModel().getColumn(7).setMinWidth(100);
 		table.getColumnModel().getColumn(7).setMaxWidth(200);
 
-		// Zeilenhöhe
 		table.setRowHeight(50);
 
-		// Spalten lassen sich nicht verschieben
 		table.getTableHeader().setReorderingAllowed(false);
 	}
 
+	/**
+	 * Legt die Breite der jeweiligen Spalten und die Höhe der Zeilen fest. Die
+	 * Möglichkeit die Spalten zu verschieben wird deaktiviert.
+	 */
 	private void monteureTblFormat() {
 		// Name
 		monteureTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
@@ -1025,16 +1117,17 @@ public class DisponentFenster extends JFrame {
 		monteureTbl.getColumnModel().getColumn(3).setMinWidth(100);
 		monteureTbl.getColumnModel().getColumn(3).setMaxWidth(500);
 
-		// Zeilenhöhe
 		monteureTbl.setRowHeight(50);
 
-		// Spalten lassen sich nicht verschieben
 		monteureTbl.getTableHeader().setReorderingAllowed(false);
 	}
 
+	/**
+	 * Erstellt eine Combobox mit den Monteuren in table.
+	 * 
+	 * @param table
+	 */
 	private void monteureCombobox(JTable table) {
-		// Fügt Optionen zur Statusveränderung hinzu
-
 		monteureCombobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		// Schriftart und Größe
 
@@ -1081,6 +1174,31 @@ public class DisponentFenster extends JFrame {
 	}
 
 	/**
+	 * Legt die Statusoptionen in der table in der Spalte spalte fest. Hierfür wird
+	 * auswahlBoxStatus bearbeitet und dann in table eingefügt.
+	 * 
+	 * @param table
+	 * @param spalte
+	 */
+	private void auswahlBoxStatus(JTable table, int spalte) {
+
+		auswahlBoxStatus.removeAllItems();
+		// erstmal alle rauslöschen
+
+		auswahlBoxStatus.addItem("Teile fehlen");
+		auswahlBoxStatus.addItem("disponiert");
+		auswahlBoxStatus.addItem("im Lager");
+		auswahlBoxStatus.addItem("nicht zugewiesen");
+		// auswahlmöglichkeiten
+
+		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);
+		// in welche Spalte soll die Combobox eingefügt werden
+
+		statusSpalte.setCellEditor(new DefaultCellEditor(auswahlBoxStatus));
+		// Combobox jetzt anklickbar
+	}
+
+	/*
 	 * Buttons in der Tabelle.==================================================
 	 */
 
@@ -1210,14 +1328,21 @@ public class DisponentFenster extends JFrame {
 		}
 	}
 
-	/**
+	/*
 	 * funktionale Hilfsmethoden.==================================================
 	 */
 
+	/**
+	 * Vergleicht monteur mit der Zuständigkeit in einem Auftrag und zählt
+	 * summeAuftraege um 1 hoch, wenn die beiden übereinstimmen.
+	 * 
+	 * @param monteur
+	 * @return int summeAuftraege als String
+	 */
 	private String summeAuftraege(Mitarbeiter monteur) {
 		// zählt die Aufträge für die der Monteur Zuständig ist
 
-		String summe;
+		int summeAuftraege = 0;
 		for (int j = 0; j < db.getAuftragsListe().size(); j++) {
 			if (monteur != null
 					&& db.getAuftragsListe().get(j).getZustaendig().getMitarbeiterNummer()
@@ -1230,31 +1355,17 @@ public class DisponentFenster extends JFrame {
 				summeAuftraege = summeAuftraege + 1;
 			}
 		}
-		summe = "" + summeAuftraege;
-		summeAuftraege = 0;
-		// SummeAuftraege wird zurückgesetzt
-
-		return summe;
+		return "" + summeAuftraege;
 	}
 
-	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
-
-		combobox.removeAllItems();// erstmal alle rauslöschen
-
-		// auswahlmöglichkeiten
-
-		combobox.addItem("Teile fehlen");
-		combobox.addItem("disponiert");
-		combobox.addItem("im Lager");
-		combobox.addItem("nicht zugewiesen");
-
-		TableColumn statusSpalte = table.getColumnModel().getColumn(spalte);
-		// in welche Spalte soll die Combobox
-
-		statusSpalte.setCellEditor(new DefaultCellEditor(combobox));
-		// Combobox jetzt anklickbar
-	}
-
+	/**
+	 * Vergleicht die Auftragsnummer in tabelle in der Zeile editingRow mit der
+	 * Auftragsnummer eines Auftrags in der Auftragsliste aus der Datenbank.
+	 * 
+	 * @param editingRow
+	 * @param tabelle
+	 * @return Den Auftrag, der in tabelle in der Zeile editingRow angezeigt wird
+	 */
 	private Auftrag welcherAuftrag(int editingRow, JTable tabelle) {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
 
@@ -1375,7 +1486,7 @@ public class DisponentFenster extends JFrame {
 								db.setStatus(auftrag, "nicht zugewiesen");
 							}
 						}
-						
+
 					}
 					;
 				}
@@ -1575,7 +1686,7 @@ public class DisponentFenster extends JFrame {
 				// Verfügbarkeit Spalte wird sofort aktualisiert
 			}
 		});
-		
+
 	}
 
 	/**
