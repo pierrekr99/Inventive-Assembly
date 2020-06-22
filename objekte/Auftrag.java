@@ -2,12 +2,17 @@ package objekte;
 
 import java.util.ArrayList;
 
+/**
+ * Der Auftrag wird vom Verkauf erstellt und an die Montage weitergeleitet. Er
+ * beinhaltet alle wichtigen Details für einen Auftrag, die dann in der
+ * Anwendung angezeigt werden können. 
+ */
 public class Auftrag {
 
-/** *****************************************************
- *	Attribute
- 	*****************************************************/
-	
+	/*
+	 * ***************************************************** Attribute
+	 *****************************************************/
+
 	private String auftragsNummer;
 	private String erstellungsdatum;
 	private String frist;
@@ -23,10 +28,9 @@ public class Auftrag {
 	// in Tabelle angegeben in ArrayList mit
 	// komponentenexemplar.getKomponentennummer()
 
-	
-	/** *****************************************************
-	 *	Konstruktor
-	 	*****************************************************/
+	/*
+	 * ***************************************************** Konstruktor
+	 *****************************************************/
 
 	public Auftrag(String auftragsnummer, String erstellungsdatum, String frist, String status, Mitarbeiter zustaendig,
 			Auftraggeber auftraggeber, ArrayList<Komponente> komponenten) {
@@ -40,10 +44,10 @@ public class Auftrag {
 		this.komponenten = komponenten;
 	}
 
-	/** *****************************************************
-	 *	Getter + Setter
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** Getter + Setter
+	 *****************************************************/
+
 	public String getAuftragsNummer() {
 		return auftragsNummer;
 	}
@@ -100,10 +104,10 @@ public class Auftrag {
 		this.komponenten = komponenten;
 	}
 
-	/** *****************************************************
-	 *	toString Methode
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** toString Methode
+	 *****************************************************/
+
 	@Override
 	public String toString() {
 		return "Auftrag [auftragsnummer=" + auftragsNummer + ", erstellungsdatum=" + erstellungsdatum + ", frist="

@@ -2,22 +2,28 @@ package objekte;
 
 import java.util.Comparator;
 
+/**
+ * 
+ *         Aus dieser Klasse kann ein Exemplar vom Typ Komponente erstellt
+ *         werden, die verfügbar oder nicht verfügbar sein kann. Sie werden
+ *         einem Auftrag zugeordnet. 
+ */
 public class Komponente {
 
-	/** *****************************************************
-	 *	Attribute
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** Attribute
+	 *****************************************************/
+
 	private String name;
 	private String komponentenNummer;
 	private boolean verfuegbarkeit;
 	private String kategorie;
 	private String attribut;
 
-	/** *****************************************************
-	 *	Konstruktor
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** Konstruktor
+	 *****************************************************/
+
 	public Komponente(String name, String komponentenNummer, boolean verfuegbarkeit, String kategorie,
 			String attribut) {
 		super();
@@ -27,10 +33,10 @@ public class Komponente {
 		this.kategorie = kategorie;
 		this.attribut = attribut;
 	}
-	
-	/** *****************************************************
-	 *	Getter + Setter
-	 	*****************************************************/
+
+	/*
+	 * ***************************************************** Getter + Setter
+	 *****************************************************/
 
 	public String getAttribut() {
 		return attribut;
@@ -56,10 +62,10 @@ public class Komponente {
 		return kategorie;
 	}
 
-	/** *****************************************************
-	 *	toString Methode
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** toString Methode
+	 *****************************************************/
+
 	@Override
 	public String toString() {
 		return "Komponente [name=" + name + ", komponentenNummer=" + komponentenNummer + ", verfuegbarkeit="

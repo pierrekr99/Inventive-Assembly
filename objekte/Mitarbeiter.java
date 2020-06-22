@@ -2,24 +2,30 @@ package objekte;
 
 import java.util.ArrayList;
 
+/**
+ *         Aus dieser Klasse kann ein Exemplar vom Typ Mitarbeiter erstellt
+ *         werden, der ein Monteur oder Disponent sein kann.  
+ */
+
 public class Mitarbeiter {
 
-	/** *****************************************************
-	 *	Attribute
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** Attribute
+	 *****************************************************/
+
 	private String rolle;
 	private String name;
 	private String vorname;
 	private String mitarbeiterNummer;
 	private String passwort;
 	private ArrayList<String> anwesenheit; // Montag bis Freitag, dargestellt in der DB
-	
-	/** *****************************************************
-	 *	Konstruktor
-	 	*****************************************************/
-	
-	public Mitarbeiter(String rolle, String name, String vorname, String mitarbeiterNummer, String passwort, ArrayList<String> anwesenheit) {
+
+	/*
+	 * ***************************************************** Konstruktor
+	 *****************************************************/
+
+	public Mitarbeiter(String rolle, String name, String vorname, String mitarbeiterNummer, String passwort,
+			ArrayList<String> anwesenheit) {
 		super();
 		this.rolle = rolle;
 		this.name = name;
@@ -28,10 +34,10 @@ public class Mitarbeiter {
 		this.passwort = passwort;
 		this.anwesenheit = anwesenheit;
 	}
-	
-	/** *****************************************************
-	 *	Getter + Setter
-	 	*****************************************************/
+
+	/*
+	 * ***************************************************** Getter + Setter
+	 *****************************************************/
 
 	public String getName() {
 		return name;
@@ -81,20 +87,14 @@ public class Mitarbeiter {
 		this.rolle = rolle;
 	}
 
-	/** *****************************************************
-	 *	toString Methode
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** toString Methode
+	 *****************************************************/
+
 	@Override
 	public String toString() {
 		return "Mitarbeiter [rolle=" + rolle + ", name=" + name + ", vorname=" + vorname + ", mitarbeiterNummer="
 				+ mitarbeiterNummer + ", passwort=" + passwort + ", anwesenheit=" + anwesenheit + "]";
 	}
-
-
-
-	
-	
-	
 
 }

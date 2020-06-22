@@ -2,27 +2,32 @@ package objekte;
 
 import java.util.Comparator;
 
+/**
+ * Aus dieser Klasse wird ein Exemplar vom Typ Auftraggeber erstellt, der von
+ * der HighSpeedGmbH bedient wird.
+ *
+ */
 public class Auftraggeber {
 
-	/** *****************************************************
-	 *	Attribute
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** Attribute
+	 *****************************************************/
+
 	private String name;
 	private String kundenNummer;
 
-	/** *****************************************************
-	 *	Konstruktor
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** Konstruktor
+	 *****************************************************/
+
 	public Auftraggeber(String name, String kundenNummer) {
-	super();
-	this.name = name;
-	this.kundenNummer = kundenNummer;
-	
-	/** *****************************************************
-	 *	Getter + Setter
-	 	*****************************************************/
+		super();
+		this.name = name;
+		this.kundenNummer = kundenNummer;
+
+		/*
+		 * ***************************************************** Getter + Setter
+		 *****************************************************/
 
 	}
 
@@ -42,10 +47,10 @@ public class Auftraggeber {
 		this.kundenNummer = kundenNummer;
 	}
 
-	/** *****************************************************
-	 *	toString Methode
-	 	*****************************************************/
-	
+	/*
+	 * ***************************************************** toString Methode
+	 *****************************************************/
+
 	@Override
 	public String toString() {
 		return " [Name = " + name + ", Kundennr = " + kundenNummer + "]";
