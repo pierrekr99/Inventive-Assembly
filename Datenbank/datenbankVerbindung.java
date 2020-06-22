@@ -82,7 +82,7 @@ public class datenbankVerbindung {
 		monteurListe.clear();
 
 		monteurListe.add(new Mitarbeiter("Monteur", "nicht", "zugewiesen", "0000", "123", null)); 
-		//erstellt leeren Monteur, jeder Auftrag dem keinen Monteur zugeordnet ist, hat den leeren Monteur als zuständigkeit
+		//erstellt "leeren" Monteur, jedem Auftrag ohne Monteur, wird dieser "leere" Monteur zugewießen
 		
 		auftraggeberEinlesen();
 		disponentEinlesen();
@@ -160,11 +160,12 @@ public class datenbankVerbindung {
 							mitarbeiter = monteur;
 						}
 					}
-					//wenn es zu keiner Übereinstimmung kommt wird dem Auftrag der "leere" Monteur zugeordnet 
+					//wenn es zu keiner Übereinstimmung gekommen ist, wird dem Auftrag der "leere" Monteur zugeordnet 
 				} else {
 					mitarbeiter = monteurListe.get(indexmitarbeiter);
 				}
-
+				 
+				
 				
 				
 				objekte.Auftrag Auftrag = new Auftrag(rs.getString("AuftragsNummer"), rs.getString("Erstellungsdatum"), rs.getString("Frist"), rs.getString("Status"), mitarbeiter, auftraggeber, komponentenlisteauftrag); 
@@ -216,9 +217,9 @@ public class datenbankVerbindung {
 
 				if (rs.getString("Rolle").equals("Disponent")) {
 					Mitarbeiter Disponent = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), rs.getString("MitarbeiterNummer"), rs.getString("Passwort"), null);
-					// Exemplar von Disponent wir derstellt mit den Daten aus der Datenbank
+					
 
-					disponentListe.add(Disponent); // Explar Disponent wird der disponentenListe hinzugefügt
+					disponentListe.add(Disponent);
 
 				}
 			}
@@ -240,7 +241,9 @@ public class datenbankVerbindung {
 
 			while (rs.next()) {
 				objekte.Komponente Komponente = new Komponente(rs.getString("Name"), rs.getString("KomponentenNummer"), rs.getBoolean("Verfuegbarkeit"), rs.getString("Kategorie"), rs.getString("Attribut"));
+				
 				komponentenListe.add(Komponente);
+				
 			}
 
 		} catch (Exception e) {
@@ -264,16 +267,14 @@ public class datenbankVerbindung {
 				Statement stmte = verbindung.createStatement();
 				ResultSet rss;
 				rss = stmte.executeQuery("SELECT * FROM `schichtplan` WHERE `Mitarbeiternummer` = " + Mitarbeiternummer + "");
-
-				// Schichtplan Array wird erstellt
-
 				rss.next();
 				anwesenheit.add(rss.getString("Montag"));
 				anwesenheit.add(rss.getString("Dienstag"));
 				anwesenheit.add(rss.getString("Mittwoch"));
 				anwesenheit.add(rss.getString("Donnerstag"));
 				anwesenheit.add(rss.getString("Freitag"));
-
+				//Schichplan wird erstellt
+				
 				if (rs.getString("Rolle").equals("Monteur")) {
 					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), Mitarbeiternummer, rs.getString("Passwort"), anwesenheit);
 					monteurListe.add(Monteur);
@@ -290,7 +291,7 @@ public class datenbankVerbindung {
 	// === Setter-Methoden ===
 
 	/**
-	 * verändert in der Datenbank den zuständigen Monteur
+	 * verändert in der Datenbank den zuständigen Monteur eines Auftrages
 	 * @param auftrag
 	 * @param monteur
 	 * 
@@ -320,7 +321,6 @@ public class datenbankVerbindung {
 			Statement stmt = verbindung.createStatement();
 
 			stmt.executeUpdate("UPDATE `auftrag` SET `Status` = '" + status + "' WHERE (`AuftragsNummer` = '" + auftrag.getAuftragsNummer() + "');");
-			// die veränderten Werte werden von der ArrayList direkt in die DB übertragen
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -328,14 +328,6 @@ public class datenbankVerbindung {
 	}
 
 	// === Getter-Methoden ===
-
-	public Connection getVerbindung() {
-		return verbindung;
-	}
-
-	public ResultSet getRs() {
-		return rs;
-	}
 
 	public ArrayList<Auftrag> getAuftragsListe() {
 		return auftragsListe;
