@@ -273,7 +273,7 @@ public class DatenbankVerbindung {
 				anwesenheit.add(rss.getString("Mittwoch"));
 				anwesenheit.add(rss.getString("Donnerstag"));
 				anwesenheit.add(rss.getString("Freitag"));
-				//Schichplan wird erstellt
+				//Schichtplan wird erstellt
 				
 				if (rs.getString("Rolle").equals("Monteur")) {
 					Mitarbeiter Monteur = new Mitarbeiter(rs.getString("Rolle"), rs.getString("Name"), rs.getString("Vorname"), Mitarbeiternummer, rs.getString("Passwort"), anwesenheit);
