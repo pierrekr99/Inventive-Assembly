@@ -953,6 +953,12 @@ public class DisponentFenster extends JFrame {
 		}
 		return monteure;
 	}
+	/**
+	 * Tabellenformat Archiv und Aufträge
+	 * <p>
+	 * Die Spaltenformatierungen werden bestimmt mit Breite, Höhe und Verschiebbarkeit
+	 * @param table
+	 */
 
 	private void tblFormat(JTable table) {
 		// als Parameter werden die Auftrags- oder Archivtabelle übergeben
@@ -1003,6 +1009,12 @@ public class DisponentFenster extends JFrame {
 		// Spalten lassen sich nicht verschieben
 		table.getTableHeader().setReorderingAllowed(false);
 	}
+	
+	/**
+	 * Tabellenformat Monteure
+	 * <p>
+	 * Die Spaltenformatierungen werden bestimmt mit Breite, Höhe und Verschiebbarkeit
+	 */
 
 	private void monteureTblFormat() {
 		// Name
@@ -1031,7 +1043,13 @@ public class DisponentFenster extends JFrame {
 		// Spalten lassen sich nicht verschieben
 		monteureTbl.getTableHeader().setReorderingAllowed(false);
 	}
-
+	/**
+	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und Funktionalität
+	 * <p>
+	 * Hier wird die Auswahlbox für die Monteure generiert. Diese werden aus der Datenbank gelesen.
+	 * Für die Mitarbeiternummer 0000, wird der Auftrag nicht zugeteilst
+	 * @param table
+	 */
 	private void monteureCombobox(JTable table) {
 		// Fügt Optionen zur Statusveränderung hinzu
 
@@ -1237,6 +1255,14 @@ public class DisponentFenster extends JFrame {
 		return summe;
 	}
 
+	/**
+	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und Funktionalität
+	 * <p>
+	 * Hier wird die Auswahlbox für den Status generiert. Diese ist im Archiv zu finden
+	 * @param table
+	 * @param combobox
+	 * @param spalte
+	 */
 	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
 
 		combobox.removeAllItems();// erstmal alle rauslöschen
