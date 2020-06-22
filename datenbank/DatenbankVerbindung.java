@@ -333,17 +333,11 @@ public class DatenbankVerbindung {
 		return auftragsListe;
 	}
 
-	public ArrayList<Auftraggeber> getAuftraggeberListe() {
-		return auftraggeberListe;
-	}
 
 	public ArrayList<Mitarbeiter> getDisponentListe() {
 		return disponentListe;
 	}
 
-	public ArrayList<Komponente> getKomponentenListe() {
-		return komponentenListe;
-	}
 
 	public ArrayList<Mitarbeiter> getMonteurListe() {
 		return monteurListe;
