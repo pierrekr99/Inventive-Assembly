@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import gui.DisponentFenster.JButtonEditor;
 import gui.DisponentFenster.JButtonRenderer;
 import objekte.Auftrag;
@@ -30,7 +30,7 @@ import javax.swing.JTable;
 
 public class AuftraegeListeFenster extends JFrame {
 
-	static datenbankVerbindung db = main.Main.getdb();
+	static DatenbankVerbindung db = main.Main.getdb();
 
 	private JPanel contentPane;
 	private JTable tabelle;

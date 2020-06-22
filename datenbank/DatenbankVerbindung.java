@@ -1,4 +1,4 @@
-package Datenbank;
+package datenbank;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +11,7 @@ import java.util.List;
 import objekte.*;
 
 
-public class datenbankVerbindung {
+public class DatenbankVerbindung {
 
 	private Connection verbindung = null;
 	private ResultSet rs;
@@ -25,7 +25,7 @@ public class datenbankVerbindung {
 
 	// === Konstruktor ===
 
-	public datenbankVerbindung() {
+	public DatenbankVerbindung() {
 
 		verbinden();
 		einlesen();

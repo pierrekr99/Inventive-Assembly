@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import objekte.Mitarbeiter;
 
 
@@ -38,7 +38,7 @@ public class LoginFenster extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	static datenbankVerbindung db = main.Main.getdb();
+	static DatenbankVerbindung db = main.Main.getdb();
 
 	private JPanel contentPane;
 	private JTextField tf_MitarbeiterID;

@@ -55,7 +55,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import gui.AuftraegeListeFenster.JButtonEditor;
 import gui.AuftraegeListeFenster.JButtonRenderer;
 import objekte.Auftrag;
@@ -68,7 +68,7 @@ public class MonteurFenster extends JFrame {
 	 * Attribute
 	 */
 
-	static datenbankVerbindung db = main.Main.getdb();
+	static DatenbankVerbindung db = main.Main.getdb();
 	// Datenbankverbindung aus der Main
 
 	private JTextField suchFeld;

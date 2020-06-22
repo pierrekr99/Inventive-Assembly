@@ -4,14 +4,14 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import gui.LoginFenster;
 
 
 public class Main {
 	
 	
-	static datenbankVerbindung db = new datenbankVerbindung();
+	static DatenbankVerbindung db = new DatenbankVerbindung();
 	
 	
 	public static void main(String[] args) {
@@ -32,7 +32,7 @@ public class Main {
 		});
 	}
 	
-	public static datenbankVerbindung getdb() {
+	public static DatenbankVerbindung getdb() {
 		return db;
 		// Datenbankverbindung wird an andere Klassen übergeben
 	}

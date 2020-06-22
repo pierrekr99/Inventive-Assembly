@@ -54,7 +54,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import objekte.Auftrag;
 import objekte.Mitarbeiter;
 import javax.swing.JLabel;
@@ -62,7 +62,7 @@ import javax.swing.JOptionPane;
 
 public class DisponentFenster extends JFrame {
 
-	static datenbankVerbindung db = main.Main.getdb();
+	static DatenbankVerbindung db = main.Main.getdb();
 	// ermöglicht auf den Inhalt der DB, die in der Main geladen wurde
 
 	private JPanel contentPane;
