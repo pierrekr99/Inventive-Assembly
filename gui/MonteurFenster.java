@@ -55,7 +55,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import gui.AuftraegeListeFenster.JButtonEditor;
 import gui.AuftraegeListeFenster.JButtonRenderer;
 import objekte.Auftrag;
@@ -63,8 +63,12 @@ import objekte.Auftraggeber;
 import objekte.Mitarbeiter;
 
 public class MonteurFenster extends JFrame {
+	
+	/*
+	 * Attribute
+	 */
 
-	static datenbankVerbindung db = main.Main.getdb();
+	static DatenbankVerbindung db = main.Main.getdb();
 	// Datenbankverbindung aus der Main
 
 	private JTextField suchFeld;
@@ -84,40 +88,72 @@ public class MonteurFenster extends JFrame {
 	// Arrayliste für Aufträge des Monteurs der sich eingeloggt hat
 
 	private TableRowSorter<DefaultTableModel> sorter1;
+	
+	
 
 
+	
 	/**
-	 * Create the application.
+	 * Monteurfenster generieren
+	 * <p>
+	 * Das Monteurfenster wird erstellt. Der Monteur kann hier seine Aufträge sehen, sowie Änderungen am Status vornehmen.
+	 * <p>
+	 * Das Fenster besteht aus einem Tab, sodass man ohne Probleme noch weitere Ansichten und Funktionen für den Monteur
+	 * programmieren könnte. Außerdem gibt es in der linken oberen Ecke eine Suchleiste, mit der man die Tabelle nach
+	 * bestimmten Einträgen durchsuchen kann. Rechts daneben ist ein JLabel, dass den Namen des sich angemeldeten 
+	 * Monteurs anzeigt. in der rechten Ecke ist ein Logout Button, mit dem man sich abmeldet und zum Login Fenster
+	 * zurückkommt. Rechts daneben ist ein Button mit dem man di Tabelle aktualisieren kann. Die Datenbank wird neu ausgelesen.
+	 * Daneben ist nochmal ein JLabel zu finden, das das aktuelle Datum wiedergibt.
+	 * <p>
+	 * Unterhalb dieser Buttons und JLabels ist eine Tabelle zu finden, die in der Methode auftraegeAktualisieren() 
+	 * erstellt wird
+	 * 
 	 */
 	public MonteurFenster() {
-
-		setTitle("Inventive Assembly Monteur Auftragsansicht");// Namen des Fensters setzen
-		setExtendedState(JFrame.MAXIMIZED_BOTH);// Großansicht
+		
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		// Großansicht
+		 
 		setBounds(0, 0, 700, 600);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// fenster schließen bei x
-		GridBagLayout gridBagLayout = new GridBagLayout();// layout von hier...
-		gridBagLayout.columnWidths = new int[] { 0, 0 };//
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// fenster schließen bei x
+		
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		// layout von hier...
+		
+		gridBagLayout.columnWidths = new int[] { 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 362, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 1.0, Double.MIN_VALUE };//
-		gridBagLayout.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };//
-		getContentPane().setLayout(gridBagLayout);// ...bis hier
+		gridBagLayout.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
+		getContentPane().setLayout(gridBagLayout);
+		// ...bis hier
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);// layout für tabbed pane von hier...
-		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16)); // Schriftgröße
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		// layout für tabbed pane von hier...
+		
+		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		// Schriftgröße
+		
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
 		gbc_tabbedPane.insets = new Insets(0, 0, 5, 0);
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
 		gbc_tabbedPane.gridx = 0;
 		gbc_tabbedPane.gridy = 0;
 		getContentPane().add(tabbedPane, gbc_tabbedPane);
-		//Was macht das? und mach das mal so dass das tabbed pane sich wieder an die Größe des Fensters anpasst
+		//...bis hier
 
 		JPanel auftraegeTab = new JPanel();
-		tabbedPane.addTab("Aufträge", null, auftraegeTab, null);// tab wird sichtbar
+		tabbedPane.addTab("Aufträge", null, auftraegeTab, null);
+		// tab wird sichtbar
 
-		suchFeld = new JTextField(); // Suchfeld erstellen
-		suchFeld.setFont(new Font("Tahoma", Font.PLAIN, 16));// Formatierung der Schrift
-		suchFeld.setText("Suche");// Suchfeld name
+		suchFeld = new JTextField(); 
+		// Suchfeld erstellen
+		
+		suchFeld.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		// Formatierung der Schrift
+		
+		suchFeld.setText("Suche");
 		suchFeld.setColumns(10);
 		suchFeld.addMouseListener(new MouseListener() {
 			
@@ -243,8 +279,7 @@ public class MonteurFenster extends JFrame {
 
 		/*
 		 * layout Regelungen für scroll pane und Anordnung der Komponenten (vom
-		 * windowbuilder
-		 * erstellt)********************************************************
+		 * windowbuilder erstellt)********************************************************
 		 * ************************************************************************************************
 		 */
 
@@ -253,6 +288,9 @@ public class MonteurFenster extends JFrame {
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
+		/*
+		 * Datum und Mitarbeitername am oberen Bildrand erstellen
+		 */
 		JLabel lbl_eingeloggterMonteur = new JLabel("Nachname Vorname");
 		String mitarbeiternummer = LoginFenster.getMitarbeiternummer();
 		for (Mitarbeiter monteur : db.getMonteurListe()) {
@@ -262,9 +300,15 @@ public class MonteurFenster extends JFrame {
 		}
 		lbl_eingeloggterMonteur.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); // Datumsformat
-		lblDatum = new JLabel(f.format(new Date())); // Heutigen Tag wird übergeben
+		DateFormat f = new SimpleDateFormat("EEEE, dd.MM.yyyy"); 
+		// Datumsformat
+		
+		lblDatum = new JLabel(f.format(new Date())); 
+		// Heutigen Tag wird übergeben
+		
 		lblDatum.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		
 
 		GroupLayout gl_auftraegeTab = new GroupLayout(auftraegeTab);
 		gl_auftraegeTab.setHorizontalGroup(
@@ -300,7 +344,7 @@ public class MonteurFenster extends JFrame {
 					.addContainerGap())
 		);
 
-		/**
+		/*
 		 * ***********************************************************************************************
 		 * ************************************************************************************************
 		 */
@@ -458,9 +502,10 @@ public class MonteurFenster extends JFrame {
 	}
 
 	/**
-	 * Hilfsmethode: Auftraege aktualisieren - Tabelle wird
-	 * erstellt********************************************
-	 ***********************************************************************************************************
+	 * Hilfsmethode: Auftraege aktualisieren - Tabelle wird erstellt
+	 * <p>
+	 * Hier wird die Tabelle neu eingelesen. Mit Hilfe der Methode auftraege() wird die Datenbank ausgelesen. 
+	 * Im Anschluss wird die Tabelle, die Suchleiste, die Tableheader, die Combobox, sowie die buttons neu erstellt
 	 */
 
 	private void auftraegeAktualisieren() {
@@ -502,9 +547,15 @@ public class MonteurFenster extends JFrame {
 
 
 	/**
-	 * Hilfsmethoden: Die Methode zum Füllen der
-	 * Tabelle**********************************************
-	 *************************************************************************************************
+	 * Hilfsmethoden: Die Methode zum Füllen der Tabelle
+	 * <p>
+	 * Als erstes wird die Auftragsliste gelöscht und neu eingelesen. Als nächstes wird die angepassteAuftragsListe
+	 * gelöscht und neu eingelesen. Hierbei werden diejenigen Aufträge gefiltert, die zu dem jeweiligen Monteur
+	 * gehören und noch bearbeitet werden.
+	 * <p>
+	 * Zuletzt wird ein mehrdimensionaler Array erstellt, der für jeden Auftrag aus der Datenbank eine Zeile erstellt
+	 * Dieser Array wird dann an die Methode auftraegeAktualisieren() übergeben
+	 * @return Object[][] 
 	 */
 	private Object[][] auftraege() {
 		// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
@@ -572,10 +623,13 @@ public class MonteurFenster extends JFrame {
 		return auftraege;
 	}
 
-	/*
-	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und
-	 * Funktionalität***************************
-	 * ***************************************************************************************************
+	/**
+	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und Funktionalität
+	 * <p>
+	 * Hier wird die Auswahlbox für den Status generiert
+	 * @param table in diesem Fall gibt es nur eine Tabelle - ist für die Disponentenansicht wichtig
+	 * @param combobox für den Fall, dass man mehrere Auswahlboxen hat
+	 * @param spalte in welcher Spalte die Combobox sein soll
 	 */
 	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
 
@@ -595,10 +649,7 @@ public class MonteurFenster extends JFrame {
 		// Combobox jetzt anklickbar
 	}
 
-	/*
-	 * Hilfsmethoden: Statusänderungen werden in die Datenbank eingetragen
-	 * *****************************************************************************
-	 **/
+	
 
 	/**
 	 * Diese Methode ermöglicht es dem Monteur, den Status eines Auftrags zu verändern.

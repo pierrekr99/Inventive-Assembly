@@ -2,18 +2,13 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GraphicsConfiguration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +26,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -45,26 +42,19 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import com.sun.java.accessibility.util.GUIInitializedListener;
-
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import objekte.Auftrag;
 import objekte.Mitarbeiter;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 public class DisponentFenster extends JFrame {
 
-	static datenbankVerbindung db = main.Main.getdb();
+	static DatenbankVerbindung db = main.Main.getdb();
 	// ermöglicht auf den Inhalt der DB, die in der Main geladen wurde
 
 	private JPanel contentPane;
@@ -90,7 +80,6 @@ public class DisponentFenster extends JFrame {
 	JComboBox monteureCombobox = new JComboBox();
 	JComboBox datumComboBox;
 	JComboBox auswahlBoxStatus = new JComboBox();
-	// Combobox zur Statusänderung
 
 	TableColumn monteureColumn;
 
@@ -1039,11 +1028,10 @@ public class DisponentFenster extends JFrame {
 		}
 		return monteure;
 	}
-
 	/**
-	 * Legt dann die Breite der jeweiligen Spalten und die Höhe der Zeilen in table
-	 * fest. Die Möglichkeit die Spalten zu verschieben wird deaktiviert.
-	 * 
+	 * Tabellenformat Archiv und Aufträge
+	 * <p>
+	 * Die Spaltenformatierungen werden bestimmt mit Breite, Höhe und Verschiebbarkeit
 	 * @param table
 	 */
 	private void tblFormat(JTable table) {
@@ -1091,10 +1079,11 @@ public class DisponentFenster extends JFrame {
 
 		table.getTableHeader().setReorderingAllowed(false);
 	}
-
+	
 	/**
-	 * Legt die Breite der jeweiligen Spalten und die Höhe der Zeilen fest. Die
-	 * Möglichkeit die Spalten zu verschieben wird deaktiviert.
+	 * Tabellenformat Monteure
+	 * <p>
+	 * Die Spaltenformatierungen werden bestimmt mit Breite, Höhe und Verschiebbarkeit
 	 */
 	private void monteureTblFormat() {
 		// Name
@@ -1123,8 +1112,10 @@ public class DisponentFenster extends JFrame {
 	}
 
 	/**
-	 * Erstellt eine Combobox mit den Monteuren in table.
-	 * 
+	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und Funktionalität
+	 * <p>
+	 * Hier wird die Auswahlbox für die Monteure generiert. Diese werden aus der Datenbank gelesen.
+	 * Für die Mitarbeiternummer 0000, wird der Auftrag nicht zugeteilst
 	 * @param table
 	 */
 	private void monteureCombobox(JTable table) {
@@ -1174,10 +1165,11 @@ public class DisponentFenster extends JFrame {
 	}
 
 	/**
-	 * Legt die Statusoptionen in der table in der Spalte spalte fest. Hierfür wird
-	 * auswahlBoxStatus bearbeitet und dann in table eingefügt.
-	 * 
+	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und Funktionalität
+	 * <p>
+	 * Hier wird die Auswahlbox für den Status generiert. Diese ist im Archiv zu finden
 	 * @param table
+	 * @param combobox
 	 * @param spalte
 	 */
 	private void auswahlBoxStatus(JTable table, int spalte) {
@@ -1358,14 +1350,6 @@ public class DisponentFenster extends JFrame {
 		return "" + summeAuftraege;
 	}
 
-	/**
-	 * Vergleicht die Auftragsnummer in tabelle in der Zeile editingRow mit der
-	 * Auftragsnummer eines Auftrags in der Auftragsliste aus der Datenbank.
-	 * 
-	 * @param editingRow
-	 * @param tabelle
-	 * @return Den Auftrag, der in tabelle in der Zeile editingRow angezeigt wird
-	 */
 	private Auftrag welcherAuftrag(int editingRow, JTable tabelle) {
 		for (Auftrag auftrag : db.getAuftragsListe()) {
 

@@ -14,12 +14,12 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import objekte.Auftrag;
 
 public class DetailsFenster extends JFrame {
 
-	static datenbankVerbindung db = main.Main.getdb();
+	static DatenbankVerbindung db = main.Main.getdb();
 	private JPanel contentPane;
 	private JTable tKomponenten;
 	private JTable tMonteur;

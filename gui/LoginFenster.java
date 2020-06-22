@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import Datenbank.datenbankVerbindung;
+import datenbank.DatenbankVerbindung;
 import objekte.Mitarbeiter;
 
 
@@ -38,7 +38,7 @@ public class LoginFenster extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	static datenbankVerbindung db = main.Main.getdb();
+	static DatenbankVerbindung db = main.Main.getdb();
 
 	private JPanel contentPane;
 	private JTextField tf_MitarbeiterID;
@@ -172,7 +172,7 @@ public class LoginFenster extends JFrame {
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH); //
 						disponent.setVisible(true); // Fenster anzeigen
 						disponent.setIconImage(image); // Icon in der Taskleiste
-						disponent.setTitle("Inventive Assembly"); // Titel setzen
+						disponent.setTitle("Inventive Assembly - Disponentansicht"); // Titel setzen
 						dispose(); // Login verschwindet
 						loginFehler = true; // LoginVariable wird true gesetzt
 					}
@@ -184,7 +184,7 @@ public class LoginFenster extends JFrame {
 						monteur.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						monteur.setVisible(true); // Monteurfenster wird angezeigt
 						monteur.setIconImage(image);
-						monteur.setTitle("Inventive Assembly");
+						monteur.setTitle("Inventive Assembly - Monteuransicht");
 						dispose(); // Login verschwindet
 						loginFehler = true;
 					}
