@@ -27,6 +27,13 @@ import javax.swing.border.EmptyBorder;
 import Datenbank.datenbankVerbindung;
 import objekte.Mitarbeiter;
 
+
+/**
+ * Startseite der Anwendung
+ * 
+ *
+ */
+
 public class LoginFenster extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -49,7 +56,12 @@ public class LoginFenster extends JFrame {
 		return mitarbeiternummer;
 	}
 
-	public LoginFenster() {
+	
+	/**
+	 * generieren der Anwendung
+	 */
+	
+ public LoginFenster() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 600);
@@ -151,18 +163,12 @@ public class LoginFenster extends JFrame {
 				String passwort = String.valueOf(tf_password.getPassword());
 
 				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) { // Disponentenliste durchlaufen
-					if (id.equals(mitarbeiter.getMitarbeiterNummer()) && passwort.equals(mitarbeiter.getPasswort())) { // vergleich
-																														// der
-																														// eingegebenen
-																														// Daten
-																														// mit
-																														// den
-																														// Daten
-																														// aus
-																														// der
-																														// Disponentenliste
-						DisponentFenster disponent = new DisponentFenster(); // wenn ein Objekt gefunden wurde, dann
-																				// Disponentenfenster erzeugen
+					if (id.equals(mitarbeiter.getMitarbeiterNummer()) && passwort.equals(mitarbeiter.getPasswort())) { 
+						// vergleich der eingegebenen Daten mit den Daten aus der Disponentenliste																																																																																																																						
+																																																											
+						DisponentFenster disponent = new DisponentFenster(); 
+						// wenn ein Objekt gefunden wurde, dann Disponentenfenster erzeugen
+						
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH); //
 						disponent.setVisible(true); // Fenster anzeigen
 						disponent.setIconImage(image); // Icon in der Taskleiste
