@@ -21,13 +21,13 @@ public class DetailsFenster extends JFrame {
 
 	static DatenbankVerbindung db = main.Main.getdb();
 	private JPanel contentPane;
-	private JTable tKomponenten;
-	private JTable tMonteur;
+	private JTable tblKomponenten;
+	private JTable tblMonteur;
 	private JScrollPane sPKomponenten;
 	private JScrollPane sPMonteur;
 
 	/**
-	 * Create the frame.
+	 * Erstellt ein Fenster mit Auftragsdetails.
 	 * @param auftrag Auftrag, von welchem man die Details sehen möchte
 	 */
 	public DetailsFenster(Auftrag auftrag) { 
@@ -71,19 +71,17 @@ public class DetailsFenster extends JFrame {
 	 * Tabelle für die Komponenten wird erstellt
 	 * @param auftrag Auftrag, von welchem man die Details sehen möchte
 	 */
-	
-	
 	private void erstellenKomponetenTabelle(Auftrag auftrag) {
 		
 		sPKomponenten = new JScrollPane();
 		sPKomponenten.setBounds(5, 36, 922, 449);
-		tKomponenten = new JTable();
-		tKomponenten.setCellSelectionEnabled(true);
+		tblKomponenten = new JTable();
+		tblKomponenten.setCellSelectionEnabled(true);
 
-		tKomponenten.getTableHeader().setReorderingAllowed(false);
+		tblKomponenten.getTableHeader().setReorderingAllowed(false);
 		// Spalten lassen sich nicht verschieben
 
-		tKomponenten.setModel(new DefaultTableModel(befuellenKomponentenTabelle(auftrag),
+		tblKomponenten.setModel(new DefaultTableModel(befuellenKomponentenTabelle(auftrag),
 				new String[] { "TeileNummer", "Name", "Attribut", "Kategorie", "Verfügbarkeit" }) {
 			// DefaultTableModel(Tabelle,Kopfzeile)
 
@@ -96,7 +94,7 @@ public class DetailsFenster extends JFrame {
 			// Kontrollmethode ob spalten sich ändern lassen
 		});
 
-		sPKomponenten.setViewportView(tKomponenten);
+		sPKomponenten.setViewportView(tblKomponenten);
 
 	}
 
@@ -108,10 +106,10 @@ public class DetailsFenster extends JFrame {
 
 		sPMonteur = new JScrollPane();
 		sPMonteur.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		tMonteur = new JTable();
+		tblMonteur = new JTable();
 
 		// DefaultTableModel(Tabelle,Kopfzeile)
-		tMonteur.setModel(new DefaultTableModel(befuellenMonteurTabelle(auftrag),
+		tblMonteur.setModel(new DefaultTableModel(befuellenMonteurTabelle(auftrag),
 				new String[] { "AuftragsNummer", "KundenNummer", "Auftraggeber", "MonteurNummer", "MonteurName" }) {
 
 			boolean[] columnEditables = new boolean[] { false, false, false, false, false };
@@ -124,7 +122,7 @@ public class DetailsFenster extends JFrame {
 
 		});
 
-		sPMonteur.setViewportView(tMonteur);
+		sPMonteur.setViewportView(tblMonteur);
 	}
 	
 	/**
@@ -133,7 +131,7 @@ public class DetailsFenster extends JFrame {
 	 */
 	private void eilbestellen() {
 		
-		tKomponenten.addMouseListener(new MouseAdapter() {
+		tblKomponenten.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.MOUSE_PRESSED == 501) {
 					// Wenn die Maus Gedrückt wird
@@ -143,12 +141,12 @@ public class DetailsFenster extends JFrame {
 					int column = target.getSelectedColumn();
 					// Welches Objekt/Reihe/Spalte wurde ausgewählt
 
-					if (column == 4 && tKomponenten.getValueAt(row, column).equals("nicht verfügbar")) {
+					if (column == 4 && tblKomponenten.getValueAt(row, column).equals("nicht verfügbar")) {
 						// Wenn Spalte 4 (Verfügbarkeit) ausgewäglt wurde und diese "nicht verfügbar
 						// beinhaltet"
 
-						JOptionPane.showMessageDialog(null, ("Eilbestellung für [" + tKomponenten.getValueAt(row, 1)
-								+ " " + tKomponenten.getValueAt(row, 2) + "] wurde ausgeführt"));
+						JOptionPane.showMessageDialog(null, ("Eilbestellung für [" + tblKomponenten.getValueAt(row, 1)
+								+ " " + tblKomponenten.getValueAt(row, 2) + "] wurde ausgeführt"));
 						// Nachricht über Eilbestellung inkl. Name der fehlenden Komponente
 					}
 				}
@@ -157,70 +155,76 @@ public class DetailsFenster extends JFrame {
 
 	}
 
+	/**
+	 * Formatiert die Tabelle tMonteur
+	 */
 	private void monteureTblFormat() {
 		// Festlegung der Größe der Spalten
-		tMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
-		tMonteur.setRowHeight(50);
-		tMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tblMonteur.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		tblMonteur.setRowHeight(50);
+		tblMonteur.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
-		tMonteur.getColumnModel().getColumn(0).setPreferredWidth(150);
-		tMonteur.getColumnModel().getColumn(0).setMinWidth(100);
-		tMonteur.getColumnModel().getColumn(0).setMaxWidth(400);
+		tblMonteur.getColumnModel().getColumn(0).setPreferredWidth(150);
+		tblMonteur.getColumnModel().getColumn(0).setMinWidth(100);
+		tblMonteur.getColumnModel().getColumn(0).setMaxWidth(400);
 
-		tMonteur.getColumnModel().getColumn(1).setPreferredWidth(175);
-		tMonteur.getColumnModel().getColumn(1).setMinWidth(100);
-		tMonteur.getColumnModel().getColumn(1).setMaxWidth(300);
+		tblMonteur.getColumnModel().getColumn(1).setPreferredWidth(175);
+		tblMonteur.getColumnModel().getColumn(1).setMinWidth(100);
+		tblMonteur.getColumnModel().getColumn(1).setMaxWidth(300);
 
-		tMonteur.getColumnModel().getColumn(2).setPreferredWidth(150);
-		tMonteur.getColumnModel().getColumn(2).setMinWidth(100);
-		tMonteur.getColumnModel().getColumn(2).setMaxWidth(400);
+		tblMonteur.getColumnModel().getColumn(2).setPreferredWidth(150);
+		tblMonteur.getColumnModel().getColumn(2).setMinWidth(100);
+		tblMonteur.getColumnModel().getColumn(2).setMaxWidth(400);
 
-		tMonteur.getColumnModel().getColumn(3).setPreferredWidth(125);
-		tMonteur.getColumnModel().getColumn(3).setMinWidth(150);
-		tMonteur.getColumnModel().getColumn(3).setMaxWidth(300);
+		tblMonteur.getColumnModel().getColumn(3).setPreferredWidth(125);
+		tblMonteur.getColumnModel().getColumn(3).setMinWidth(150);
+		tblMonteur.getColumnModel().getColumn(3).setMaxWidth(300);
 
-		tMonteur.getColumnModel().getColumn(4).setPreferredWidth(150);
-		tMonteur.getColumnModel().getColumn(4).setMinWidth(100);
-		tMonteur.getColumnModel().getColumn(4).setMaxWidth(400);
+		tblMonteur.getColumnModel().getColumn(4).setPreferredWidth(150);
+		tblMonteur.getColumnModel().getColumn(4).setMinWidth(100);
+		tblMonteur.getColumnModel().getColumn(4).setMaxWidth(400);
 
-		tMonteur.getTableHeader().setReorderingAllowed(false);
+		tblMonteur.getTableHeader().setReorderingAllowed(false);
 		// Spalten lassen sich nicht verschieben
 	}
 
+	/**
+	 * Formatiert die Tabelle tKomponenten aktiviert RowSorter
+	 */
 	private void komponentenTblFormat() {
 		// Festlegung der Größe der Spalten
-		tKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
-		tKomponenten.setRowHeight(50);
-		tKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tblKomponenten.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 22));
+		tblKomponenten.setRowHeight(50);
+		tblKomponenten.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
-		tKomponenten.setAutoCreateRowSorter(true);
+		tblKomponenten.setAutoCreateRowSorter(true);
 		/*
 		 * durch Anklicken der Kopfzeile (in der jeweiligen Spalte) werden die
 		 * Komponenten nach diesem Attribut in der natürlichen Ordnung und umgekehrt
 		 * sortiert
 		 */
 
-		tKomponenten.getColumnModel().getColumn(0).setPreferredWidth(150);
-		tKomponenten.getColumnModel().getColumn(0).setMinWidth(100);
-		tKomponenten.getColumnModel().getColumn(0).setMaxWidth(400);
+		tblKomponenten.getColumnModel().getColumn(0).setPreferredWidth(150);
+		tblKomponenten.getColumnModel().getColumn(0).setMinWidth(100);
+		tblKomponenten.getColumnModel().getColumn(0).setMaxWidth(400);
 
-		tKomponenten.getColumnModel().getColumn(1).setPreferredWidth(175);
-		tKomponenten.getColumnModel().getColumn(1).setMinWidth(100);
-		tKomponenten.getColumnModel().getColumn(1).setMaxWidth(300);
+		tblKomponenten.getColumnModel().getColumn(1).setPreferredWidth(175);
+		tblKomponenten.getColumnModel().getColumn(1).setMinWidth(100);
+		tblKomponenten.getColumnModel().getColumn(1).setMaxWidth(300);
 
-		tKomponenten.getColumnModel().getColumn(2).setPreferredWidth(150);
-		tKomponenten.getColumnModel().getColumn(2).setMinWidth(100);
-		tKomponenten.getColumnModel().getColumn(2).setMaxWidth(400);
+		tblKomponenten.getColumnModel().getColumn(2).setPreferredWidth(150);
+		tblKomponenten.getColumnModel().getColumn(2).setMinWidth(100);
+		tblKomponenten.getColumnModel().getColumn(2).setMaxWidth(400);
 
-		tKomponenten.getColumnModel().getColumn(3).setPreferredWidth(125);
-		tKomponenten.getColumnModel().getColumn(3).setMinWidth(150);
-		tKomponenten.getColumnModel().getColumn(3).setMaxWidth(300);
+		tblKomponenten.getColumnModel().getColumn(3).setPreferredWidth(125);
+		tblKomponenten.getColumnModel().getColumn(3).setMinWidth(150);
+		tblKomponenten.getColumnModel().getColumn(3).setMaxWidth(300);
 
-		tKomponenten.getColumnModel().getColumn(4).setPreferredWidth(150);
-		tKomponenten.getColumnModel().getColumn(4).setMinWidth(100);
-		tKomponenten.getColumnModel().getColumn(4).setMaxWidth(400);
+		tblKomponenten.getColumnModel().getColumn(4).setPreferredWidth(150);
+		tblKomponenten.getColumnModel().getColumn(4).setMinWidth(100);
+		tblKomponenten.getColumnModel().getColumn(4).setMaxWidth(400);
 
-		tKomponenten.getTableHeader().setReorderingAllowed(false);
+		tblKomponenten.getTableHeader().setReorderingAllowed(false);
 		// Spalten lassen sich nicht verschieben
 	}
 	

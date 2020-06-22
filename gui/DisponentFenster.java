@@ -92,7 +92,7 @@ public class DisponentFenster extends JFrame {
 	private TableRowSorter<DefaultTableModel> sorter2;
 
 	/**
-	 * Create the frame.
+	 * Erstellt ein das Fenster mit der Disponentensicht
 	 */
 	public DisponentFenster() {
 
@@ -691,7 +691,7 @@ public class DisponentFenster extends JFrame {
 	 * die Kopfzeile erstellt, zu dem wird festgelegt welche Spalten Editierbar
 	 * sind.
 	 * 
-	 * @see {@link gui.DisponentFenster #auftraege()())}
+	 * @see {@link gui.DisponentFenster #auftraege()}
 	 *      <p>
 	 * @see {@link gui.DisponentFenster.JButtonRenderer}
 	 *      <p>
@@ -742,7 +742,7 @@ public class DisponentFenster extends JFrame {
 	 * 
 	 * @see {@link gui.DisponentFenster #auftraegeAktualisieren()}
 	 *      <p>
-	 * @see {@link gui.DisponentFenster #archiv())}
+	 * @see {@link gui.DisponentFenster #archiv()}
 	 *      <p>
 	 * @see {@link gui.DisponentFenster.JButtonRenderer}
 	 *      <p>
@@ -791,7 +791,7 @@ public class DisponentFenster extends JFrame {
 	 * 
 	 * @see {@link gui.DisponentFenster #auftraegeAktualisieren()}
 	 *      <p>
-	 * @see {@link gui.DisponentFenster #monteure())}
+	 * @see {@link gui.DisponentFenster #monteure()}
 	 *      <p>
 	 * @see {@link gui.DisponentFenster.JButtonRenderer}
 	 *      <p>
@@ -1028,10 +1028,13 @@ public class DisponentFenster extends JFrame {
 		}
 		return monteure;
 	}
+
 	/**
 	 * Tabellenformat Archiv und Aufträge
 	 * <p>
-	 * Die Spaltenformatierungen werden bestimmt mit Breite, Höhe und Verschiebbarkeit
+	 * Die Spaltenformatierungen werden bestimmt mit Breite, Höhe und
+	 * Verschiebbarkeit
+	 * 
 	 * @param table
 	 */
 	private void tblFormat(JTable table) {
@@ -1079,11 +1082,12 @@ public class DisponentFenster extends JFrame {
 
 		table.getTableHeader().setReorderingAllowed(false);
 	}
-	
+
 	/**
 	 * Tabellenformat Monteure
 	 * <p>
-	 * Die Spaltenformatierungen werden bestimmt mit Breite, Höhe und Verschiebbarkeit
+	 * Die Spaltenformatierungen werden bestimmt mit Breite, Höhe und
+	 * Verschiebbarkeit
 	 */
 	private void monteureTblFormat() {
 		// Name
@@ -1114,8 +1118,10 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und Funktionalität
 	 * <p>
-	 * Hier wird die Auswahlbox für die Monteure generiert. Diese werden aus der Datenbank gelesen.
-	 * Für die Mitarbeiternummer 0000, wird der Auftrag nicht zugeteilst
+	 * Hier wird die Auswahlbox für die Monteure generiert. Diese werden aus der
+	 * Datenbank gelesen. Für die Mitarbeiternummer 0000, wird der Auftrag nicht
+	 * zugeteilst
+	 * 
 	 * @param table
 	 */
 	private void monteureCombobox(JTable table) {
@@ -1167,7 +1173,9 @@ public class DisponentFenster extends JFrame {
 	/**
 	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und Funktionalität
 	 * <p>
-	 * Hier wird die Auswahlbox für den Status generiert. Diese ist im Archiv zu finden
+	 * Hier wird die Auswahlbox für den Status generiert. Diese ist im Archiv zu
+	 * finden
+	 * 
 	 * @param table
 	 * @param combobox
 	 * @param spalte
