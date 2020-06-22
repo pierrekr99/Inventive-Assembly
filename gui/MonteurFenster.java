@@ -64,7 +64,7 @@ import objekte.Mitarbeiter;
 
 public class MonteurFenster extends JFrame {
 	
-	/**
+	/*
 	 * Attribute
 	 */
 
@@ -93,6 +93,22 @@ public class MonteurFenster extends JFrame {
 
 
 	
+	/**
+	 * Monteurfenster generieren
+	 * <p>
+	 * Das Monteurfenster wird erstellt. Der Monteur kann hier seine Aufträge sehen, sowie Änderungen am Status vornehmen.
+	 * <p>
+	 * Das Fenster besteht aus einem Tab, sodass man ohne Probleme noch weitere Ansichten und Funktionen für den Monteur
+	 * programmieren könnte. Außerdem gibt es in der linken oberen Ecke eine Suchleiste, mit der man die Tabelle nach
+	 * bestimmten Einträgen durchsuchen kann. Rechts daneben ist ein JLabel, dass den Namen des sich angemeldeten 
+	 * Monteurs anzeigt. in der rechten Ecke ist ein Logout Button, mit dem man sich abmeldet und zum Login Fenster
+	 * zurückkommt. Rechts daneben ist ein Button mit dem man di Tabelle aktualisieren kann. Die Datenbank wird neu ausgelesen.
+	 * Daneben ist nochmal ein JLabel zu finden, das das aktuelle Datum wiedergibt.
+	 * <p>
+	 * Unterhalb dieser Buttons und JLabels ist eine Tabelle zu finden, die in der Methode auftraegeAktualisieren() 
+	 * erstellt wird
+	 * 
+	 */
 	public MonteurFenster() {
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -328,7 +344,7 @@ public class MonteurFenster extends JFrame {
 					.addContainerGap())
 		);
 
-		/**
+		/*
 		 * ***********************************************************************************************
 		 * ************************************************************************************************
 		 */
@@ -539,6 +555,7 @@ public class MonteurFenster extends JFrame {
 	 * <p>
 	 * Zuletzt wird ein mehrdimensionaler Array erstellt, der für jeden Auftrag aus der Datenbank eine Zeile erstellt
 	 * Dieser Array wird dann an die Methode auftraegeAktualisieren() übergeben
+	 * @return Object[][] 
 	 */
 	private Object[][] auftraege() {
 		// Aufträge werden aus Auftragsliste asugelesen und in auftraege[][] eingebaut
@@ -610,9 +627,9 @@ public class MonteurFenster extends JFrame {
 	 * Hilfsmethoden: Erstellen der Combobox, sowie Befüllen und Funktionalität
 	 * <p>
 	 * Hier wird die Auswahlbox für den Status generiert
-	 * @param table
-	 * @param combobox
-	 * @param spalte
+	 * @param table in diesem Fall gibt es nur eine Tabelle - ist für die Disponentenansicht wichtig
+	 * @param combobox für den Fall, dass man mehrere Auswahlboxen hat
+	 * @param spalte in welcher Spalte die Combobox sein soll
 	 */
 	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
 
