@@ -97,6 +97,15 @@ public class DisponentFenster extends JFrame {
 	public DisponentFenster() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		// trennt die Verbindung von der DB wenn das Fenster geschlossen wird
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			public void run() {
+				System.out.println("trennen");
+				db.trennen();
+			}
+		}));
+		
 		setBounds(100, 100, 1047, 515);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

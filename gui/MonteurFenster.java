@@ -117,7 +117,16 @@ public class MonteurFenster extends JFrame {
 		setBounds(0, 0, 700, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// fenster schlieﬂen bei x
-
+		
+		// trennt die Verbindung von der DB wenn das Fenster geschlossen wird
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			public void run() {
+				System.out.println("trennen");
+				db.trennen();
+			}
+		}));
+		
+		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		// layout von hier...
 
