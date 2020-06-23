@@ -27,7 +27,6 @@ import javax.swing.border.EmptyBorder;
 import datenbank.DatenbankVerbindung;
 import objekte.Mitarbeiter;
 
-
 /**
  * Startseite der Anwendung
  * 
@@ -56,14 +55,23 @@ public class LoginFenster extends JFrame {
 		return mitarbeiternummer;
 	}
 
-	
 	/**
 	 * generieren der Anwendung
 	 */
-	
- public LoginFenster() {
 
+	public LoginFenster() {
+
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		// trennt die Verbindung von der DB wenn das Fenster geschlossen wird
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			public void run() {
+				System.out.println("trennen");
+				db.trennen();
+			}
+		}));
+		
 		setBounds(100, 100, 900, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -163,12 +171,12 @@ public class LoginFenster extends JFrame {
 				String passwort = String.valueOf(tf_password.getPassword());
 
 				for (Mitarbeiter mitarbeiter : db.getDisponentListe()) { // Disponentenliste durchlaufen
-					if (id.equals(mitarbeiter.getMitarbeiterNummer()) && passwort.equals(mitarbeiter.getPasswort())) { 
-						// vergleich der eingegebenen Daten mit den Daten aus der Disponentenliste																																																																																																																						
-																																																											
-						DisponentFenster disponent = new DisponentFenster(); 
+					if (id.equals(mitarbeiter.getMitarbeiterNummer()) && passwort.equals(mitarbeiter.getPasswort())) {
+						// vergleich der eingegebenen Daten mit den Daten aus der Disponentenliste
+
+						DisponentFenster disponent = new DisponentFenster();
 						// wenn ein Objekt gefunden wurde, dann Disponentenfenster erzeugen
-						
+
 						disponent.setExtendedState(JFrame.MAXIMIZED_BOTH); //
 						disponent.setVisible(true); // Fenster anzeigen
 						disponent.setIconImage(image); // Icon in der Taskleiste
