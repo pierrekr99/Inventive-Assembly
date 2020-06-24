@@ -4,8 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import benutzeroberflaeche.LoginFenster;
 import datenbank.DatenbankVerbindung;
-import gui.LoginFenster;
 
 
 public class Main {

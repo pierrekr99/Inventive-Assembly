@@ -1,4 +1,4 @@
-package gui;
+package benutzeroberflaeche;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -19,9 +19,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import benutzeroberflaeche.DisponentFenster.JButtonEditor;
+import benutzeroberflaeche.DisponentFenster.JButtonRenderer;
 import datenbank.DatenbankVerbindung;
-import gui.DisponentFenster.JButtonEditor;
-import gui.DisponentFenster.JButtonRenderer;
 import objekte.Auftrag;
 import objekte.Mitarbeiter;
 

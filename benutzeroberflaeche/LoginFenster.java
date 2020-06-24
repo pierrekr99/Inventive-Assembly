@@ -1,4 +1,4 @@
-package gui;
+package benutzeroberflaeche;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

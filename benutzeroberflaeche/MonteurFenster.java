@@ -1,4 +1,4 @@
-package gui;
+package benutzeroberflaeche;
 
 import java.awt.EventQueue;
 
@@ -55,9 +55,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import benutzeroberflaeche.AuftraegeListeFenster.JButtonEditor;
+import benutzeroberflaeche.AuftraegeListeFenster.JButtonRenderer;
 import datenbank.DatenbankVerbindung;
-import gui.AuftraegeListeFenster.JButtonEditor;
-import gui.AuftraegeListeFenster.JButtonRenderer;
 import objekte.Auftrag;
 import objekte.Auftraggeber;
 import objekte.Mitarbeiter;
