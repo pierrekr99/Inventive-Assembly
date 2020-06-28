@@ -15,7 +15,6 @@ public class DatenbankVerbindung {
 
 	private Connection verbindung = null;
 	private ResultSet rs;
-	private Statement stmt;
 
 	private ArrayList<Auftrag> auftragsListe = new ArrayList<>();
 	private ArrayList<Auftraggeber> auftraggeberListe = new ArrayList<>();
