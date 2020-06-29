@@ -1191,6 +1191,7 @@ public class DisponentFenster extends JFrame {
 	 */
 	private void auswahlBoxStatus(JTable table, int spalte) {
 		auswahlBoxStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		// Schriftart und Größe
 
 		auswahlBoxStatus.removeAllItems();
 		// erstmal alle rauslöschen
