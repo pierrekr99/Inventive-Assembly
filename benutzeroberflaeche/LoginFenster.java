@@ -85,7 +85,7 @@ public class LoginFenster extends JFrame {
 
 		tf_MitarbeiterID = new JTextField();
 		tf_MitarbeiterID.setText("Mitarbeiter-ID");
-		tf_MitarbeiterID.setToolTipText("Hier ihre ID eingeben...");
+		tf_MitarbeiterID.setToolTipText("Mitarbeiter-ID eingeben");
 		tf_MitarbeiterID.setBounds(364, 265, 144, 25);
 		panel.add(tf_MitarbeiterID);
 		tf_MitarbeiterID.setColumns(10);
@@ -156,7 +156,7 @@ public class LoginFenster extends JFrame {
 		});
 
 		tf_password = new JPasswordField();
-		tf_password.setToolTipText("Hier Passwort eingeben...");
+		tf_password.setToolTipText("Passwort eingeben");
 		tf_password.setColumns(10);
 		tf_password.setBounds(364, 301, 144, 25);
 		panel.add(tf_password);
