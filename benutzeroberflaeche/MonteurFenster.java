@@ -635,6 +635,7 @@ public class MonteurFenster extends JFrame {
 	 * @param spalte   in welcher Spalte die Combobox sein soll
 	 */
 	private void auswahlBoxStatus(JTable table, JComboBox combobox, int spalte) {
+		combobox.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
 		combobox.removeAllItems();
 		// erstmal alle Items rauslöschen

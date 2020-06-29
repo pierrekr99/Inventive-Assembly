@@ -852,8 +852,9 @@ public class DisponentFenster extends JFrame {
 	 */
 	public Object[][] auftraege() {
 		// Erstellt Inhalt zur befüllung der auftraegeTabelle
+		
 		arrayListeBefuellen(auftragsListe);
-		// befüllen der ArrayList mit den passenden Aufträgen
+		// befüllen die ArrayList mit den passenden Aufträgen
 
 		zeilen = auftragsListe.size();
 		// größe der Tabelle wird ermittelt
@@ -1189,6 +1190,7 @@ public class DisponentFenster extends JFrame {
 	 * @param spalte
 	 */
 	private void auswahlBoxStatus(JTable table, int spalte) {
+		auswahlBoxStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
 		auswahlBoxStatus.removeAllItems();
 		// erstmal alle rauslöschen
