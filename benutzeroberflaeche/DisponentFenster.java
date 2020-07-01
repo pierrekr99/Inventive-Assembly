@@ -566,7 +566,7 @@ public class DisponentFenster extends JFrame {
 
 			}));
 
-			sorter.setComparator(columnIndexToSortDatum1, ((String datum1, String datum2) -> {
+			sorter1.setComparator(columnIndexToSortDatum1, ((String datum1, String datum2) -> {
 				// Zuweisen eines Comparators, der ausgewählte Spalte nach Erstellungsdatum
 				// sortiert
 
